@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class Medicine {
+public class Medicine extends BaseEntity {
     @Id
     @Column(name="medicine_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class Seizure {
+public class Seizure extends BaseEntity {
     @Id
     @Column(name="seizure_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
