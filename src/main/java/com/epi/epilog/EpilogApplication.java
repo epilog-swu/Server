@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 @EnableJpaAuditing
 @EnableScheduling
 @SpringBootApplication
@@ -14,5 +17,4 @@ public class EpilogApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EpilogApplication.class, args);
 	}
-
 }
