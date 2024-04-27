@@ -20,7 +20,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final ModelMapper modelMapper;
 
-    public String partientLogin(LoginFormDto.PatientLoginFormDto form) {
+    public String patientLogin(LoginFormDto.PatientLoginFormDto form) {
         String loginId = form.getLoginId();
         String password = form.getPassword();
         Member member = memberRepository.findByLoginId(loginId);
@@ -36,7 +36,7 @@ public class AuthService {
 
     public String protectorLogin(LoginFormDto.ProtectorLoginFormDto form) {
         String code = form.getCode();
-        Member member =memberRepository.findByCode(code);
+        Member member = memberRepository.findByCode(code);
         if (member == null) {
             throw new UsernameNotFoundException("코드가 존재하지 않습니다");
         }

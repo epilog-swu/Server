@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("login/partient")
+    @PostMapping("login/patient")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody LoginFormDto.PatientLoginFormDto form){
-        String token = authService.partientLogin(form);
+        String token = authService.patientLogin(form);
         return ResponseEntity.ok(token);
     }
 
