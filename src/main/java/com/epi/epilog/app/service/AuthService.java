@@ -2,8 +2,11 @@ package com.epi.epilog.app.service;
 
 import com.epi.epilog.app.domain.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
-import com.epi.epilog.app.dto.LoginFormDto;
+import com.epi.epilog.app.dto.AuthFormDto;
 import com.epi.epilog.app.repository.MemberRepository;
+import com.epi.epilog.global.exception.ApiException;
+import com.epi.epilog.global.exception.ErrorCode;
+import com.epi.epilog.global.exception.ErrorResponse;
 import com.epi.epilog.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,25 +23,25 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final ModelMapper modelMapper;
 
-    public String patientLogin(LoginFormDto.PatientLoginFormDto form) {
+    public String patientLogin(AuthFormDto.PatientLoginFormDto form) {
         String loginId = form.getLoginId();
         String password = form.getPassword();
         Member member = memberRepository.findByLoginId(loginId);
         if (member == null){
-            throw new UsernameNotFoundException("아이디가 존재하지 않습니다");
+            throw new ApiException(ErrorCode.USER_NOT_FOUND);
         }
         if (!passwordEncoder.matches(password, member.getPassword())){
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다");
+            throw new ApiException(ErrorCode.USER_NOT_FOUND);
         }
         CustomUserInfoDto memberInfoDto = modelMapper.map(member, CustomUserInfoDto.class);
         return jwtUtil.createAccessToken(memberInfoDto);
     }
 
-    public String protectorLogin(LoginFormDto.ProtectorLoginFormDto form) {
+    public String protectorLogin(AuthFormDto.ProtectorLoginFormDto form) {
         String code = form.getCode();
         Member member = memberRepository.findByCode(code);
         if (member == null) {
-            throw new UsernameNotFoundException("코드가 존재하지 않습니다");
+            throw new ApiException(ErrorCode.LOGIN_FAILED);
         }
         CustomUserInfoDto memberInfoDto = modelMapper.map(member, CustomUserInfoDto.class);
         return jwtUtil.createAccessToken(memberInfoDto);
