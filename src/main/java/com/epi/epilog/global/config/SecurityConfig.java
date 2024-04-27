@@ -1,7 +1,5 @@
 package com.epi.epilog.global.config;
 
-import com.epi.epilog.global.utils.CustomAccessDeniedHandler;
-import com.epi.epilog.global.utils.CustomAuthenticationEntryPoint;
 import com.epi.epilog.global.utils.CustomUserDetailService;
 import com.epi.epilog.global.utils.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -25,8 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
-    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-    private final CustomAccessDeniedHandler accessDeniedHandler;
     private static final String[] AUTH_WHITELIST = {
             "/api/auth/**"
     };
@@ -53,9 +49,8 @@ public class SecurityConfig {
         // 권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
-
         return http.build();
     }
 }

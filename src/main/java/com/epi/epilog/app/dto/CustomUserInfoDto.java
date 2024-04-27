@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access =  AccessLevel.PRIVATE)
 public class CustomUserInfoDto {
-    private Long memberId;
+    private Long Id;
     private String loginId;
     private String password;
     private String name;

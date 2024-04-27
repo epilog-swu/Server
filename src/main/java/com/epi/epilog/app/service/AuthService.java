@@ -28,10 +28,10 @@ public class AuthService {
         String password = form.getPassword();
         Member member = memberRepository.findByLoginId(loginId);
         if (member == null){
-            throw new ApiException(ErrorCode.USER_NOT_FOUND);
+            throw new ApiException(ErrorCode.LOGIN_FAILED);
         }
         if (!passwordEncoder.matches(password, member.getPassword())){
-            throw new ApiException(ErrorCode.USER_NOT_FOUND);
+            throw new ApiException(ErrorCode.LOGIN_FAILED);
         }
         CustomUserInfoDto memberInfoDto = modelMapper.map(member, CustomUserInfoDto.class);
         return jwtUtil.createAccessToken(memberInfoDto);

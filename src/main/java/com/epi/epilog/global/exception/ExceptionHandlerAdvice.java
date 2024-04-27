@@ -22,6 +22,9 @@ public class ExceptionHandlerAdvice {
         // NestedExceptionUtils.getMostSpecificCause() -> 가장 구체적인 원인, 즉 가장 근본 원인을 찾아서 반환
         log.error("[Exception] cause: {} , message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        if (e.getMessage().equals("접근이 거부되었습니다.")){
+            errorCode = ErrorCode.INVALID_TOKEN;
+        }
         ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }

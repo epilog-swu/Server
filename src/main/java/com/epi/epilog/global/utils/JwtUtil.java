@@ -1,6 +1,8 @@
 package com.epi.epilog.global.utils;
 
 import com.epi.epilog.app.dto.CustomUserInfoDto;
+import com.epi.epilog.global.exception.ApiException;
+import com.epi.epilog.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -50,7 +52,7 @@ public class JwtUtil {
     private String createToken(CustomUserInfoDto member, Long accessTokenExpirationTime){
         // Claims 생성 및 초기화
         Claims claims = Jwts.claims();
-        claims.put("memberId", member.getMemberId());
+        claims.put("memberId", member.getId());
         claims.put("loginId", member.getLoginId());
         claims.put("name", member.getName());
         claims.put("code", member.getCode());
@@ -73,7 +75,10 @@ public class JwtUtil {
      */
     public boolean validateJwt(String token){
         try {
-            Jwts.parserBuilder().setSigningKey(this.key).build().parseClaimsJwt(token);
+            if (token == null){
+                throw new ApiException(ErrorCode.INVALID_TOKEN);
+            }
+            Jwts.parserBuilder().setSigningKey(this.key).build().parseClaimsJws(token);
             return true;
         } catch(io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
             log.info("유효하지 않은 토큰", e);
@@ -103,7 +108,7 @@ public class JwtUtil {
      */
     private Claims parseClaims(String token) {
         try{
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(token).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch(ExpiredJwtException e){
             return e.getClaims();
         }
