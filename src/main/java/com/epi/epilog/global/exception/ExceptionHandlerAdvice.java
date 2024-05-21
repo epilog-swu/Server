@@ -1,5 +1,6 @@
 package com.epi.epilog.global.exception;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
@@ -80,4 +81,7 @@ public class ExceptionHandlerAdvice {
         ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(),  errorCode.getMessage());
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
+
+    @ExceptionHandler({JwtException.class, })
+
 }

@@ -5,6 +5,8 @@ import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
 import com.epi.epilog.app.dto.DiabetesResponseDto;
 import com.epi.epilog.app.repository.DiabetesRepository;
+import com.epi.epilog.app.repository.MemberRepository;
+import com.epi.epilog.app.service.DiabetesCommandService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.exception.ErrorResponse;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class DiabetesController {
-    private final DiabetesRepository diabetesRepository;
+    private final DiabetesCommandService diabetesCommandService;
 
 //    @GetMapping("/bloodsugar/today")
 //    public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarToday(){
@@ -36,7 +38,7 @@ public class DiabetesController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            log.info("user details:", authentication.getPrincipal());
+            return diabetesCommandService.createBloodSugar(form ,userDetails.getMember());
         }
         throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
