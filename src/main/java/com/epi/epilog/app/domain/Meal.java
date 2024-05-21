@@ -38,5 +38,6 @@ public class Meal {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+    @ColumnDefault("true")
     private Boolean isAlarm;
 }
