@@ -24,7 +24,7 @@ public class Symptom extends BaseEntity {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seizure_id")
-    private Seizure seizure;
+    private Diabetes seizure;
     private String part;
     @ElementCollection
     @CollectionTable(name="SymptomOptions", joinColumns = @JoinColumn(name="symptom_id"))
