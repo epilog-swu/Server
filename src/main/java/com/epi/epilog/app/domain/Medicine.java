@@ -35,6 +35,6 @@ public class Medicine extends BaseEntity {
     private LocalDateTime endDate;
     private Boolean isAlarm;
     @ElementCollection
-    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="seizure_id"))
-    private List<WeekType> weseks = new ArrayList<>();
+    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="diabetes_id"))
+    private List<WeekType> weeks = new ArrayList<>();
 }

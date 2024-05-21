@@ -1,25 +1,20 @@
 package com.epi.epilog.app.domain;
 
+import com.epi.epilog.app.domain.enums.MealStatus;
 import com.epi.epilog.app.domain.enums.MedicationStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
-
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
-public class MedicineLog extends BaseEntity {
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access= AccessLevel.PRIVATE)
+public class MealLog {
     @Id
-    @Column(name="medicine_log_id")
+    @Column(name="meal_log_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,5 +24,5 @@ public class MedicineLog extends BaseEntity {
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
-    private MedicationStatus medicationStatus = MedicationStatus.상태없음;
+    private MealStatus mealStatus = MealStatus.상태없음;
 }

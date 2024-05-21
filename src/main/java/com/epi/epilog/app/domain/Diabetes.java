@@ -1,5 +1,6 @@
 package com.epi.epilog.app.domain;
 
+import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
 import com.epi.epilog.app.domain.enums.OccurrenceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,12 @@ public class Diabetes extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
-    private String occurrenceDate;
+    // 발생일자
+    private LocalDate date;
+
+    // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
+    @ValidOccurenceType
+    private OccurrenceType occurrenceType;
     private String title;
     @ColumnDefault("0")
     private Integer bloodSugar;
