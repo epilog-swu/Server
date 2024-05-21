@@ -1,5 +1,6 @@
 package com.epi.epilog.app.domain;
 
+import com.epi.epilog.app.domain.enums.MealType;
 import com.epi.epilog.app.domain.enums.WeekType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,24 +21,23 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
-public class Medicine extends BaseEntity {
+@NoArgsConstructor(access=PROTECTED)
+@AllArgsConstructor(access=PRIVATE)
+public class Meal {
     @Id
-    @Column(name="medicine_id")
+    @Column(name="meal_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
+    private LocalDateTime goalTime;
+    @Enumerated(EnumType.STRING)
+    private MealType mealType;
+    @ElementCollection
+    @CollectionTable(name="MealWeeks", joinColumns =  @JoinColumn(name="meal_id"))
+    private List<WeekType> weeks = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
-    @NotNull
     private Member member;
-    @NotNull
-    private String name;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
     @ColumnDefault("true")
     private Boolean isAlarm;
-    @ElementCollection
-    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="medicine_id"))
-    private List<WeekType> weeks = new ArrayList<>();
 }

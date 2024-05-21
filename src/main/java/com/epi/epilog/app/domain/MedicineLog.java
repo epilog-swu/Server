@@ -23,13 +23,10 @@ public class MedicineLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="medicine_id")
     private Medicine medicine;
-    private LocalDateTime goalDate;
-    private LocalDateTime actualDate;
+    private LocalDateTime goalTime;
+    private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
     private MedicationStatus medicationStatus = MedicationStatus.상태없음;
