@@ -25,10 +25,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("username = "+ Long.valueOf(username));
+//        log.info("username = "+ Long.valueOf(username));
         Member member = memberRepository.findById(Long.valueOf(username)).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         CustomUserInfoDto infoDto = modelMapper.map(member, CustomUserInfoDto.class);
-        log.info("infoDto="+infoDto.toString());
+//        log.info("infoDto="+infoDto.toString());
         return new CustomUserDetails(infoDto);
     }
 }

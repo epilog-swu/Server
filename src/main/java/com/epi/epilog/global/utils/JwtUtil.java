@@ -53,9 +53,9 @@ public class JwtUtil {
         // Claims 생성 및 초기화
         Claims claims = Jwts.claims();
         claims.put("memberId", member.getId());
-        claims.put("loginId", member.getLoginId());
-        claims.put("name", member.getName());
-        claims.put("code", member.getCode());
+//        claims.put("loginId", member.getLoginId());
+//        claims.put("name", member.getName());
+//        claims.put("code", member.getCode());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValid = now.plusSeconds(accessTokenExpirationTime);
