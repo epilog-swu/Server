@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access= AccessLevel.PRIVATE)
 public class MealLog {
@@ -18,8 +18,8 @@ public class MealLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="medicine_id")
-    private Medicine medicine;
+    @JoinColumn(name="meal_id")
+    private Meal meal;
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;

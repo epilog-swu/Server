@@ -1,5 +1,6 @@
 package com.epi.epilog.app.domain;
 
+import com.epi.epilog.app.domain.enums.MealType;
 import com.epi.epilog.app.domain.enums.WeekType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -29,11 +30,13 @@ public class Meal {
     private Long id;
     @NotNull
     private LocalDateTime goalTime;
+    @Enumerated(EnumType.STRING)
+    private MealType mealType;
     @ElementCollection
-    @CollectionTable(name="MealWeeks")
+    @CollectionTable(name="MealWeeks", joinColumns =  @JoinColumn(name="meal_id"))
     private List<WeekType> weeks = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
-
+    private Boolean isAlarm;
 }

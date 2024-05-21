@@ -28,13 +28,10 @@ public class Medicine extends BaseEntity {
     @JoinColumn(name="member_id")
     private Member member;
     private String name;
-    @ElementCollection
-    @CollectionTable(name="MedicineDoses", joinColumns = @JoinColumn(name="medicine_id"))
-    private List<LocalDateTime> doses = new ArrayList<>();
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Boolean isAlarm;
     @ElementCollection
-    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="diabetes_id"))
+    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="medicine_id"))
     private List<WeekType> weeks = new ArrayList<>();
 }
