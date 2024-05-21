@@ -24,7 +24,8 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
     private static final String[] AUTH_WHITELIST = {
-            "/api/auth/**"
+            "/api/auth/**",
+            "/api/diabetes/**"
     };
     @Bean
     public PasswordEncoder passwordEncoder() {
