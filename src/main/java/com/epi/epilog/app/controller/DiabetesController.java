@@ -12,6 +12,7 @@ import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.exception.ErrorResponse;
 import com.epi.epilog.global.utils.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class DiabetesController {
 //    }
 
     @PostMapping("/bloodsugar")
-    public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody DiabetesRequestDto.BloodSugarRequest form){
+    public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody @Valid DiabetesRequestDto.BloodSugarRequest form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {

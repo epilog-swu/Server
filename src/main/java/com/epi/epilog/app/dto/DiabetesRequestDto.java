@@ -15,7 +15,7 @@ public class DiabetesRequestDto {
     static public class BloodSugarRequest {
         @NotNull
         @ValidOccurenceType
-        public OccurrenceType occurrenceType;
+        public String occurrenceType;
         @NotNull
         public Integer bloodSugar;
     }

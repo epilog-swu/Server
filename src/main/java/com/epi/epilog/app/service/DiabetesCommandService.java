@@ -2,6 +2,7 @@ package com.epi.epilog.app.service;
 
 import com.epi.epilog.app.domain.Diabetes;
 import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
@@ -9,6 +10,7 @@ import com.epi.epilog.app.repository.DiabetesRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class DiabetesCommandService {
                 .member(mem)
                 .date(LocalDate.now())
                 .occurrenceType(form.getOccurrenceType())
-                .title(form.getOccurrenceType().toString())
+                .title(form.getOccurrenceType())
                 .bloodSugar(form.getBloodSugar())
                 .build();
         diabetesRepository.save(diabet);
