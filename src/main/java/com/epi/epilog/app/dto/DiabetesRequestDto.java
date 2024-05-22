@@ -13,8 +13,8 @@ public class DiabetesRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     static public class BloodSugarRequest {
-        @ValidOccurenceType
         @NotNull
+        @ValidOccurenceType
         public OccurrenceType occurrenceType;
         @NotNull
         public Integer bloodSugar;

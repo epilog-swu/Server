@@ -81,7 +81,17 @@ public class ExceptionHandlerAdvice {
         ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(),  errorCode.getMessage());
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
-
-    @ExceptionHandler({JwtException.class, })
-
+    // JWT 관련 예외 처리
+    @ExceptionHandler({
+            io.jsonwebtoken.security.SignatureException.class,
+            io.jsonwebtoken.MalformedJwtException.class,
+            io.jsonwebtoken.ExpiredJwtException.class,
+            io.jsonwebtoken.UnsupportedJwtException.class
+    })
+    public ResponseEntity<ErrorResponse> handleJwtException(Exception e) {
+        log.error("[JwtException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.INVALID_TOKEN; // 여기에 적절한 에러 코드를 설정
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(), errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
+    }
 }

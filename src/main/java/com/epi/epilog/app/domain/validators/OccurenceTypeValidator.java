@@ -7,24 +7,24 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.regex.Pattern;
 
-public class OccurenceTypeValidator implements ConstraintValidator<ValidOccurenceType, String> {
+public class OccurenceTypeValidator implements ConstraintValidator<ValidOccurenceType, OccurrenceType> {
 
-    private static final Pattern TIME_PATTERN = Pattern.compile("^([01]\\d|2[0-3]):([0-5]\\d)$");
     @Override
     public void initialize(ValidOccurenceType constraintAnnotation) {
+        // 초기화 코드 (필요시)
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(OccurrenceType value, ConstraintValidatorContext context) {
         if (value == null) {
-            return false;
+            return true; // null 값을 허용하는 경우, 그렇지 않다면 false로 설정
         }
-        // Enum 값 또는 시간 포맷에 맞는지 확인
+        // Enum 값이 유효한지 검사하는 로직
         for (OccurrenceType type : OccurrenceType.values()) {
-            if (type.getDescription().equals(value)) {
+            if (type.equals(value)) {
                 return true;
             }
         }
-        return TIME_PATTERN.matcher(value).matches();
+        return false;
     }
 }

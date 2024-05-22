@@ -1,5 +1,6 @@
 package com.epi.epilog.app.controller;
 
+import com.epi.epilog.app.domain.Member;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
@@ -36,10 +37,12 @@ public class DiabetesController {
     @PostMapping("/bloodsugar")
     public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody DiabetesRequestDto.BloodSugarRequest form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return diabetesCommandService.createBloodSugar(form ,userDetails.getMember());
+            return diabetesCommandService.createBloodSugar(form, userDetails.getMember());
         }
+
         throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 
