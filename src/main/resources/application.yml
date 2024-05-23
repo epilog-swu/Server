@@ -1,0 +1,29 @@
+spring:
+  datasource:
+      driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+      url: ${SPRING_DATASOURCE_URL}
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  logging:
+    level:
+      org.hibernate.SQL: debug
+  servlet:
+    multipart:
+      max-file-size: 200MB
+
+jwt:
+  expiration_time: 86400000 #1일
+  secret: ${JWT_SECRET_KEY}
+
+
+
