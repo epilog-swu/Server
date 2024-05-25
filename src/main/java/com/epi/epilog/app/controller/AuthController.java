@@ -18,13 +18,13 @@ public class AuthController {
 //        String
 //    }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.PatientLoginFormDto form){
         String token = authService.patientLogin(form);
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("login/code")
+    @PostMapping("/login/code")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.ProtectorLoginFormDto form){
         String token = authService.protectorLogin(form);
         return ResponseEntity.ok(token);

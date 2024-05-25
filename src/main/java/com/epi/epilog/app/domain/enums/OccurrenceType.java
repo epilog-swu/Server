@@ -8,13 +8,23 @@ public enum OccurrenceType {
     BEFORE_DINNER("저녁식사 전"),
     AFTER_DINNER("저녁식사 후"),
     BEFORE_SLEEP("자기 전");
+
     private final String value;
 
-    OccurrenceType(String description) {
-        this.value = description;
+    OccurrenceType(String value) {
+        this.value = value;
     }
 
-    public String getDescription() {
-        return this.value;
+    public String getValue() {
+        return value;
+    }
+
+    public static boolean isValid(String value) {
+        for (OccurrenceType type : OccurrenceType.values()) {
+            if (type.getValue().equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
