@@ -30,6 +30,7 @@ public class DiabetesCommandService {
             DiabetesRequestDto.BloodSugarRequest form, CustomUserInfoDto member) {
         Member mem = memberRepository.findById(member.getId()).orElseThrow(()->
                 new ApiException(ErrorCode.USER_NOT_FOUND));
+
         // create diabetes
         Diabetes diabet = Diabetes.builder()
                 .member(mem)

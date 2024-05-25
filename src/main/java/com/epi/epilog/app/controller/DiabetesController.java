@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,14 +33,18 @@ public class DiabetesController {
 //    @GetMapping("/bloodsugar/today")
 //    public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarToday(){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
+//        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+//            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+//            return dia
+//        }
+//        throw new ApiException(ErrorCode.INVALID_TOKEN);
 //    }
 
     @PostMapping("/bloodsugar")
     public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody @Valid DiabetesRequestDto.BloodSugarRequest form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return diabetesCommandService.createBloodSugar(form, userDetails.getMember());
         }
