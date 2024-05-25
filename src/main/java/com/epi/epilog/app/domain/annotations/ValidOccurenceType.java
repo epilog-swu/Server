@@ -10,11 +10,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = OccurenceTypeValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidOccurenceType
-{
-    String message() default "Invalid time type";
+public @interface ValidOccurenceType {
+    String message() default "Invalid Occurrence Type";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

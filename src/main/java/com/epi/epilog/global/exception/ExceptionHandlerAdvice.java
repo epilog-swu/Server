@@ -1,5 +1,6 @@
 package com.epi.epilog.global.exception;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
@@ -78,6 +79,19 @@ public class ExceptionHandlerAdvice {
 
         ErrorCode errorCode = INVALID_HTTP_METHOD;
         ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(),  errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
+    }
+    // JWT 관련 예외 처리
+    @ExceptionHandler({
+            io.jsonwebtoken.security.SignatureException.class,
+            io.jsonwebtoken.MalformedJwtException.class,
+            io.jsonwebtoken.ExpiredJwtException.class,
+            io.jsonwebtoken.UnsupportedJwtException.class
+    })
+    public ResponseEntity<ErrorResponse> handleJwtException(Exception e) {
+        log.error("[JwtException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+        ErrorCode errorCode = ErrorCode.INVALID_TOKEN; // 여기에 적절한 에러 코드를 설정
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode.getHttpStatus(), errorCode.getCode(), errorCode.getMessage());
         return ResponseEntity.status(errorCode.getHttpStatus()).body(errorResponse);
     }
 }

@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 
 public class OccurenceTypeValidator implements ConstraintValidator<ValidOccurenceType, String> {
 
-    private static final Pattern TIME_PATTERN = Pattern.compile("^([01]\\d|2[0-3]):([0-5]\\d)$");
+    private static final Pattern TIME_PATTERN = Pattern.compile("^(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])$");
+
     @Override
     public void initialize(ValidOccurenceType constraintAnnotation) {
     }
@@ -17,14 +18,9 @@ public class OccurenceTypeValidator implements ConstraintValidator<ValidOccurenc
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
-            return false;
+            return false; // null 값은 유효하지 않음
         }
-        // Enum 값 또는 시간 포맷에 맞는지 확인
-        for (OccurrenceType type : OccurrenceType.values()) {
-            if (type.getDescription().equals(value)) {
-                return true;
-            }
-        }
-        return TIME_PATTERN.matcher(value).matches();
+        // Enum 값이거나 시간 형식인지 검사
+        return OccurrenceType.isValid(value) || TIME_PATTERN.matcher(value).matches();
     }
 }

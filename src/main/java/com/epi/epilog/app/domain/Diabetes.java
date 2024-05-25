@@ -34,8 +34,7 @@ public class Diabetes extends BaseEntity {
     private LocalDate date;
 
     // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
-    @ValidOccurenceType
-    private OccurrenceType occurrenceType;
+    private String occurrenceType;
     private String title;
     @ColumnDefault("0")
     private Integer bloodSugar;
