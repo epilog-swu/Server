@@ -1,12 +1,7 @@
 package com.epi.epilog.app.service;
 
-import com.epi.epilog.app.domain.Member;
 import com.epi.epilog.app.dto.AccelerometerData;
-import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.repository.MemberRepository;
-import com.epi.epilog.global.exception.ApiException;
-import com.epi.epilog.global.exception.ErrorCode;
-import com.epi.epilog.global.utils.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

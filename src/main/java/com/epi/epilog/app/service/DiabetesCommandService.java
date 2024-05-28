@@ -53,7 +53,7 @@ public class DiabetesCommandService {
 
         // return form
         return CommonResponseDto.CommonResponse.builder()
-                .message("일지가 추가됐습니다.")
+                .message("일지가 추가됐습니다. - "+diabet.getTitle())
                 .success(true)
                 .build();
     }
