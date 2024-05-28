@@ -17,7 +17,7 @@ import java.util.List;
 public class FallDetectionService {
     private final MemberRepository memberRepository;
     private static final double THRESHOLD_SVM = 2.5;
-    private static final double THRESHOLD_ANGLE = 60.0;
+    private static final double THRESHOLD_ANGLE = 50.0;
     private static final int SVM_THRESHOLD_COUNT = 70;
     private static final int SVM_TIME_WINDOW = 100;
 
@@ -40,7 +40,7 @@ public class FallDetectionService {
             }
 
             // SVM 초과 횟수가 임계값을 넘고 Y축 각도도 임계값을 넘으면 낙상으로 간주
-            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT || angleY > THRESHOLD_ANGLE) {
+            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT && angleY > THRESHOLD_ANGLE) {
                 return true;
             }
 
