@@ -5,6 +5,8 @@ import com.epi.epilog.app.domain.enums.OccurrenceType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
+
 
 public class DiabetesRequestDto {
     @Data
@@ -13,6 +15,7 @@ public class DiabetesRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     static public class BloodSugarRequest {
+        public LocalDate date;
         @NotNull
         @ValidOccurenceType
         public String occurrenceType;
