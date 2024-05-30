@@ -26,7 +26,7 @@ public class DiabetesController {
     private final DiabetesQueryService diabetesQueryService;
 
     @GetMapping("/bloodsugars")
-    public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarList(@RequestParam("date") LocalDate date){
+    public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarList(@RequestParam(value = "date", required = false) LocalDate date){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
