@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.diabetes;
 
 import com.epi.epilog.app.domain.Diabetes;
 import com.epi.epilog.app.domain.Member;

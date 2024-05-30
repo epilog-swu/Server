@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.diabetes;
 
 import com.epi.epilog.app.converter.DiabetesConverter;
 import com.epi.epilog.app.domain.Diabetes;
@@ -15,8 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,8 +33,6 @@ public class DiabetesQueryService {
                 .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));
         List<Diabetes> diabetes = diabetesRepository.findAllByDateAndMember(date, newMember);
 
-        // 정렬 로직
-
         List<DiabetesResponseDto.DiabetesBloodSugar> bloodSugars = new ArrayList<>();
 
         if (diabetes != null){
@@ -43,6 +42,8 @@ public class DiabetesQueryService {
                             .bloodSugar(diabet.getBloodSugar())
                             .occurrenceType(diabet.getOccurrenceType())
                             .build()).collect(Collectors.toList());
+
+            bloodSugars.sort(new CustomBloodSugarComparator());
         }
 
         return DiabetesResponseDto.BloodSugarTodayResponse.builder()
