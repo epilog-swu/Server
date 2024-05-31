@@ -32,8 +32,4 @@ public class DiabetesResponseDto {
         public String occurrenceType;
         public Integer bloodSugar;
     }
-
-    /**
-     *
-     */
 }

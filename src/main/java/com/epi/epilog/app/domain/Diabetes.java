@@ -40,15 +40,15 @@ public class Diabetes extends BaseEntity {
     private Integer bloodSugar;
     // 기분
     @ElementCollection
-    @CollectionTable(name="SeizureMood", joinColumns = @JoinColumn(name="seizure_id"))
+    @CollectionTable(name="DiabetesMood", joinColumns = @JoinColumn(name="diabetes_id"))
     private List<String> mood = new ArrayList<>();
     // 신체활동
     @ElementCollection
-    @CollectionTable(name="SeizureActivity", joinColumns = @JoinColumn(name="seizure_id"))
+    @CollectionTable(name="DiabetesActivity", joinColumns = @JoinColumn(name="diabetes_id"))
     private List<String> activity = new ArrayList<>();
     // 복용 약
     @ElementCollection
-    @CollectionTable(name="SeizureMedication", joinColumns = @JoinColumn(name="seizure_id"))
+    @CollectionTable(name="DiabetesMedication", joinColumns = @JoinColumn(name="diabetes_id"))
     private List<String> medication = new ArrayList<>();
     private String comment;
 }
