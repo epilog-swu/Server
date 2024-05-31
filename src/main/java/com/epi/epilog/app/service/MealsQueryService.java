@@ -27,27 +27,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MealsQueryService {
     private final MemberRepository memberRepository;
-    private final MealRepository mealRepository;
     private final MealLogRepository mealLogRepository;
 
     public MealsResponseDto.ChecklistDto mealsCheckList(CustomUserInfoDto member, LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        Member newMemer = memberRepository.findById(member.getId())
-                .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 mm분");
+        DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("H시");
+
+        Member newMember = memberRepository.findById(member.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         List<MealLog> mealLogs = mealLogRepository
-                .findAllByMemberAndGoalTime(newMemer, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+                .findAllByMemberAndGoalTime(newMember, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         List<MealsResponseDto.ChecklistStateDto> checklist = mealLogs.stream()
-                .map(meal -> MealsResponseDto.ChecklistStateDto
-                        .builder()
+                .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
                         .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
-                        .title(meal.getGoalTime().format(formatter) + meal.getMeal().getMealType().toString())
+                        .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
                         .state(meal.getMealStatus().toString())
                         .build()
                 ).collect(Collectors.toList());
 
-        return MealsResponseDto.ChecklistDto.builder().date(date)
+        return MealsResponseDto.ChecklistDto.builder()
+                .date(date)
                 .checklist(checklist)
                 .build();
     }
