@@ -26,4 +26,17 @@ public class MealLog {
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'상태없음'")
     private MealStatus mealStatus;
+
+    public void updateActualTiime(LocalDateTime time){
+        this.actualTime = time;
+    }
+
+    public void updateStatue(MealStatus mealStatus){
+        this.mealStatus = mealStatus;
+        if (mealStatus == MealStatus.상태없음){
+            this.isComplete = false;
+        } else {
+            this.isComplete = true;
+        }
+    }
 }

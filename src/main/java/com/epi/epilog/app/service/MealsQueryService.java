@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +40,19 @@ public class MealsQueryService {
         List<MealLog> mealLogs = mealLogRepository
                 .findAllByMemberAndGoalTime(newMember, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
-        List<MealsResponseDto.ChecklistStateDto> checklist = mealLogs.stream()
-                .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
-                        .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
-                        .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
-                        .state(meal.getMealStatus().toString())
-                        .build()
-                ).collect(Collectors.toList());
+        List<MealsResponseDto.ChecklistStateDto> checklist = new ArrayList<>();
+
+        if (!mealLogs.isEmpty()){
+            checklist = mealLogs.stream()
+                    .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
+                            .id(meal.getId())
+                            .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
+                            .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
+                            .state(meal.getMealStatus().toString())
+                            .isComplete(meal.getIsComplete())
+                            .build()
+                    ).collect(Collectors.toList());
+        }
 
         return MealsResponseDto.ChecklistDto.builder()
                 .date(date)
