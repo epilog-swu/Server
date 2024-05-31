@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.MealLog;
 import com.epi.epilog.app.domain.Member;
