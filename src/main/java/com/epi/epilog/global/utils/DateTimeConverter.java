@@ -15,6 +15,8 @@ import java.time.format.DateTimeParseException;
 @Configuration
 @Slf4j
 public class DateTimeConverter {
+    public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static LocalDate convertToLocalDate(String dateString) {
         // 날짜 형식 지정
@@ -40,6 +42,16 @@ public class DateTimeConverter {
         } catch (DateTimeParseException e) {
             // 파싱 실패 시 예외 처리
             log.info("Invalid date time format: " + dateTimeString);
+            throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
+        }
+    }
+
+    public static String convertLocalDateTimeToString(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try{
+            return dateTime.format(formatter);
+        } catch(DateTimeParseException e){
+            log.info("Invalid date time format: " + dateTime);
             throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
         }
     }

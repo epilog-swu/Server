@@ -1,9 +1,9 @@
 package com.epi.epilog.app.domain;
 
 import com.epi.epilog.app.domain.enums.MealStatus;
-import com.epi.epilog.app.domain.enums.MedicationStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +23,7 @@ public class MealLog {
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
-    @Builder.Default
-    private MealStatus mealStatus = MealStatus.상태없음;
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'상태없음'")
+    private MealStatus mealStatus;
 }
