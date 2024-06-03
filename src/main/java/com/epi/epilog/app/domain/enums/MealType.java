@@ -1,5 +1,5 @@
 package com.epi.epilog.app.domain.enums;
 
 public enum MealType {
-    아침, 점심, 저녁, 간식
+    아침식사, 점심식사, 저녁식사, 간식
 }

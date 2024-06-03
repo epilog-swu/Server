@@ -3,6 +3,7 @@ package com.epi.epilog.app.dto;
 import com.epi.epilog.app.domain.enums.OccurrenceType;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class DiabetesResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     static public class BloodSugarTodayResponse {
-        public String date;
+        public Integer total;
+        public LocalDate date;
         public List<DiabetesBloodSugar> diabetes;
     }
 
@@ -27,11 +29,7 @@ public class DiabetesResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     static public class DiabetesBloodSugar {
-        public OccurrenceType occurrenceType;
+        public String occurrenceType;
         public Integer bloodSugar;
     }
-
-    /**
-     *
-     */
 }

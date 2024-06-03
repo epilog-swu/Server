@@ -11,7 +11,7 @@ import java.util.Base64;
 
 @EnableJpaAuditing
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.epi.epilog")
 public class EpilogApplication {
 
 	public static void main(String[] args) {
