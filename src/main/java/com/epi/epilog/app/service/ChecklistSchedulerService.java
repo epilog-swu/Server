@@ -32,7 +32,7 @@ public class ChecklistSchedulerService {
     /**
      * 식사 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "0 15 3 * * *")
     @Transactional
     public void mealChecklistScheduler() {
         List<Meal> all = mealRepository.findAll();
@@ -51,7 +51,7 @@ public class ChecklistSchedulerService {
     /**
      * 복약 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "0 15 3 * * *")
     @Transactional
     public void medicineChecklistScheduler(){
         List<Medicine> all = medicineRepository.findAll();
