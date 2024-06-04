@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -25,7 +26,7 @@ public class MedicineLog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="medicine_id")
     private Medicine medicine;
-    private LocalDateTime goalTime;
+    private LocalTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
