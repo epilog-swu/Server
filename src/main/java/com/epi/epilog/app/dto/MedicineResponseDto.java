@@ -15,7 +15,7 @@ public class MedicineResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class ChecklistDto {
         public LocalDate date;
-        public List<MealsResponseDto.ChecklistStateDto> checklist;
+        public List<MedicineResponseDto.ChecklistStateDto> checklist;
     }
 
     @Data
