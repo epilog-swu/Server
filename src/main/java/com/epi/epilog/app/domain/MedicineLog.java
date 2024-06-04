@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -25,9 +26,22 @@ public class MedicineLog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="medicine_id")
     private Medicine medicine;
-    private LocalDateTime goalTime;
+    private LocalTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private MedicationStatus medicationStatus = MedicationStatus.상태없음;
-}
+
+    public void updateMedicationStatus(MedicationStatus status){
+        this.medicationStatus = status;
+        if (status == MedicationStatus.상태없음){
+            this.isComplete = false;
+        } else {
+            this.isComplete = true;
+        }
+    }
+    public void updateActualTime(LocalDateTime time){
+        this.actualTime = time;
+    }
+ }
