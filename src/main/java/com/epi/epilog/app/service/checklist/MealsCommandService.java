@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.MealLog;
 import com.epi.epilog.app.domain.Member;
@@ -23,7 +23,7 @@ public class MealsCommandService {
     private final MealLogRepository mealLogRepository;
 
     @Transactional
-    public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.ChecklistUpdateDto form) {
+    public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.MealChecklistUpdateDto form) {
         MealLog mealLog = mealLogRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
 
