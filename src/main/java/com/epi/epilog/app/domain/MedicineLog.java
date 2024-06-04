@@ -26,7 +26,7 @@ public class MedicineLog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="medicine_id")
     private Medicine medicine;
-    private LocalTime goalTime;
+    private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
