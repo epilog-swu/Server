@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,10 @@ public class Medicine extends BaseEntity {
     @ColumnDefault("true")
     private Boolean isAlarm;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="medicine_id"))
     private List<WeekType> weeks = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name="MedicineTimes", joinColumns = @JoinColumn(name="medicine_id"))
+    private List<LocalTime> times = new ArrayList<>();
 }

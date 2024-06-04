@@ -12,6 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,12 @@ public class Meal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    private LocalDateTime goalTime;
+    private LocalTime goalTime;
     @Enumerated(EnumType.STRING)
     private MealType mealType;
     @ElementCollection
     @CollectionTable(name="MealWeeks", joinColumns =  @JoinColumn(name="meal_id"))
+    @Enumerated(EnumType.STRING)
     private List<WeekType> weeks = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")

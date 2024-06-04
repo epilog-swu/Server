@@ -22,6 +22,12 @@ public class MealsCommandService {
     private final MemberRepository memberRepository;
     private final MealLogRepository mealLogRepository;
 
+    /**
+     * 체크리스트 수정
+     * @param id
+     * @param form
+     * @return
+     */
     @Transactional
     public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.MealChecklistUpdateDto form) {
         MealLog mealLog = mealLogRepository.findById(id)

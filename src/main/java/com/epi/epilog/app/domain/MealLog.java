@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class MealLog {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="meal_id")
     private Meal meal;
-    private LocalDateTime goalTime;
+    private LocalTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Enumerated(EnumType.STRING)
