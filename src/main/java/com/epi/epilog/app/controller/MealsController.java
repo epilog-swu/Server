@@ -33,7 +33,7 @@ public class MealsController {
     }
 
     @PatchMapping("/{chklstId}")
-    public CommonResponseDto.CommonResponse mealsCheck(@PathVariable("chklstId")Long id, @RequestBody @Valid MealsResponseDto.ChecklistUpdateDto form){
+    public CommonResponseDto.CommonResponse medicineCheck(@PathVariable("chklstId")Long id, @RequestBody @Valid MealsResponseDto.MealChecklistUpdateDto form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

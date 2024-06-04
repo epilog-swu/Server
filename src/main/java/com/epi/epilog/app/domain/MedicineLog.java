@@ -29,5 +29,18 @@ public class MedicineLog extends BaseEntity {
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Builder.Default
+    @Enumerated(EnumType.STRING)
     private MedicationStatus medicationStatus = MedicationStatus.상태없음;
-}
+
+    public void updateMedicationStatus(MedicationStatus status){
+        this.medicationStatus = status;
+        if (status == MedicationStatus.상태없음){
+            this.isComplete = false;
+        } else {
+            this.isComplete = true;
+        }
+    }
+    public void updateActualTime(LocalDateTime time){
+        this.actualTime = time;
+    }
+ }
