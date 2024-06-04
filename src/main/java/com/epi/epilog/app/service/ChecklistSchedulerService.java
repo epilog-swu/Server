@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,14 +34,14 @@ public class ChecklistSchedulerService {
     /**
      * 식사 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 25 0,3,12 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void mealChecklistScheduler() {
         List<Meal> all = mealRepository.findAll();
         if (!all.isEmpty()){
             List<MealLog> mealChecklist = all.stream().map(meal -> MealLog.builder()
                     .meal(meal)
-                    .goalTime(meal.getGoalTime())
+                    .goalTime(LocalDate.now().plusDays(1).atTime(meal.getGoalTime()))
                     .isComplete(false)
                     .mealStatus(MealStatus.상태없음)
                     .build()).collect(Collectors.toList());
@@ -51,7 +53,7 @@ public class ChecklistSchedulerService {
     /**
      * 복약 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 25 0,3,12 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void medicineChecklistScheduler(){
         List<Medicine> all = medicineRepository.findAll();
@@ -61,7 +63,7 @@ public class ChecklistSchedulerService {
                             .map(times -> MedicineLog.builder()
                                     .medicine(medicine)
                                     .isComplete(false)
-                                    .goalTime(times)
+                                    .goalTime(LocalDate.now().plusDays(1).atTime(times))
                                     .medicationStatus(MedicationStatus.상태없음)
                                     .build()))
                     .collect(Collectors.toList());

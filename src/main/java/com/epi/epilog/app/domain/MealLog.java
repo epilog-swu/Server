@@ -21,7 +21,7 @@ public class MealLog {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="meal_id")
     private Meal meal;
-    private LocalTime goalTime;
+    private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
     @Enumerated(EnumType.STRING)
