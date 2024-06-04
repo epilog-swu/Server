@@ -34,6 +34,7 @@ public class Meal {
     @Enumerated(EnumType.STRING)
     private MealType mealType;
     @ElementCollection
+    @Builder.Default
     @CollectionTable(name="MealWeeks", joinColumns =  @JoinColumn(name="meal_id"))
     @Enumerated(EnumType.STRING)
     private List<WeekType> weeks = new ArrayList<>();
