@@ -38,10 +38,12 @@ public class Medicine extends BaseEntity {
     @ColumnDefault("true")
     private Boolean isAlarm;
     @ElementCollection
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="medicine_id"))
     private List<WeekType> weeks = new ArrayList<>();
     @ElementCollection
+    @Builder.Default
     @CollectionTable(name="MedicineTimes", joinColumns = @JoinColumn(name="medicine_id"))
     private List<LocalTime> times = new ArrayList<>();
 }
