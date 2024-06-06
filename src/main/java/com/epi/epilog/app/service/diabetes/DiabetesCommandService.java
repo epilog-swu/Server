@@ -41,6 +41,11 @@ public class DiabetesCommandService {
         Member mem = memberRepository.findById(member.getId()).orElseThrow(()->
                 new ApiException(ErrorCode.USER_NOT_FOUND));
 
+        List<Diabetes> diabetsList = diabetesRepository.findAllByDateAndMember(form.getDate(), mem);
+        if (diabetsList.size() >= 10) {
+            throw new ApiException(ErrorCode.OVER_COUNT_DIABETES);
+        }
+
         // create diabetes
         Diabetes diabet = Diabetes.builder()
                 .member(mem)
