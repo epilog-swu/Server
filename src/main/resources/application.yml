@@ -1,0 +1,41 @@
+spring:
+  datasource:
+      driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+      url: ${SPRING_DATASOURCE_URL}
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: ${SPRING_DDL_AUTO}
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+  logging:
+    level:
+      org.hibernate.SQL: debug
+  servlet:
+    multipart:
+      max-file-size: 200MB
+
+jwt:
+  expiration_time: 86400000 #1일
+  secret: ${JWT_SECRET_KEY}
+
+sms:
+  cool:
+    api: ${COOL_SMS_KEY}
+    secret: ${COOL_SMS_SECRET}
+  map:
+    api: ${GOOGLE_API_KEY}
+
+kakao:
+  api:
+    key: ${KAKAO_API_KEY}
+
+bitly:
+  api:
+    token: ${BITLY_API_KEY}
