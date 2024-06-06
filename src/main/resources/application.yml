@@ -25,5 +25,17 @@ jwt:
   expiration_time: 86400000 #1일
   secret: ${JWT_SECRET_KEY}
 
+sms:
+  cool:
+    api: ${COOL_SMS_KEY}
+    secret: ${COOL_SMS_SECRET}
+  map:
+    api: ${GOOGLE_API_KEY}
 
+kakao:
+  api:
+    key: ${KAKAO_API_KEY}
 
+bitly:
+  api:
+    token: ${BITLY_API_KEY}

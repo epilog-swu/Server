@@ -12,4 +12,11 @@ public class CommonResponseDto {
         public String message;
         public Boolean success;
     }
+
+    @Data
+    @Getter
+    static public class LocationRequest {
+        public Double latitude;
+        public Double longitude;
+    }
 }
