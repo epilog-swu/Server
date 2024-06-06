@@ -52,7 +52,7 @@ public class FallDetectionController {
                 String mapImage = googleMapService.getMapImageUrl(form.getLatitude(), form.getLongitude());
                 String mapImageUrl = googleMapService.createShortURL(mapImage);
                 String address = googleMapService.getAddress(form.getLatitude(), form.getLongitude());
-                String message = member.getName() + "님 낙상 감지됨" + "\n" + " " + address + mapImageUrl;
+                String message = member.getName() + "님 낙상 감지됨" + "\n" + " " + address + " " + mapImageUrl;
 
                 log.info("message="+message);
 
