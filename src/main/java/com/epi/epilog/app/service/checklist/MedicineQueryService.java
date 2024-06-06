@@ -41,7 +41,7 @@ public class MedicineQueryService {
             lists = medicineLogs.stream().map(medicine -> MedicineResponseDto.ChecklistStateDto.builder()
                             .id(medicine.getId())
                             .goalTime(medicine.getGoalTime().format((DateTimeConverter.timeFormatter)))
-                            .title(medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter))
+                            .title((medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter)) + " " + medicine.getMedicine().getName())
                             .isComplete(medicine.getIsComplete())
                             .state(medicine.getMedicationStatus().toString())
                             .build()
