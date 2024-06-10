@@ -67,12 +67,13 @@ public class MapService {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+//        log.info("body = "+response.getBody().toString());
 
         if (response.getStatusCode() == HttpStatus.OK) {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.getBody());
-            log.info("url = "+response.getBody());
-            return root.path("link").asText();
+//            log.info("url = "+response.getBody());
+            return root.path("id").asText();
         } else {
             return longUrl;
         }

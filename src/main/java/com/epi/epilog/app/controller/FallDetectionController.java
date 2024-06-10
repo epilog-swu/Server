@@ -50,13 +50,16 @@ public class FallDetectionController {
                     .getMember().getId()).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
             try {
                 String mapImage = googleMapService.getMapImageUrl(form.getLatitude(), form.getLongitude());
+                log.info("map = "+mapImage);
                 String mapImageUrl = googleMapService.createShortURL(mapImage);
+                log.info("map real url = "+mapImageUrl);
                 String address = googleMapService.getAddress(form.getLatitude(), form.getLongitude());
+                log.info("address = "+address);
                 String message = member.getName() + "님 낙상 감지됨" + "\n" + " " + address + " " + mapImageUrl;
 
-                log.info("message="+message);
+                log.info("message = "+message);
 
-                smsService.sendSms("01086907017", member.getProtectorPhone(), message);
+                smsService.sendSms(member.getProtectorPhone(), "01086907017", message);
                 return CommonResponseDto.CommonResponse.builder()
                         .success(true)
                         .message("전송되었습니다.")
