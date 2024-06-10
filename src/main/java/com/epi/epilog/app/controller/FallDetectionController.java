@@ -59,7 +59,7 @@ public class FallDetectionController {
 
                 log.info("message = "+message);
 
-                smsService.sendSms(member.getProtectorPhone(), "01086907017", message);
+                smsService.sendSms("01086907017", member.getProtectorPhone(), message);
                 return CommonResponseDto.CommonResponse.builder()
                         .success(true)
                         .message("전송되었습니다.")
