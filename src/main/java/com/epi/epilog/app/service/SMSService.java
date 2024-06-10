@@ -32,7 +32,7 @@ public class SMSService {
 
         Message message = new Message();
 
-        message.setFrom("01047367769");
+        message.setFrom(from);
         message.setTo(to);
         message.setText(text);
 
