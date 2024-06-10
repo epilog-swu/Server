@@ -25,7 +25,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, 2000, "유저를 찾을 수 없습니다."),
 
     // 3xxx
-    OVER_COUNT_DIABETES(HttpStatus.BAD_REQUEST, 3000, "최대 입력 개수를 넘었습니다.");
+    OVER_COUNT_DIABETES(HttpStatus.BAD_REQUEST, 3000, "최대 입력 개수를 넘었습니다."),
+    CANT_SEND_SMS(HttpStatus.BAD_REQUEST, 3001, "SMS 발송에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;
