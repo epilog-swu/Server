@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FallDetectionService {
-    private static final double THRESHOLD_SVM = 2.5;
-    private static final double THRESHOLD_ANGLE = 50.0;
-    private static final int SVM_THRESHOLD_COUNT = 70;
+    private static final double THRESHOLD_SVM = 2.0;
+    private static final double THRESHOLD_ANGLE = 40.0;
+    private static final int SVM_THRESHOLD_COUNT = 65;
     private static final int BASELINE_WINDOW_SIZE = 10;
 
     /**
