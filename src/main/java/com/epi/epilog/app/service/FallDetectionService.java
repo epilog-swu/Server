@@ -50,7 +50,7 @@ public class FallDetectionService {
                 svmThresholdExceedCount++;
             }
 
-            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT && angleY > THRESHOLD_ANGLE) {
+            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT || angleY > THRESHOLD_ANGLE) {
                 return true;
             }
 
