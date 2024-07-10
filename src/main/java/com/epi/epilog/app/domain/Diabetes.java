@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,25 +30,21 @@ public class Diabetes extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
-    // 발생일자
-    private LocalDate date;
-
-    // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
-    private String occurrenceType;
-    private String title;
-    @ColumnDefault("0")
-    private Integer bloodSugar;
-    // 기분
-    @ElementCollection
-    @CollectionTable(name="DiabetesMood", joinColumns = @JoinColumn(name="diabetes_id"))
-    private List<String> mood = new ArrayList<>();
-    // 신체활동
-    @ElementCollection
-    @CollectionTable(name="DiabetesActivity", joinColumns = @JoinColumn(name="diabetes_id"))
-    private List<String> activity = new ArrayList<>();
-    // 복용 약
-    @ElementCollection
-    @CollectionTable(name="DiabetesMedication", joinColumns = @JoinColumn(name="diabetes_id"))
-    private List<String> medication = new ArrayList<>();
-    private String comment;
+    private String title; // 제목
+    private LocalDate date; // 발생일자
+    private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
+    @Nullable
+    private Double bloodSugar; // 혈당
+    @Nullable
+    private Double systolicBloodPressure; // 수축기 혈압
+    @Nullable
+    private Double diastolicBloodPressure; // 이완기 혈압
+    @Nullable
+    private Integer heartRate; // 심박수
+    @Nullable
+    private Double weight; // 몸무게
+    @Nullable
+    private Double bodyFatPercentage; // 체지방률
+    @Nullable
+    private String bodyPhoto; // 눈바디 사진
 }

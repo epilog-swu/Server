@@ -1,5 +1,7 @@
 package com.epi.epilog.app.domain;
 
+import com.epi.epilog.app.domain.enums.ActivityLevel;
+import com.epi.epilog.app.domain.enums.AgeType;
 import com.epi.epilog.app.domain.enums.GenderType;
 import com.epi.epilog.app.domain.enums.RoleType;
 import jakarta.persistence.*;
@@ -35,6 +37,10 @@ public class Member extends BaseEntity {
     private Double weight;
     @Enumerated(EnumType.STRING)
     private GenderType gender;
+    @Enumerated(EnumType.STRING)
+    private AgeType age;
+    @Enumerated(EnumType.STRING)
+    private ActivityLevel activityLevel;
     @NotNull
     private String protectorName;
     @NotNull
