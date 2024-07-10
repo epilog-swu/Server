@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.diabets;
+package com.epi.epilog.app.domain.log;
 
 import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.member.Member;
@@ -30,14 +30,17 @@ public class Log extends BaseEntity {
     private String title; // 제목
     private LocalDate date; // 발생일자
     private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
+
     @Nullable
     private Double bloodSugar; // 혈당
+
     @Nullable
     private Double systolicBloodPressure; // 수축기 혈압
     @Nullable
     private Double diastolicBloodPressure; // 이완기 혈압
     @Nullable
     private Integer heartRate; // 심박수
+
     @Nullable
     private Double weight; // 몸무게
     @Nullable

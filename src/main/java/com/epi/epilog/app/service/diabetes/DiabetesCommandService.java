@@ -1,8 +1,8 @@
 package com.epi.epilog.app.service.diabetes;
 
-import com.epi.epilog.app.domain.diabets.Log;
+import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.member.Member;
-import com.epi.epilog.app.domain.diabets.OccurrenceType;
+import com.epi.epilog.app.domain.log.OccurrenceType;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;

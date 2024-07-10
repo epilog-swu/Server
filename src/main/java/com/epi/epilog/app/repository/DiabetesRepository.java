@@ -1,6 +1,6 @@
 package com.epi.epilog.app.repository;
 
-import com.epi.epilog.app.domain.diabets.Log;
+import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
