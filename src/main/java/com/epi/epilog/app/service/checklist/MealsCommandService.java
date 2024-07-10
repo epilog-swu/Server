@@ -3,7 +3,7 @@ package com.epi.epilog.app.service.checklist;
 import com.epi.epilog.app.domain.meal.MealCheckList;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
-import com.epi.epilog.app.repository.MealLogRepository;
+import com.epi.epilog.app.repository.MealCheckListRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MealsCommandService {
     private final MemberRepository memberRepository;
-    private final MealLogRepository mealLogRepository;
+    private final MealCheckListRepository mealCheckListRepository;
 
     /**
      * 체크리스트 수정
@@ -28,12 +28,12 @@ public class MealsCommandService {
      */
     @Transactional
     public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.MealChecklistUpdateDto form) {
-        MealCheckList mealCheckList = mealLogRepository.findById(id)
+        MealCheckList mealCheckList = mealCheckListRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
 
         mealCheckList.updateActualTime(DateTimeConverter.convertToLocalDateTime(form.getTime()));
         mealCheckList.updateStatue(form.getStatus());
-        mealLogRepository.save(mealCheckList);
+        mealCheckListRepository.save(mealCheckList);
 
         return CommonResponseDto.CommonResponse.builder().success(true).message("수정되었습니다.").build();
     }
