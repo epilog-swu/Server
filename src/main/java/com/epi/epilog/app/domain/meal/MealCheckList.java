@@ -27,6 +27,10 @@ public class MealCheckList {
     @ColumnDefault("'상태없음'")
     private MealStatus mealStatus;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="meal_log_id")
+    private MealLog mealLog;
+
     public void updateActualTime(LocalDateTime time){
         this.actualTime = time;
     }
