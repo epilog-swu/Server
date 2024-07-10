@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.enums;
+package com.epi.epilog.app.domain.member;
 
 public enum ActivityLevel {
     LOW("활동 강도 낮음"),

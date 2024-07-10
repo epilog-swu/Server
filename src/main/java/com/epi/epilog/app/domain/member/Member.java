@@ -1,9 +1,6 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.member;
 
-import com.epi.epilog.app.domain.enums.ActivityLevel;
-import com.epi.epilog.app.domain.enums.AgeType;
-import com.epi.epilog.app.domain.enums.GenderType;
-import com.epi.epilog.app.domain.enums.RoleType;
+import com.epi.epilog.app.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;

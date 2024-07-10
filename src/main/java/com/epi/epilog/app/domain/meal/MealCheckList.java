@@ -1,26 +1,25 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.meal;
 
-import com.epi.epilog.app.domain.enums.MealStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access= AccessLevel.PRIVATE)
-public class MealLog {
+public class MealCheckList {
     @Id
-    @Column(name="meal_log_id")
+    @Column(name="meal_checklist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="meal_id")
     private Meal meal;
+    private String title;
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
@@ -28,7 +27,7 @@ public class MealLog {
     @ColumnDefault("'상태없음'")
     private MealStatus mealStatus;
 
-    public void updateActualTiime(LocalDateTime time){
+    public void updateActualTime(LocalDateTime time){
         this.actualTime = time;
     }
 

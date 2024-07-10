@@ -1,7 +1,7 @@
 package com.epi.epilog.app.service.checklist;
 
-import com.epi.epilog.app.domain.MedicineLog;
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.medication.MedicationCheckList;
+import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MedicineResponseDto;
 import com.epi.epilog.app.repository.MedicineLogRepository;
@@ -33,15 +33,15 @@ public class MedicineQueryService {
         Member member = memberRepository.findById(memberDto.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
-        List<MedicineLog> medicineLogs = medicineLogRepository
+        List<MedicationCheckList> medicationCheckLists = medicineLogRepository
                 .findAllByMemberAndGoalTime(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         List<MedicineResponseDto.ChecklistStateDto> lists = new ArrayList<>();
-        if (!medicineLogs.isEmpty()){
-            lists = medicineLogs.stream().map(medicine -> MedicineResponseDto.ChecklistStateDto.builder()
+        if (!medicationCheckLists.isEmpty()){
+            lists = medicationCheckLists.stream().map(medicine -> MedicineResponseDto.ChecklistStateDto.builder()
                             .id(medicine.getId())
                             .goalTime(medicine.getGoalTime().format((DateTimeConverter.timeFormatter)))
-                            .title((medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter)) + " " + medicine.getMedicine().getName())
+                            .title((medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter)) + " " + medicine.getMedication().getMedicationName())
                             .isComplete(medicine.getIsComplete())
                             .state(medicine.getMedicationStatus().toString())
                             .build()

@@ -1,17 +1,14 @@
 package com.epi.epilog.app.service;
 
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.AuthFormDto;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
-import com.epi.epilog.global.exception.ErrorResponse;
 import com.epi.epilog.global.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

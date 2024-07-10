@@ -1,8 +1,7 @@
 package com.epi.epilog.app.service.diabetes;
 
-import com.epi.epilog.app.converter.DiabetesConverter;
-import com.epi.epilog.app.domain.Diabetes;
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.diabets.Log;
+import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesResponseDto;
 import com.epi.epilog.app.repository.DiabetesRepository;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,12 +28,12 @@ public class DiabetesQueryService {
     public DiabetesResponseDto.BloodSugarTodayResponse showBloodSugarList(CustomUserInfoDto member, LocalDate date) {
         Member newMember = memberRepository.findById(member.getId())
                 .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));
-        List<Diabetes> diabetes = diabetesRepository.findAllByDateAndMember(date, newMember);
+        List<Log> logs = diabetesRepository.findAllByDateAndMember(date, newMember);
 
         List<DiabetesResponseDto.DiabetesBloodSugar> bloodSugars = new ArrayList<>();
 
-        if (diabetes != null){
-            bloodSugars = diabetes.stream().map(diabet ->
+        if (logs != null){
+            bloodSugars = logs.stream().map(diabet ->
                     DiabetesResponseDto.DiabetesBloodSugar
                             .builder()
                             .bloodSugar(diabet.getBloodSugar())

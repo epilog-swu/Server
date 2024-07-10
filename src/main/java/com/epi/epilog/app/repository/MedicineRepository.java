@@ -1,7 +1,7 @@
 package com.epi.epilog.app.repository;
 
-import com.epi.epilog.app.domain.Medicine;
+import com.epi.epilog.app.domain.medication.Medication;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Long> {
+public interface MedicineRepository extends JpaRepository<Medication, Long> {
 }

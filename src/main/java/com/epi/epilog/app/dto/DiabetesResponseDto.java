@@ -1,10 +1,8 @@
 package com.epi.epilog.app.dto;
 
-import com.epi.epilog.app.domain.enums.OccurrenceType;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class DiabetesResponseDto {
@@ -30,6 +28,6 @@ public class DiabetesResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     static public class DiabetesBloodSugar {
         public String occurrenceType;
-        public Integer bloodSugar;
+        public Double bloodSugar;
     }
 }

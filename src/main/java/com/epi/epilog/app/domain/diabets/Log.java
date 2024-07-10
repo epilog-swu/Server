@@ -1,18 +1,15 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.diabets;
 
-import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
-import com.epi.epilog.app.domain.enums.OccurrenceType;
+import com.epi.epilog.app.domain.BaseEntity;
+import com.epi.epilog.app.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -22,9 +19,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class Diabetes extends BaseEntity {
+public class Log extends BaseEntity {
     @Id
-    @Column(name="diabetes_id")
+    @Column(name="log_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)

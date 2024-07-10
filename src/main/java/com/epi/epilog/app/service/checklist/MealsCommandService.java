@@ -1,9 +1,7 @@
 package com.epi.epilog.app.service.checklist;
 
-import com.epi.epilog.app.domain.MealLog;
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.meal.MealCheckList;
 import com.epi.epilog.app.dto.CommonResponseDto;
-import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
 import com.epi.epilog.app.repository.MealLogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
@@ -30,12 +28,12 @@ public class MealsCommandService {
      */
     @Transactional
     public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.MealChecklistUpdateDto form) {
-        MealLog mealLog = mealLogRepository.findById(id)
+        MealCheckList mealCheckList = mealLogRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
 
-        mealLog.updateActualTiime(DateTimeConverter.convertToLocalDateTime(form.getTime()));
-        mealLog.updateStatue(form.getStatus());
-        mealLogRepository.save(mealLog);
+        mealCheckList.updateActualTime(DateTimeConverter.convertToLocalDateTime(form.getTime()));
+        mealCheckList.updateStatue(form.getStatus());
+        mealLogRepository.save(mealCheckList);
 
         return CommonResponseDto.CommonResponse.builder().success(true).message("수정되었습니다.").build();
     }

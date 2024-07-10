@@ -1,6 +1,6 @@
 package com.epi.epilog.app.dto;
 
-import com.epi.epilog.app.domain.enums.MedicationStatus;
+import com.epi.epilog.app.domain.medication.MedicationStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 

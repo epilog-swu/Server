@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.enums;
+package com.epi.epilog.app.domain.member;
 
 public enum AgeType {
     AGE_15_18("15-18세"),

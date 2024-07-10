@@ -1,6 +1,6 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.medication;
 
-import com.epi.epilog.app.domain.enums.MedicationStatus;
+import com.epi.epilog.app.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -18,14 +17,15 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class MedicineLog extends BaseEntity {
+public class MedicationCheckList extends BaseEntity {
     @Id
-    @Column(name="medicine_log_id")
+    @Column(name="medication_checklist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="medicine_id")
-    private Medicine medicine;
+    @JoinColumn(name="medication_id")
+    private Medication medication;
+    private String title;
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;
     private Boolean isComplete;
