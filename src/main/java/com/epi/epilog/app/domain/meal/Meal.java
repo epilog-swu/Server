@@ -1,17 +1,13 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.meal;
 
-import com.epi.epilog.app.domain.enums.MealType;
-import com.epi.epilog.app.domain.enums.WeekType;
+import com.epi.epilog.app.domain.member.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +25,15 @@ public class Meal {
     @Column(name="meal_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private LocalTime goalTime;
-    @Enumerated(EnumType.STRING)
-    private MealType mealType;
-    @ElementCollection
-    @Builder.Default
-    @CollectionTable(name="MealWeeks", joinColumns =  @JoinColumn(name="meal_id"))
-    @Enumerated(EnumType.STRING)
-    private List<WeekType> weeks = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+    @Enumerated(EnumType.STRING)
+    private MealType mealType;
     @ColumnDefault("true")
     private Boolean isAlarm;
+    @ElementCollection
+    @Builder.Default
+    @CollectionTable(name="MealTimes", joinColumns = @JoinColumn(name="meal_id"))
+    private List<LocalTime> times = new ArrayList<>();
 }

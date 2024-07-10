@@ -1,12 +1,10 @@
 package com.epi.epilog.app.service.checklist;
 
-import com.epi.epilog.app.domain.Meal;
-import com.epi.epilog.app.domain.MealLog;
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.meal.MealCheckList;
+import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
-import com.epi.epilog.app.repository.MealLogRepository;
-import com.epi.epilog.app.repository.MealRepository;
+import com.epi.epilog.app.repository.MealCheckListRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MealsQueryService {
     private final MemberRepository memberRepository;
-    private final MealLogRepository mealLogRepository;
+    private final MealCheckListRepository mealCheckListRepository;
 
     public MealsResponseDto.ChecklistDto mealsCheckList(CustomUserInfoDto member, LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 mm분");
@@ -37,13 +34,13 @@ public class MealsQueryService {
         Member newMember = memberRepository.findById(member.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
-        List<MealLog> mealLogs = mealLogRepository
+        List<MealCheckList> mealCheckLists = mealCheckListRepository
                 .findAllByMemberAndGoalTime(newMember, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         List<MealsResponseDto.ChecklistStateDto> checklist = new ArrayList<>();
 
-        if (!mealLogs.isEmpty()){
-            checklist = mealLogs.stream()
+        if (!mealCheckLists.isEmpty()){
+            checklist = mealCheckLists.stream()
                     .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
                             .id(meal.getId())
                             .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
