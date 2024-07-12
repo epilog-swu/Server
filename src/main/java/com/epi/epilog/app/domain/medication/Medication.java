@@ -39,7 +39,10 @@ public class Medication extends BaseEntity {
     private LocalDateTime startDate;
     @Nullable
     private LocalDateTime endDate;
+    @NotNull
+    private Boolean endless;
     @ColumnDefault("true")
+    @NotNull
     private Boolean isAlarm;
     @Nullable
     private String precautions; // 주의사항
@@ -53,9 +56,11 @@ public class Medication extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @CollectionTable(name="MedicationWeeks", joinColumns = @JoinColumn(name="medication_id"))
+    @Nullable
     private List<WeekType> weeks = new ArrayList<>();
     @ElementCollection
     @Builder.Default
     @CollectionTable(name="MedicationTimes", joinColumns = @JoinColumn(name="medication_id"))
+    @Nullable
     private List<LocalTime> times = new ArrayList<>();
 }
