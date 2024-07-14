@@ -89,6 +89,7 @@ public class AuthService {
                 .protectorName(form.getProtectorName())
                 .protectorPhone(form.getProtectorPhone())
                 .code(code)
+                .linkWatch(false)
                 .build();
         Member saveMember = memberRepository.save(member);
 
