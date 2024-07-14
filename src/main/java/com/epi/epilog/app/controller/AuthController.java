@@ -1,6 +1,7 @@
 package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.AuthFormDto;
+import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
-//    @PostMapping("signup")
-//    public ResponseEntity<String> signup(@Valid @RequestBody AuthFormDto.SignupFormDto form){
-//        String
-//    }
+    @PostMapping("/signup")
+    public AuthFormDto.SignUpResponseDto signup(@Valid @RequestBody AuthFormDto.SignupFormDto form){
+        return authService.signUp(form);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.PatientLoginFormDto form){
@@ -28,5 +29,10 @@ public class AuthController {
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.ProtectorLoginFormDto form){
         String token = authService.protectorLogin(form);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("/validation")
+    public CommonResponseDto.CommonResponse idValidationCheck(@RequestParam("id") String userId){
+        return authService.idValidationCheck(userId);
     }
 }
