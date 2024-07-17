@@ -1,7 +1,7 @@
 package com.epi.epilog.app.domain.validators;
 
 import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
-import com.epi.epilog.app.domain.enums.OccurrenceType;
+import com.epi.epilog.app.domain.log.OccurrenceType;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

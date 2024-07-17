@@ -1,6 +1,8 @@
-package com.epi.epilog.app.domain;
+package com.epi.epilog.app.domain.medication;
 
+import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.enums.WeekType;
+import com.epi.epilog.app.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,9 +25,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class Medicine extends BaseEntity {
+public class Medication extends BaseEntity {
     @Id
-    @Column(name="medicine_id")
+    @Column(name="medication_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,18 +35,32 @@ public class Medicine extends BaseEntity {
     @NotNull
     private Member member;
     @NotNull
-    private String name;
+    private String medicationName;
     private LocalDateTime startDate;
+    @Nullable
     private LocalDateTime endDate;
+    @NotNull
+    private Boolean endless;
     @ColumnDefault("true")
+    @NotNull
     private Boolean isAlarm;
+    @Nullable
+    private String precautions; // 주의사항
+    @Nullable
+    private String storageMethod; // 보관방법
+    @Nullable
+    private String effectiveness; // 효능
+    @Nullable
+    private String medicationImage; // 이미지
     @ElementCollection
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name="MedicineWeeks", joinColumns = @JoinColumn(name="medicine_id"))
+    @CollectionTable(name="MedicationWeeks", joinColumns = @JoinColumn(name="medication_id"))
+    @Nullable
     private List<WeekType> weeks = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name="MedicineTimes", joinColumns = @JoinColumn(name="medicine_id"))
+    @CollectionTable(name="MedicationTimes", joinColumns = @JoinColumn(name="medication_id"))
+    @Nullable
     private List<LocalTime> times = new ArrayList<>();
 }

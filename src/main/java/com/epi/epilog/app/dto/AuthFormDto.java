@@ -1,8 +1,10 @@
 package com.epi.epilog.app.dto;
 
-import com.epi.epilog.app.domain.enums.GenderType;
+import com.epi.epilog.app.domain.member.GenderType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.List;
 
 
 public class AuthFormDto {
@@ -27,7 +29,7 @@ public class AuthFormDto {
     @AllArgsConstructor
     @NoArgsConstructor(access=AccessLevel.PRIVATE)
     public static class SignupFormDto{
-        private String id;
+        private String loginId;
         private String password;
         private String name;
         private Double stature;
@@ -35,5 +37,17 @@ public class AuthFormDto {
         private GenderType gender;
         private String protectorName;
         private String protectorPhone;
+        private List<MedicationRequestDto.MedicationSignUpDto> medication;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor(access=AccessLevel.PRIVATE)
+    @Builder
+    @Getter
+    public static class SignUpResponseDto {
+        private Boolean success;
+        private String code;
+        private String token;
     }
 }

@@ -39,3 +39,6 @@ kakao:
 bitly:
   api:
     token: ${BITLY_API_KEY}
+
+firebase:
+  json: ${FIREBASE_CONFIG}

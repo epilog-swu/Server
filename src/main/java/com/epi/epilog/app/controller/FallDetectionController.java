@@ -1,6 +1,6 @@
 package com.epi.epilog.app.controller;
 
-import com.epi.epilog.app.domain.Member;
+import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.AccelerometerData;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.repository.MemberRepository;

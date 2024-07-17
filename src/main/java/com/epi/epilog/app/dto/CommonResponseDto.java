@@ -8,6 +8,15 @@ public class CommonResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    static public class SuccessResponse {
+        public Boolean success;
+    }
+
+    @Data
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
     static public class CommonResponse {
         public String message;
         public Boolean success;

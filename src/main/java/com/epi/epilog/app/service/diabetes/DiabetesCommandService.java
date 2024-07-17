@@ -1,28 +1,21 @@
 package com.epi.epilog.app.service.diabetes;
 
-import com.epi.epilog.app.domain.Diabetes;
-import com.epi.epilog.app.domain.Member;
-import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
-import com.epi.epilog.app.domain.enums.OccurrenceType;
-import com.epi.epilog.app.domain.validators.OccurenceTypeValidator;
+import com.epi.epilog.app.domain.log.Log;
+import com.epi.epilog.app.domain.member.Member;
+import com.epi.epilog.app.domain.log.OccurrenceType;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
-import com.epi.epilog.app.repository.DiabetesRepository;
+import com.epi.epilog.app.repository.LogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
-import com.epi.epilog.global.utils.DateTimeConverter;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -33,7 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class DiabetesCommandService {
-    private final DiabetesRepository diabetesRepository;
+    private final LogRepository logRepository;
     private final MemberRepository memberRepository;
 
     public CommonResponseDto.CommonResponse createBloodSugar(
@@ -41,20 +34,20 @@ public class DiabetesCommandService {
         Member mem = memberRepository.findById(member.getId()).orElseThrow(()->
                 new ApiException(ErrorCode.USER_NOT_FOUND));
 
-        List<Diabetes> diabetsList = diabetesRepository.findAllByDateAndMember(form.getDate(), mem);
+        List<Log> diabetsList = logRepository.findAllByDateAndMember(form.getDate(), mem);
         if (diabetsList.size() >= 10) {
             throw new ApiException(ErrorCode.OVER_COUNT_DIABETES);
         }
 
         // create diabetes
-        Diabetes diabet = Diabetes.builder()
+        Log diabet = Log.builder()
                 .member(mem)
                 .date(form.getDate()!=null?form.getDate():LocalDate.now())
                 .occurrenceType(form.getOccurrenceType())
                 .title(createTitle(mem, form.getDate(), form.getOccurrenceType()))
                 .bloodSugar(form.getBloodSugar())
                 .build();
-        diabetesRepository.save(diabet);
+        logRepository.save(diabet);
 
         // return form
         return CommonResponseDto.CommonResponse.builder()
@@ -74,10 +67,10 @@ public class DiabetesCommandService {
         Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
 
         if (OccurrenceType.isValid(occurrenceType)) {
-            List<Diabetes> diabetes = diabetesRepository.findAllByDateAndMember(date, member);
-            Map<String, Integer> titleCount = diabetes.stream()
+            List<Log> logs = logRepository.findAllByDateAndMember(date, member);
+            Map<String, Integer> titleCount = logs.stream()
                     .collect(Collectors.toMap(
-                            Diabetes::getOccurrenceType,
+                            Log::getOccurrenceType,
                             data -> 1,
                             Integer::sum
                     ));
