@@ -26,20 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/detection")
 public class FallDetectionController {
-    private final FallDetectionService fallDetectionService;
     private final SMSService smsService;
     private final MapService googleMapService;
     private final MemberRepository memberRepository;
-
-    @PostMapping("/fall")
-    public boolean detectFall(@RequestBody List<AccelerometerData> data) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return fallDetectionService.isFallDetected(data);
-        }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
-    }
 
     @PostMapping("/emergency")
     public CommonResponseDto.CommonResponse emergencyAlram(
