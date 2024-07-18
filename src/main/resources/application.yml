@@ -42,3 +42,11 @@ bitly:
 
 firebase:
   json: ${FIREBASE_CONFIG}
+
+logging:
+  file:
+    name: /var/log/springboot/spring.log
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.epi.epilog: DEBUG
