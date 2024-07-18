@@ -66,7 +66,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    @Scheduled(fixedRate = 180000)
+    @Scheduled(fixedRate = 30000)
     public void sendPingEvent() {
         for (WebSocketSession session : sessions) {
             if (session.isOpen()) {
