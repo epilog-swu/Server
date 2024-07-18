@@ -7,15 +7,18 @@ import com.epi.epilog.global.utils.JwtUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -24,14 +27,18 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final FallDetectionService fallDetectionService;
 
+    private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String uri = session.getUri().toString();
         String token = extractTokenFromUri(uri);
 
         if (token != null && jwtUtil.validateJwt(token)) {
+            sessions.add(session);
             System.out.println("연결되었습니다: ID(" + session.getId()+")");
         } else {
+            session.close(CloseStatus.NOT_ACCEPTABLE);
             System.out.println("연결되지 않았습니다: ID(" + session.getId()+")");
         }
     }
@@ -50,14 +57,37 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             case "fall":
                 handleFallEvent(session, data);
                 break;
+            case "pong":
+                handlePongEvent(session, data);
+                break;
             default:
                 System.out.println("Unknown event: " + event);
                 break;
         }
     }
 
+    @Scheduled(fixedRate = 180000)
+    public void sendPingEvent() {
+        for (WebSocketSession session : sessions) {
+            if (session.isOpen()) {
+                try {
+                    Map<String, Object> response = new HashMap<>();
+                    response.put("event", "ping");
+                    response.put("success", true);
+                    session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handlePongEvent(WebSocketSession session, JsonNode data) {
+    }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        sessions.remove(session);
         System.out.println("연결이 해제되었습니다: ID(" + session.getId() +")");
     }
 
