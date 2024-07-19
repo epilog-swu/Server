@@ -64,9 +64,9 @@ public class LogsResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class DayAvgBloodSugar {
         private String date;
-        private Long average;
-        private Long preAverage;
-        private Long postAverage;
+        private Double average;
+        private Double preAverage;
+        private Double postAverage;
     }
 
     /**

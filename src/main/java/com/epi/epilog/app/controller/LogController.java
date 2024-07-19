@@ -77,6 +77,25 @@ public class LogController {
     /**
      * 일별 평균, 식전후 평균 혈당 조회
      */
+    @GetMapping("/bloodsugar/average")
+    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(@RequestParam(value = "date", required = false)String date){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)){
+                throw new ApiException(ErrorCode.INVALID_TOKEN);
+            }
+
+            if (date == null){
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+            return logQueryService.dayAvgBloodSugar(customUserDetails, queryDate);
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
     /**
      * 일별 혈당 목록 조회

@@ -1,7 +1,7 @@
 package com.epi.epilog.app.service;
 
 import com.epi.epilog.app.domain.log.Log;
-import com.epi.epilog.app.domain.log.LogMood;
+import com.epi.epilog.app.domain.log.OccurrenceType;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
@@ -130,5 +130,53 @@ public class LogQueryService {
         if (!logExerciseRepository.findByLog(log).isEmpty())
             keywordList.add("운동");
         return keywordList;
+    }
+
+    /**
+     * 일별 평균, 식전후 평균 혈당 조회
+     * @param customUserDetails
+     * @param queryDate
+     * @return
+     */
+    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(CustomUserDetails customUserDetails, LocalDate queryDate) {
+        Member member = memberRepository.findById(customUserDetails.getMember().getId())
+                .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
+
+        Double average = logs.stream()
+                .filter(log -> log.getBloodSugar() != null)
+                .mapToDouble(Log::getBloodSugar)
+                .average()
+                .orElse(0.0);
+
+        Double preAverage = logs.stream()
+                .filter(log -> log.getBloodSugar() != null)
+                .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
+                        (log.getOccurrenceType().equals(OccurrenceType.BEFORE_BREAKFAST.getValue()) ||
+                                log.getOccurrenceType().equals(OccurrenceType.BEFORE_LUNCH.getValue()) ||
+                                log.getOccurrenceType().equals(OccurrenceType.BEFORE_DINNER.getValue())))
+                .mapToDouble(Log::getBloodSugar)
+                .average()
+                .orElse(0.0);
+
+        Double postAverage = logs.stream()
+                .filter(log -> log.getBloodSugar() != null)
+                .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
+                        (log.getOccurrenceType().equals(OccurrenceType.AFTER_BREAKFAST.getValue()) ||
+                                log.getOccurrenceType().equals(OccurrenceType.AFTER_LUNCH.getValue()) ||
+                                log.getOccurrenceType().equals(OccurrenceType.AFTER_DINNER.getValue())))
+                .mapToDouble(Log::getBloodSugar)
+                .average()
+                .orElse(0.0);
+
+
+        return LogsResponseDto.DayAvgBloodSugar
+                .builder()
+                .date(DateTimeConverter.convertLocalDateToString(queryDate))
+                .average(average)
+                .preAverage(preAverage)
+                .postAverage(postAverage)
+                .build();
     }
 }
