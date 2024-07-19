@@ -46,6 +46,15 @@ public class DateTimeConverter {
         }
     }
 
+    public static String convertLocalDateToString(LocalDate date){
+        try {
+            return dateFormatter.format(date);
+        } catch(DateTimeParseException e){
+            log.info("Invalid date format: " + date);
+            throw new ApiException(ErrorCode.INVALID_DATE_ERROR);
+        }
+    }
+
     public static String convertLocalDateTimeToString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try{
