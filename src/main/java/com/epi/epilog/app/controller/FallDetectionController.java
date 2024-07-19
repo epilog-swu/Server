@@ -1,10 +1,8 @@
 package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.domain.member.Member;
-import com.epi.epilog.app.dto.AccelerometerData;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.repository.MemberRepository;
-import com.epi.epilog.app.service.FallDetectionService;
 import com.epi.epilog.app.service.MapService;
 import com.epi.epilog.app.service.SMSService;
 import com.epi.epilog.global.exception.ApiException;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @Slf4j
