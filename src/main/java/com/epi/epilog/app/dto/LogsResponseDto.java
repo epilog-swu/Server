@@ -2,6 +2,8 @@ package com.epi.epilog.app.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 public class LogsResponseDto {
     /**
      * 월별 일지 개수 조회
