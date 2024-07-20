@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -100,6 +98,21 @@ public class LogController {
     /**
      * 일별 혈당 목록 조회
      */
+    @GetMapping("/bloodsugar")
+    public LogsResponseDto.DayBloodSugarList getDayBloodSugarList(@RequestParam(value = "date", required = false)String date){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)){
+                throw new ApiException(ErrorCode.INVALID_TOKEN);
+            }
+            if (date == null) {
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            return logQueryService.dayBloodSugarList(((CustomUserDetails) authentication.getPrincipal()).getMember(), date);
+        }catch (Exception e){
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
     /**
      * 월별 체중, 체지방률 목록 조회

@@ -90,7 +90,7 @@ public class LogsResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class DayBloodSugarItem {
         private String title;
-        private Integer bloodSugar;
+        private Double bloodSugar;
     }
 
     /**

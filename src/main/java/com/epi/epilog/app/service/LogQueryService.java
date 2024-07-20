@@ -9,12 +9,14 @@ import com.epi.epilog.app.repository.LogExerciseRepository;
 import com.epi.epilog.app.repository.LogMoodRepository;
 import com.epi.epilog.app.repository.LogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
+import com.epi.epilog.app.service.diabetes.CustomLogsComparator;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.keyvalue.repository.support.QuerydslKeyValueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,7 +106,8 @@ public class LogQueryService {
 
     private List<LogsResponseDto.DayLogsItem> dayLogItems(Member saveMember, LocalDate queryDate) {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, saveMember);
-//        log.info("repo logs="+logs);
+        logs.sort(new CustomLogsComparator());
+
         return logs.stream().map(log ->
                 LogsResponseDto.DayLogsItem
                         .builder()
@@ -177,6 +180,30 @@ public class LogQueryService {
                 .average(average)
                 .preAverage(preAverage)
                 .postAverage(postAverage)
+                .build();
+    }
+
+    public LogsResponseDto.DayBloodSugarList dayBloodSugarList(CustomUserInfoDto userInfo, String date) {
+        Member member = memberRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+        List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
+        logs.sort(new CustomLogsComparator());
+
+        List<LogsResponseDto.DayBloodSugarItem> bloodSugarItemList = logs.stream().filter(log -> log.getBloodSugar() != null).map(log ->
+                LogsResponseDto.DayBloodSugarItem
+                        .builder()
+                        .title(log.getTitle())
+                        .bloodSugar(log.getBloodSugar())
+                        .build()
+        ).collect(Collectors.toList());
+
+        return LogsResponseDto.DayBloodSugarList
+                .builder()
+                .date(date)
+                .count(bloodSugarItemList.size())
+                .bloodSugars(bloodSugarItemList)
                 .build();
     }
 }
