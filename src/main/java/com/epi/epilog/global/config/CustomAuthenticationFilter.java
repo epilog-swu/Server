@@ -12,11 +12,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
+    private static final String[] AUTH_WHITELIST = {
+            "/api/auth/**",
+//            "/api/diabetes/**",
+            "/test"
+    };
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+
+        // Whitelist 엔드포인트에 대해 필터링을 건너뜁니다.
+        if (Arrays.stream(AUTH_WHITELIST).anyMatch(requestURI::startsWith)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)){
             throw new ApiException(ErrorCode.INVALID_TOKEN);

@@ -1,5 +1,6 @@
 package com.epi.epilog.app.controller;
 
+import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
 import com.epi.epilog.app.service.logs.LogQueryService;
 import com.epi.epilog.global.exception.ApiException;
@@ -104,16 +105,19 @@ public class LogController {
     /**
      * 월별 체중, 체지방률 목록 조회
      */
-//    @GetMapping("/weight")
-//    public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value="date", required = false)String date){
-//        try {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//
-//        } catch (Exception e) {
-//            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
-//        }
-//    }
+    @GetMapping("/weight")
+    public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value="date", required = false)String date){
+        try {
+            if (date == null) {
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            return logQueryService.getMonthWeightList(date, (CustomUserInfoDto) authentication.getPrincipal());
+            return null;
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
     /**
      * 일지 등록

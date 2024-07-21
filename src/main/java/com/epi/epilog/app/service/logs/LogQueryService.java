@@ -146,12 +146,14 @@ public class LogQueryService {
 
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
+        // get average
         Double average = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .mapToDouble(Log::getBloodSugar)
                 .average()
                 .orElse(0.0);
 
+        // get prevAverage
         Double preAverage = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
@@ -162,6 +164,7 @@ public class LogQueryService {
                 .average()
                 .orElse(0.0);
 
+        // get postAverage
         Double postAverage = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
@@ -211,4 +214,16 @@ public class LogQueryService {
                 .bloodSugars(bloodSugarItemList)
                 .build();
     }
+
+    /**
+     * 월별 몸무게 및 체지방률 변화 추이 조회
+     * @param date
+     * @param userInfo
+     * @return
+     */
+//    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
+//        Member member = memberRepository.findById(userInfo.getId())
+//                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+//
+//    }
 }
