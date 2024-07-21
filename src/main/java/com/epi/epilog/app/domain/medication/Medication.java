@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -36,12 +37,11 @@ public class Medication extends BaseEntity {
     private Member member;
     @NotNull
     private String medicationName;
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     @Nullable
-    private LocalDateTime endDate;
+    private LocalDate endDate;
     @NotNull
     private Boolean endless;
-    @ColumnDefault("true")
     @NotNull
     private Boolean isAlarm;
     @Nullable
@@ -50,8 +50,6 @@ public class Medication extends BaseEntity {
     private String storageMethod; // 보관방법
     @Nullable
     private String effectiveness; // 효능
-    @Nullable
-    private String medicationImage; // 이미지
     @ElementCollection
     @Builder.Default
     @Enumerated(EnumType.STRING)

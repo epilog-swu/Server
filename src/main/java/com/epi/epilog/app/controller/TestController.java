@@ -19,10 +19,6 @@ public class TestController {
     }
     @GetMapping("/auth/test")
     public ResponseEntity<String> testAuthAPI(){
-        try {
-            return ResponseEntity.ok("successful");
-        } catch (Exception e){
-            throw new ApiException(ErrorCode.INVALID_TOKEN);
-        }
+        return ResponseEntity.ok("successful");
     }
 }

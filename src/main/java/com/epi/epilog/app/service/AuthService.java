@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +103,11 @@ public class AuthService {
                     weeks.add(WeekType.금);
                     weeks.add(WeekType.토);
                     weeks.add(WeekType.일);
+
                     Medication refMedication = Medication.builder()
                             .medicationName(medication.name)
                             .member(saveMember)
-                            .startDate(LocalDateTime.now())
+                            .startDate(LocalDate.now())
                             .endless(true)
                             .times(medication.times)
                             .weeks(weeks)

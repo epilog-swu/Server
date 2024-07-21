@@ -2,8 +2,6 @@ package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.LogsResponseDto;
 import com.epi.epilog.app.service.logs.LogQueryService;
-import com.epi.epilog.global.exception.ApiException;
-import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
@@ -27,21 +25,17 @@ public class LogController {
      */
     @GetMapping("/count")
     public LogsResponseDto.MonthLogsCount monthLogsCount(@RequestParam(value = "date", required = false) String date){
-        try {
-            LocalDate queryDate;
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LocalDate queryDate;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (date == null) {
-                 date  = DateTimeConverter.convertLocalDateToString(LocalDate.now());
-            }
-            queryDate = DateTimeConverter.convertToLocalDate(date);
-
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            LogsResponseDto.MonthLogsCount logsCount = logQueryService.monthLogsCount(queryDate, userDetails.getMember());
-            return logsCount;
-        } catch (Exception e) {
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        if (date == null) {
+             date  = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+        queryDate = DateTimeConverter.convertToLocalDate(date);
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        LogsResponseDto.MonthLogsCount logsCount = logQueryService.monthLogsCount(queryDate, userDetails.getMember());
+        return logsCount;
     }
 
     /**
@@ -49,20 +43,15 @@ public class LogController {
      */
     @GetMapping("")
     public LogsResponseDto.DayLogsList dayLogList(@RequestParam(value = "date", required = false) String date){
-        try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (date == null){
-                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
-            }
-            LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
-
-            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            return logQueryService.dayLogList(customUserDetails, queryDate);
-        } catch(Exception e) {
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        if (date == null){
+            date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+        LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
 
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return logQueryService.dayLogList(customUserDetails, queryDate);
     }
 
     /**
@@ -70,19 +59,15 @@ public class LogController {
      */
     @GetMapping("/bloodsugar/average")
     public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(@RequestParam(value = "date", required = false)String date){
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (date == null){
-                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
-            }
-            LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
-            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
-            return logQueryService.dayAvgBloodSugar(customUserDetails, queryDate);
-        } catch(Exception e){
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        if (date == null){
+            date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+        LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        return logQueryService.dayAvgBloodSugar(customUserDetails, queryDate);
     }
 
     /**
@@ -90,15 +75,11 @@ public class LogController {
      */
     @GetMapping("/bloodsugar")
     public LogsResponseDto.DayBloodSugarList getDayBloodSugarList(@RequestParam(value = "date", required = false)String date){
-        try {
-            if (date == null) {
-                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
-            }
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            return logQueryService.dayBloodSugarList(((CustomUserDetails) authentication.getPrincipal()), date);
-        }catch (Exception e){
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        if (date == null) {
+            date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return logQueryService.dayBloodSugarList(((CustomUserDetails) authentication.getPrincipal()), date);
     }
 
     /**
@@ -106,15 +87,11 @@ public class LogController {
      */
     @GetMapping("/weight")
     public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value="date", required = false)String date){
-        try {
-            if (date == null) {
-                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
-            }
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            return logQueryService.getMonthWeightList(date, ((CustomUserDetails) authentication.getPrincipal()));
-        } catch (Exception e) {
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        if (date == null) {
+            date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return logQueryService.getMonthWeightList(date, ((CustomUserDetails) authentication.getPrincipal()));
     }
 
     /**
