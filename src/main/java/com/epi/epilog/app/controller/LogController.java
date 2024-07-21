@@ -112,8 +112,7 @@ public class LogController {
                 date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
             }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            return logQueryService.getMonthWeightList(date, (CustomUserInfoDto) authentication.getPrincipal());
-            return null;
+            return logQueryService.getMonthWeightList(date, (CustomUserInfoDto) authentication.getPrincipal());
         } catch (Exception e) {
             throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
         }

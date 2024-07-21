@@ -9,7 +9,6 @@ import com.epi.epilog.app.repository.LogExerciseRepository;
 import com.epi.epilog.app.repository.LogMoodRepository;
 import com.epi.epilog.app.repository.LogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
-import com.epi.epilog.app.service.logs.CustomLogsComparator;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
@@ -221,9 +220,9 @@ public class LogQueryService {
      * @param userInfo
      * @return
      */
-//    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
-//        Member member = memberRepository.findById(userInfo.getId())
-//                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-//
-//    }
+    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
+        Member member = memberRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+    }
 }
