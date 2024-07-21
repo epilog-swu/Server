@@ -24,21 +24,27 @@ public class MealsController {
 
     @GetMapping("")
     public MealsResponseDto.ChecklistDto mealsChecklist(@RequestParam(value = "date", required = false)LocalDate date){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return mealsQueryService.mealsCheckList(userDetails.getMember(), date!=null?date:LocalDate.now());
+        } catch (Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 
+    /**
+     * 유저 검증하는 절차 추가해야 함
+     * @param id
+     * @param form
+     * @return
+     */
     @PatchMapping("/{chklstId}")
     public CommonResponseDto.CommonResponse medicineCheck(@PathVariable("chklstId")Long id, @RequestBody @Valid MealsResponseDto.MealChecklistUpdateDto form){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        try {
             return mealsCommandService.mealsCheck(id, form);
+        } catch (Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 }

@@ -24,10 +24,6 @@ public class FCMController {
     public CommonResponseDto.CommonResponse saveFCMToken(@RequestBody FCMDto.FCMRequestForm form) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
-                throw new ApiException(ErrorCode.INVALID_TOKEN);
-            }
-
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             Boolean success = fcmService.saveFCMToken(form, userDetails.getMember());
 
