@@ -18,12 +18,9 @@ public class MedicationRequestDto {
     @Data
     @Getter
     public static class MedicationAddedForm {
-        @NotNull
         private String medicationName;
-        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         private List<LocalTime> times;
-        @NotNull
         private LocalDate startDate;
         private LocalDate endDate;
         private Boolean endless;

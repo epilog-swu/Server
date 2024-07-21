@@ -23,6 +23,12 @@ public class MedicationCommandService {
     private final MedicationRepository medicationRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 생성
+     * @param userInfo
+     * @param form
+     * @return
+     */
     @Transactional
     public CommonResponseDto.CommonResponse addMedication
             (CustomUserDetails userInfo, MedicationRequestDto.MedicationAddedForm form) {
@@ -59,6 +65,79 @@ public class MedicationCommandService {
         return CommonResponseDto.CommonResponse.builder()
                 .success(true)
                 .message("추가되었습니다.")
+                .build();
+    }
+
+    /**
+     * 수정
+     * @param userInfo
+     * @param medicationId
+     * @param form
+     * @return
+     */
+    @Transactional
+    public CommonResponseDto.CommonResponse patchMedication(CustomUserDetails userInfo, Long medicationId, MedicationRequestDto.MedicationAddedForm form) {
+        Medication medication = medicationRepository.findById(medicationId)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEDICATION_NOT_FOUND));
+
+        Member member = memberRepository.findById(userInfo.getMember().getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        if (medication.getMember() != member) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED);
+        }
+
+        Medication.MedicationBuilder medicationBuilder = medication.toBuilder();
+
+        if (form.getMedicationName() != null) {
+            medicationBuilder.medicationName(form.getMedicationName());
+        }
+        if (form.getTimes() != null) {
+            medicationBuilder.times(form.getTimes());
+        }
+        if (form.getStartDate() != null) {
+            medicationBuilder.startDate(form.getStartDate());
+        }
+        if (form.getEndDate() != null) {
+            medicationBuilder.endDate(form.getEndDate());
+        }
+        if (form.getEndless() != null) {
+            medicationBuilder.endless(form.getEndless());
+        }
+        if (form.getIsAlarm() != null) {
+            medicationBuilder.isAlarm(form.getIsAlarm());
+        }
+        if (form.getWeeks() != null) {
+            List<WeekType> weekTypeList = form.getWeeks().stream().map(week -> {
+                switch (week) {
+                    case "월": return WeekType.월;
+                    case "화": return WeekType.화;
+                    case "수": return WeekType.수;
+                    case "목": return WeekType.목;
+                    case "금": return WeekType.금;
+                    case "토": return WeekType.토;
+                    case "일": return WeekType.일;
+                    default: throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);
+                }
+            }).collect(Collectors.toList());
+            medicationBuilder.weeks(weekTypeList);
+        }
+        if (form.getEffectiveness() != null) {
+            medicationBuilder.effectiveness(form.getEffectiveness());
+        }
+        if (form.getPrecautions() != null) {
+            medicationBuilder.precautions(form.getPrecautions());
+        }
+        if (form.getStorageMethod() != null) {
+            medicationBuilder.storageMethod(form.getStorageMethod());
+        }
+
+        Medication updatedMedication = medicationBuilder.build();
+        medicationRepository.save(updatedMedication);
+
+        return CommonResponseDto.CommonResponse.builder()
+                .success(true)
+                .message("수정되었습니다.")
                 .build();
     }
 }

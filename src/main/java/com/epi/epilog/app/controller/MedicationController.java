@@ -41,6 +41,12 @@ public class MedicationController {
     /**
      * 복용약 수정
      */
+    @PatchMapping("/{mcId}")
+    public CommonResponseDto.CommonResponse patchMedication(@PathVariable("mcId")Long medicationId, @RequestBody MedicationRequestDto.MedicationAddedForm form) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userInfo = (CustomUserDetails) authentication.getPrincipal();
+        return medicationCommandService.patchMedication(userInfo, medicationId, form);
+    }
 
     /**
      * 복용약 삭제
