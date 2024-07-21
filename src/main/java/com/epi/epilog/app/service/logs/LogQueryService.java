@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.log.OccurrenceType;
@@ -9,14 +9,13 @@ import com.epi.epilog.app.repository.LogExerciseRepository;
 import com.epi.epilog.app.repository.LogMoodRepository;
 import com.epi.epilog.app.repository.LogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
-import com.epi.epilog.app.service.diabetes.CustomLogsComparator;
+import com.epi.epilog.app.service.logs.CustomLogsComparator;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.keyvalue.repository.support.QuerydslKeyValueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -183,6 +182,12 @@ public class LogQueryService {
                 .build();
     }
 
+    /**
+     * 일별 혈당 목록 조회
+     * @param userInfo
+     * @param date
+     * @return
+     */
     public LogsResponseDto.DayBloodSugarList dayBloodSugarList(CustomUserInfoDto userInfo, String date) {
         Member member = memberRepository.findById(userInfo.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
