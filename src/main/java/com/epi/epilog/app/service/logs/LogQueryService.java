@@ -220,9 +220,9 @@ public class LogQueryService {
      * @param userInfo
      * @return
      */
-    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
-        Member member = memberRepository.findById(userInfo.getId())
-                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-
-    }
+//    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
+//        Member member = memberRepository.findById(userInfo.getId())
+//                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+//
+//    }
 }
