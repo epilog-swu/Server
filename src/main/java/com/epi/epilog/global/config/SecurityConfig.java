@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
-    private static final String[] AUTH_WHITELIST = {
+    public static final String[] AUTH_WHITELIST = {
             "/api/auth/**",
 //            "/api/diabetes/**",
             "/test"
@@ -47,7 +47,8 @@ public class SecurityConfig {
 
         // usernamePasswordAuthenticationToken 앞에 jwt 필터체인 추가
         http.addFilterBefore(new JwtAuthFilter(jwtUtil, customUserDetailService), UsernamePasswordAuthenticationFilter.class);
-
+        // AuthenticationFilterChain 추가
+        http.addFilterBefore(new CustomAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         // 권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(AUTH_WHITELIST).permitAll()

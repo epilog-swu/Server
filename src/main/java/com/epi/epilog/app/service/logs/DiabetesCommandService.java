@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service.diabetes;
+package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.member.Member;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,6 +30,10 @@ import java.util.stream.Collectors;
 public class DiabetesCommandService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
+    private final Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+
 
     public CommonResponseDto.CommonResponse createBloodSugar(
             DiabetesRequestDto.BloodSugarRequest form, CustomUserInfoDto member) {
@@ -64,8 +70,6 @@ public class DiabetesCommandService {
      * @return
      */
     private String createTitle(Member member, LocalDate date, String occurrenceType) {
-        Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
-
         if (OccurrenceType.isValid(occurrenceType)) {
             List<Log> logs = logRepository.findAllByDateAndMember(date, member);
             Map<String, Integer> titleCount = logs.stream()
@@ -83,10 +87,17 @@ public class DiabetesCommandService {
                 return (occurrenceType + "(" + count + ")");
             }
         } else {
-            if (TIME_PATTERN.matcher(occurrenceType).matches())
-                return occurrenceType;
-            else
+            if (TIME_PATTERN.matcher(occurrenceType).matches()) {
+                if (occurrenceType.length() >= 19) { // Check if occurrenceType has the correct length
+                    String timePart = occurrenceType.substring(11); // Extract the time part from the string
+                    LocalTime time = LocalTime.parse(timePart, TIME_FORMATTER);
+                    return String.format("%02d시 %02d분 %02d초", time.getHour(), time.getMinute(), time.getSecond());
+                } else {
+                    throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
+                }
+            } else {
                 throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
+            }
         }
     }
 }

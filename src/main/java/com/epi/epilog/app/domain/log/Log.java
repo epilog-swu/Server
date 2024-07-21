@@ -29,7 +29,7 @@ public class Log extends BaseEntity {
     private Member member;
     private String title; // 제목
     private LocalDate date; // 발생일자
-    private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format 00:00)
+    private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format yyyy-mm-dd 00:00:00)
 
     @Nullable
     private Double bloodSugar; // 혈당

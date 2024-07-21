@@ -19,11 +19,10 @@ public class TestController {
     }
     @GetMapping("/auth/test")
     public ResponseEntity<String> testAuthAPI(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("soobin", authentication.toString());
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+        try {
             return ResponseEntity.ok("successful");
+        } catch (Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 }

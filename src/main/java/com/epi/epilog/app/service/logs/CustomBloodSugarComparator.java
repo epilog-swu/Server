@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service.diabetes;
+package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.dto.DiabetesResponseDto;
 
@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDto.DiabetesBloodSugar> {
-
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final Map<String, Integer> EVENT_ORDER = new HashMap<>();
 
@@ -25,24 +23,30 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
     }
     @Override
     public int compare(DiabetesResponseDto.DiabetesBloodSugar o1, DiabetesResponseDto.DiabetesBloodSugar o2) {
-        return getOrder(o1.getOccurrenceType()) - getOrder(o2.getOccurrenceType());
+        int orderComparison = Integer.compare(getOrder(o1.getOccurrenceType()), getOrder(o2.getOccurrenceType()));
+        if (orderComparison != 0) {
+            return orderComparison;
+        }
+
+        // If the occurrence types have the same order, compare by time
+        return compareTimes(o1.getOccurrenceType(), o2.getOccurrenceType());
     }
 
-    private int getOrder(String dateTime) {
-        if (EVENT_ORDER.containsKey(dateTime)) {
-            return EVENT_ORDER.get(dateTime);
+    private int getOrder(String occurrenceType) {
+        if (EVENT_ORDER.containsKey(occurrenceType)) {
+            return EVENT_ORDER.get(occurrenceType);
         } else {
-            LocalTime parsedTime = LocalTime.parse(dateTime.substring(11), TIME_FORMATTER);
+            LocalTime parsedTime = LocalTime.parse(occurrenceType.substring(11), TIME_FORMATTER);
             if (isBetween(parsedTime, LocalTime.of(2, 0), LocalTime.of(7, 0))) {
                 return 0;
             } else if (isBetween(parsedTime, LocalTime.of(7, 0), LocalTime.of(12, 0))) {
                 return 3;
             } else if (isBetween(parsedTime, LocalTime.of(12, 0), LocalTime.of(17, 0))) {
                 return 6;
-            } else if (isBetween(parsedTime, LocalTime.of(17, 0), LocalTime.of(2, 0))) {
+            } else if (isBetween(parsedTime, LocalTime.of(17, 0), LocalTime.of(23, 59))) {
                 return 9;
             } else {
-                throw new IllegalArgumentException("Invalid time: " + dateTime);
+                throw new IllegalArgumentException("Invalid time: " + occurrenceType);
             }
         }
     }
@@ -53,5 +57,11 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
         } else {
             return !time.isBefore(start) || time.isBefore(end);
         }
+    }
+
+    private int compareTimes(String dateTime1, String dateTime2) {
+        LocalTime parsedTime1 = LocalTime.parse(dateTime1.substring(11), TIME_FORMATTER);
+        LocalTime parsedTime2 = LocalTime.parse(dateTime2.substring(11), TIME_FORMATTER);
+        return parsedTime1.compareTo(parsedTime2);
     }
 }

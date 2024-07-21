@@ -1,7 +1,8 @@
 package com.epi.epilog.app.controller;
 
+import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
-import com.epi.epilog.app.service.LogQueryService;
+import com.epi.epilog.app.service.logs.LogQueryService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.regex.Pattern;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,11 +30,7 @@ public class LogController {
     public LogsResponseDto.MonthLogsCount monthLogsCount(@RequestParam(value = "date", required = false) String date){
         try {
             LocalDate queryDate;
-
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
-                throw new ApiException(ErrorCode.INVALID_TOKEN);
-            }
 
             if (date == null) {
                  date  = DateTimeConverter.convertLocalDateToString(LocalDate.now());
@@ -52,18 +48,75 @@ public class LogController {
     /**
      * 일별 일지 목록 조회
      */
+    @GetMapping("")
+    public LogsResponseDto.DayLogsList dayLogList(@RequestParam(value = "date", required = false) String date){
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (date == null){
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+            return logQueryService.dayLogList(customUserDetails, queryDate);
+        } catch(Exception e) {
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+
+    }
 
     /**
      * 일별 평균, 식전후 평균 혈당 조회
      */
+    @GetMapping("/bloodsugar/average")
+    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(@RequestParam(value = "date", required = false)String date){
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (date == null){
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+            return logQueryService.dayAvgBloodSugar(customUserDetails, queryDate);
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
     /**
      * 일별 혈당 목록 조회
      */
+    @GetMapping("/bloodsugar")
+    public LogsResponseDto.DayBloodSugarList getDayBloodSugarList(@RequestParam(value = "date", required = false)String date){
+        try {
+            if (date == null) {
+                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return logQueryService.dayBloodSugarList(((CustomUserDetails) authentication.getPrincipal()).getMember(), date);
+        }catch (Exception e){
+            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
     /**
      * 월별 체중, 체지방률 목록 조회
      */
+//    @GetMapping("/weight")
+//    public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value="date", required = false)String date){
+//        try {
+//            if (date == null) {
+//                date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+//            }
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            return logQueryService.getMonthWeightList(date, (CustomUserInfoDto) authentication.getPrincipal());
+//        } catch (Exception e) {
+//            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR, e);
+//        }
+//    }
 
     /**
      * 일지 등록

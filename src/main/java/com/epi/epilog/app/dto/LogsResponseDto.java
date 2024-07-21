@@ -1,6 +1,7 @@
 package com.epi.epilog.app.dto;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
 
@@ -64,9 +65,9 @@ public class LogsResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class DayAvgBloodSugar {
         private String date;
-        private Long average;
-        private Long preAverage;
-        private Long postAverage;
+        private Double average;
+        private Double preAverage;
+        private Double postAverage;
     }
 
     /**
@@ -90,7 +91,7 @@ public class LogsResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class DayBloodSugarItem {
         private String title;
-        private Integer bloodSugar;
+        private Double bloodSugar;
     }
 
     /**
@@ -104,7 +105,8 @@ public class LogsResponseDto {
     public static class MonthWeightList {
         private Integer year;
         private Integer month;
-        private List<MonthWeightItem> day;
+        private List<MonthWeightItem> dayWeight;
+        private List<MonthWeightItem> dayBodyFatPercentage;
     }
 
     @Data
@@ -114,7 +116,6 @@ public class LogsResponseDto {
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class MonthWeightItem {
         private String date;
-        private Long weight;
-        private Long bodyFatPercentage;
+        private Double value;
     }
 }

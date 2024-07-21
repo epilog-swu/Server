@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service.diabetes;
+package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.member.Member;

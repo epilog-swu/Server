@@ -1,10 +1,11 @@
 package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.CommonResponseDto;
+import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
 import com.epi.epilog.app.dto.DiabetesResponseDto;
-import com.epi.epilog.app.service.diabetes.DiabetesCommandService;
-import com.epi.epilog.app.service.diabetes.DiabetesQueryService;
+import com.epi.epilog.app.service.logs.DiabetesCommandService;
+import com.epi.epilog.app.service.logs.DiabetesQueryService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
@@ -27,24 +28,23 @@ public class DiabetesController {
 
     @GetMapping("/bloodsugars")
     public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarList(@RequestParam(value = "date", required = false) LocalDate date){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return diabetesQueryService.showBloodSugarList(userDetails.getMember(), date!=null?date:LocalDate.now());
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 
     @PostMapping("/bloodsugar")
     public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody @Valid DiabetesRequestDto.BloodSugarRequest form){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return diabetesCommandService.createBloodSugar(form, userDetails.getMember());
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
-
 }
