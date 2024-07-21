@@ -24,13 +24,9 @@ public class MealsController {
 
     @GetMapping("")
     public MealsResponseDto.ChecklistDto mealsChecklist(@RequestParam(value = "date", required = false)LocalDate date){
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return mealsQueryService.mealsCheckList(userDetails.getMember(), date!=null?date:LocalDate.now());
-        } catch (Exception e){
-            throw new ApiException(ErrorCode.INVALID_TOKEN);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return mealsQueryService.mealsCheckList(userDetails.getMember(), date!=null?date:LocalDate.now());
     }
 
     /**
@@ -41,10 +37,6 @@ public class MealsController {
      */
     @PatchMapping("/{chklstId}")
     public CommonResponseDto.CommonResponse medicineCheck(@PathVariable("chklstId")Long id, @RequestBody @Valid MealsResponseDto.MealChecklistUpdateDto form){
-        try {
-            return mealsCommandService.mealsCheck(id, form);
-        } catch (Exception e){
-            throw new ApiException(ErrorCode.INVALID_TOKEN);
-        }
+        return mealsCommandService.mealsCheck(id, form);
     }
 }

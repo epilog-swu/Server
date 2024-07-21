@@ -39,7 +39,7 @@ public class MedicineQueryService {
         List<Medication> medicationList = medicationRepository.findAllByMemberOrderByCreatedAt(member);
 
         List<MedicationCheckList> medicationCheckLists = medicationCheckListRepository
-                .findAllByMemberAndGoalTime(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
+                .findAllByMemberAndGoalTimeOrderByGoalTimeAsc(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
         List<MedicationResponseDto.ChecklistStateDto> lists = new ArrayList<>();
         if (!medicationCheckLists.isEmpty()){
