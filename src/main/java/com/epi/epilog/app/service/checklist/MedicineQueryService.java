@@ -1,10 +1,12 @@
 package com.epi.epilog.app.service.checklist;
 
+import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
-import com.epi.epilog.app.dto.MedicineResponseDto;
+import com.epi.epilog.app.dto.MedicationResponseDto;
 import com.epi.epilog.app.repository.MedicationCheckListRepository;
+import com.epi.epilog.app.repository.MedicationRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
@@ -25,20 +27,23 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MedicineQueryService {
     private final MemberRepository memberRepository;
+    private final MedicationRepository medicationRepository;
     private final MedicationCheckListRepository medicationCheckListRepository;
-    public MedicineResponseDto.ChecklistDto medicineChecklist(LocalDate date, CustomUserInfoDto memberDto) {
+    public MedicationResponseDto.ChecklistDto medicineChecklist(LocalDate date, CustomUserInfoDto memberDto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 mm분");
         DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("H시");
 
         Member member = memberRepository.findById(memberDto.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
+        List<Medication> medicationList = medicationRepository.findAllByMemberOrderByCreatedAt(member);
+
         List<MedicationCheckList> medicationCheckLists = medicationCheckListRepository
                 .findAllByMemberAndGoalTime(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
-        List<MedicineResponseDto.ChecklistStateDto> lists = new ArrayList<>();
+        List<MedicationResponseDto.ChecklistStateDto> lists = new ArrayList<>();
         if (!medicationCheckLists.isEmpty()){
-            lists = medicationCheckLists.stream().map(medicine -> MedicineResponseDto.ChecklistStateDto.builder()
+            lists = medicationCheckLists.stream().map(medicine -> MedicationResponseDto.ChecklistStateDto.builder()
                             .id(medicine.getId())
                             .goalTime(medicine.getGoalTime().format((DateTimeConverter.timeFormatter)))
                             .title((medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter)) + " " + medicine.getMedication().getMedicationName())
@@ -49,8 +54,9 @@ public class MedicineQueryService {
             );
         }
 
-        return MedicineResponseDto.ChecklistDto.builder()
+        return MedicationResponseDto.ChecklistDto.builder()
                 .date(date)
+                .medicationId(!medicationList.isEmpty() ? medicationList.get(0).getId() : null)
                 .checklist(lists)
                 .build();
     }

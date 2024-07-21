@@ -28,23 +28,15 @@ public class DiabetesController {
 
     @GetMapping("/bloodsugars")
     public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarList(@RequestParam(value = "date", required = false) LocalDate date){
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return diabetesQueryService.showBloodSugarList(userDetails.getMember(), date!=null?date:LocalDate.now());
-        } catch(Exception e){
-            throw new ApiException(ErrorCode.INVALID_TOKEN);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return diabetesQueryService.showBloodSugarList(userDetails.getMember(), date!=null?date:LocalDate.now());
     }
 
     @PostMapping("/bloodsugar")
     public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody @Valid DiabetesRequestDto.BloodSugarRequest form){
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            return diabetesCommandService.createBloodSugar(form, userDetails.getMember());
-        } catch(Exception e){
-            throw new ApiException(ErrorCode.INVALID_TOKEN);
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return diabetesCommandService.createBloodSugar(form, userDetails.getMember());
     }
 }

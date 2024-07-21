@@ -7,15 +7,16 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MedicineResponseDto {
+public class MedicationResponseDto {
     @Data
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class ChecklistDto {
-        public LocalDate date;
-        public List<MedicineResponseDto.ChecklistStateDto> checklist;
+        private LocalDate date;
+        private  Long medicationId;
+        private List<MedicationResponseDto.ChecklistStateDto> checklist;
     }
 
     @Data
@@ -24,18 +25,18 @@ public class MedicineResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     public static class ChecklistStateDto{
-        public Long id;
-        public String goalTime;
-        public String title;
-        public Boolean isComplete;
-        public String state;
+        private Long id;
+        private String goalTime;
+        private String title;
+        private Boolean isComplete;
+        private String state;
     }
     @Data
     @Getter
     public static class MedicineChecklistUpdateDto{
         @NotNull
-        public String time;
+        private String time;
         @NotNull
-        public MedicationStatus status;
+        private MedicationStatus status;
     }
 }
