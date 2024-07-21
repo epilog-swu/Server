@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -190,8 +187,8 @@ public class LogQueryService {
      * @param date
      * @return
      */
-    public LogsResponseDto.DayBloodSugarList dayBloodSugarList(CustomUserInfoDto userInfo, String date) {
-        Member member = memberRepository.findById(userInfo.getId())
+    public LogsResponseDto.DayBloodSugarList dayBloodSugarList(CustomUserDetails userInfo, String date) {
+        Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
@@ -220,9 +217,46 @@ public class LogQueryService {
      * @param userInfo
      * @return
      */
-//    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
-//        Member member = memberRepository.findById(userInfo.getId())
-//                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-//
-//    }
+    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserDetails userInfo) {
+        Member member = memberRepository.findById(userInfo.getMember().getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+        List<Log> logs = logRepository.findAllByMonthAndMember(queryDate.getYear(), queryDate.getMonthValue(), member);
+        logs.sort(new CustomLogsComparator().reversed());
+
+        Map<LocalDate, List<Log>> logsWeightGroupedByDate = logs.stream()
+                .filter(log -> log.getWeight() != null)
+                .collect(Collectors.groupingBy(Log::getDate, TreeMap::new, Collectors.toList()));
+
+        Map<LocalDate, List<Log>> logsBodyFatPercentGroupedByDate = logs.stream()
+                .filter(log -> log.getBodyFatPercentage() != null)
+                .collect(Collectors.groupingBy(Log::getDate, TreeMap::new, Collectors.toList()));
+
+        List<LogsResponseDto.MonthWeightItem> weightItemList = new ArrayList<>();
+        List<LogsResponseDto.MonthWeightItem> bodyFatPercentage = new ArrayList<>();
+
+        logsWeightGroupedByDate.forEach((logsDate, logList) -> {
+            Log lastLog = logList.get(0);
+            weightItemList.add(LogsResponseDto.MonthWeightItem.builder()
+                    .date(DateTimeConverter.convertLocalDateToString(logsDate))
+                    .value(lastLog.getWeight())
+                    .build());
+        });
+
+        logsBodyFatPercentGroupedByDate.forEach((logsDate, logList) -> {
+            Log lastLog = logList.get(0);
+            bodyFatPercentage.add(LogsResponseDto.MonthWeightItem.builder()
+                            .date(DateTimeConverter.convertLocalDateToString(logsDate))
+                            .value(lastLog.getBodyFatPercentage())
+                            .build());
+        });
+
+        return LogsResponseDto.MonthWeightList.builder()
+                .year(queryDate.getYear())
+                .month(queryDate.getMonthValue())
+                .dayWeight(weightItemList)
+                .dayBodyFatPercentage(bodyFatPercentage)
+                .build();
+    }
 }
