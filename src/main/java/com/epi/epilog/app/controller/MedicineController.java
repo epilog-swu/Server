@@ -27,22 +27,28 @@ public class MedicineController {
 
     @GetMapping("")
     public MedicineResponseDto.ChecklistDto showMedicines(@RequestParam(value = "date", required = false)LocalDate date) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             return medicineQueryService.medicineChecklist(date!=null?date:LocalDate.now(), userDetails.getMember());
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 
+    /**
+     * 유저 검증 절차 추가하기
+     * @param id
+     * @param form
+     * @return
+     */
     @PatchMapping("/{chklstId}")
     public CommonResponseDto.CommonResponse medicineCheck(@PathVariable("chklstId")Long id, @RequestBody @Valid MedicineResponseDto.MedicineChecklistUpdateDto form){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        try {
             return medicineCommandService.medicineCheck(id, form);
+        } catch(Exception e){
+            throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
-        throw new ApiException(ErrorCode.INVALID_TOKEN);
     }
 
 }

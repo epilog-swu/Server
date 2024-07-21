@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.log.Log;
 import com.epi.epilog.app.domain.log.OccurrenceType;
@@ -104,7 +104,8 @@ public class LogQueryService {
 
     private List<LogsResponseDto.DayLogsItem> dayLogItems(Member saveMember, LocalDate queryDate) {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, saveMember);
-//        log.info("repo logs="+logs);
+        logs.sort(new CustomLogsComparator());
+
         return logs.stream().map(log ->
                 LogsResponseDto.DayLogsItem
                         .builder()
@@ -144,12 +145,14 @@ public class LogQueryService {
 
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
+        // get average
         Double average = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .mapToDouble(Log::getBloodSugar)
                 .average()
                 .orElse(0.0);
 
+        // get prevAverage
         Double preAverage = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
@@ -160,6 +163,7 @@ public class LogQueryService {
                 .average()
                 .orElse(0.0);
 
+        // get postAverage
         Double postAverage = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
@@ -178,5 +182,47 @@ public class LogQueryService {
                 .preAverage(preAverage)
                 .postAverage(postAverage)
                 .build();
+    }
+
+    /**
+     * 일별 혈당 목록 조회
+     * @param userInfo
+     * @param date
+     * @return
+     */
+    public LogsResponseDto.DayBloodSugarList dayBloodSugarList(CustomUserInfoDto userInfo, String date) {
+        Member member = memberRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
+        List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
+        logs.sort(new CustomLogsComparator());
+
+        List<LogsResponseDto.DayBloodSugarItem> bloodSugarItemList = logs.stream().filter(log -> log.getBloodSugar() != null).map(log ->
+                LogsResponseDto.DayBloodSugarItem
+                        .builder()
+                        .title(log.getTitle())
+                        .bloodSugar(log.getBloodSugar())
+                        .build()
+        ).collect(Collectors.toList());
+
+        return LogsResponseDto.DayBloodSugarList
+                .builder()
+                .date(date)
+                .count(bloodSugarItemList.size())
+                .bloodSugars(bloodSugarItemList)
+                .build();
+    }
+
+    /**
+     * 월별 몸무게 및 체지방률 변화 추이 조회
+     * @param date
+     * @param userInfo
+     * @return
+     */
+    public LogsResponseDto.MonthWeightList getMonthWeightList(String date, CustomUserInfoDto userInfo) {
+        Member member = memberRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
     }
 }
