@@ -44,4 +44,7 @@ public class MedicationCheckList extends BaseEntity {
     public void updateActualTime(LocalDateTime time){
         this.actualTime = time;
     }
+    public void deleteMedication() {
+        this.medication = null;
+    }
  }

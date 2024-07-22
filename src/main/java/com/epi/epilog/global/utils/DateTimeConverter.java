@@ -17,6 +17,8 @@ import java.time.format.DateTimeParseException;
 public class DateTimeConverter {
     public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static DateTimeFormatter krTimeFormatter = DateTimeFormatter.ofPattern("H시 m분");
+    public static DateTimeFormatter krShortTimeFormatter = DateTimeFormatter.ofPattern("H시");
 
     public static LocalDate convertToLocalDate(String dateString) {
         // 날짜 형식 지정
@@ -65,4 +67,10 @@ public class DateTimeConverter {
         }
     }
 
+    public static String formatTime(LocalDateTime time) {
+        DateTimeFormatter formatter = time.getMinute() == 0 ?
+                DateTimeConverter.krShortTimeFormatter :
+                DateTimeConverter.krTimeFormatter;
+        return time.format(formatter);
+    }
 }

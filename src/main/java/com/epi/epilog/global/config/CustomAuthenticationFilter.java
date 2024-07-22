@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -17,12 +18,13 @@ import java.util.Arrays;
 import static com.epi.epilog.global.config.SecurityConfig.AUTH_WHITELIST;
 
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String requestURI = request.getRequestURI();
 
-        if (Arrays.stream(AUTH_WHITELIST).anyMatch(requestURI::startsWith)) {
+        if (Arrays.stream(AUTH_WHITELIST).anyMatch(pattern -> antPathMatcher.match(pattern, requestURI))) {
             filterChain.doFilter(request, response);
             return;
         }
