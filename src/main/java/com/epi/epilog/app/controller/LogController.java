@@ -98,7 +98,7 @@ public class LogController {
      * 일지 등록
      */
 
-    /**회
+    /**
      * 일지 수정
      */
 
