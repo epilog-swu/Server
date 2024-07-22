@@ -7,6 +7,7 @@ import com.epi.epilog.app.repository.MealCheckListRepository;
 import com.epi.epilog.app.repository.MealRepository;
 import com.epi.epilog.app.repository.MedicationCheckListRepository;
 import com.epi.epilog.app.repository.MedicationRepository;
+import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,10 @@ public class ChecklistSchedulerService {
                             .map(times -> MedicationCheckList.builder()
                                     .medication(medication)
                                     .isComplete(false)
+                                    .title((times.getMinute() != 0 ?
+                                            times.format(DateTimeConverter.krTimeFormatter) :
+                                            times.format(DateTimeConverter.krShortTimeFormatter))
+                                            + " " + medication.getMedicationName())
                                     .goalTime(LocalDate.now().plusDays(1).atTime(times))
                                     .medicationStatus(MedicationStatus.상태없음)
                                     .build()))

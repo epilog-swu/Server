@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 public class Medication extends BaseEntity {

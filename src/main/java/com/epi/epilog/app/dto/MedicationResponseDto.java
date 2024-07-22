@@ -30,6 +30,8 @@ public class MedicationResponseDto {
         private Long id;
         private String goalTime;
         private String title;
+        private String time;
+        private String medicationName;
         private Boolean isComplete;
         private String state;
     }

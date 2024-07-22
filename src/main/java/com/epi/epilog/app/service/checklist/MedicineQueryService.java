@@ -2,6 +2,7 @@ package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
+import com.epi.epilog.app.domain.medication.MedicationStatus;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MedicationResponseDto;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,10 +31,14 @@ public class MedicineQueryService {
     private final MemberRepository memberRepository;
     private final MedicationRepository medicationRepository;
     private final MedicationCheckListRepository medicationCheckListRepository;
-    public MedicationResponseDto.ChecklistDto medicineChecklist(LocalDate date, CustomUserInfoDto memberDto) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H시 mm분");
-        DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("H시");
 
+    /**
+     * 일별 복약 체크리스트 목록 조회
+     * @param date
+     * @param memberDto
+     * @return
+     */
+    public MedicationResponseDto.ChecklistDto medicineChecklist(LocalDate date, CustomUserInfoDto memberDto) {
         Member member = memberRepository.findById(memberDto.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
@@ -41,23 +47,35 @@ public class MedicineQueryService {
         List<MedicationCheckList> medicationCheckLists = medicationCheckListRepository
                 .findAllByMemberAndGoalTimeOrderByGoalTimeAsc(member, date.atStartOfDay(), date.atTime(LocalTime.MAX));
 
-        List<MedicationResponseDto.ChecklistStateDto> lists = new ArrayList<>();
-        if (!medicationCheckLists.isEmpty()){
-            lists = medicationCheckLists.stream().map(medicine -> MedicationResponseDto.ChecklistStateDto.builder()
-                            .id(medicine.getId())
-                            .goalTime(medicine.getGoalTime().format((DateTimeConverter.timeFormatter)))
-                            .title((medicine.getGoalTime().format(medicine.getGoalTime().getMinute()==0?hourFormatter:formatter)) + " " + medicine.getMedication().getMedicationName())
-                            .isComplete(medicine.getIsComplete())
-                            .state(medicine.getMedicationStatus().toString())
-                            .build()
-            ).collect(Collectors.toList()
-            );
-        }
+        List<MedicationResponseDto.ChecklistStateDto> lists = medicationCheckLists.stream()
+                .map(this::convertToChecklistStateDto)
+                .collect(Collectors.toList());
 
         return MedicationResponseDto.ChecklistDto.builder()
                 .date(date)
-                .medicationId(!medicationList.isEmpty() ? medicationList.get(0).getId() : null)
+                .medicationId(medicationList.stream().findFirst().map(Medication::getId).orElse(null))
                 .checklist(lists)
+                .build();
+    }
+
+    private MedicationResponseDto.ChecklistStateDto convertToChecklistStateDto(MedicationCheckList medicine) {
+        String formattedGoalTime = DateTimeConverter.formatTime(medicine.getGoalTime());
+        String formattedActualTime = medicine.getActualTime() != null
+                ? DateTimeConverter.formatTime(medicine.getActualTime())
+                : null;
+
+        String title = medicine.getActualTime() == null ?
+                medicine.getTitle() :
+                formattedActualTime + " " + medicine.getMedication().getMedicationName();
+
+        return MedicationResponseDto.ChecklistStateDto.builder()
+                .id(medicine.getId())
+                .goalTime(medicine.getGoalTime().format((DateTimeConverter.timeFormatter)))
+                .title(title)
+                .medicationName(medicine.getMedication().getMedicationName())
+                .time(formattedActualTime != null ? formattedActualTime : formattedGoalTime)
+                .isComplete(medicine.getIsComplete())
+                .state(medicine.getMedicationStatus().toString())
                 .build();
     }
 }
