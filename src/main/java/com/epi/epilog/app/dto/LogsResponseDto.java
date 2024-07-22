@@ -118,4 +118,25 @@ public class LogsResponseDto {
         private String date;
         private Double value;
     }
+
+    /**
+     * 일지 등록
+     */
+    public static class createLogForm {
+
+    }
+
+    /**
+     * 일지 수정
+     */
+    public static class patchLogForm {
+
+    }
+
+    /**
+     * 일지 상세 조회
+     */
+    public static class getLogDetail {
+
+    }
 }

@@ -2,9 +2,11 @@ package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.enums.WeekType;
 import com.epi.epilog.app.domain.medication.Medication;
+import com.epi.epilog.app.domain.medication.MedicationCheckList;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.MedicationRequestDto;
+import com.epi.epilog.app.repository.MedicationCheckListRepository;
 import com.epi.epilog.app.repository.MedicationRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class MedicationCommandService {
     private final MedicationRepository medicationRepository;
     private final MemberRepository memberRepository;
+    private final MedicationCheckListRepository medicationCheckListRepository;
 
     /**
      * 생성
@@ -138,6 +142,38 @@ public class MedicationCommandService {
         return CommonResponseDto.CommonResponse.builder()
                 .success(true)
                 .message("수정되었습니다.")
+                .build();
+    }
+
+    /**
+     * 삭제
+     * @param userInfo
+     * @param medicationId
+     * @return
+     */
+    @Transactional
+    public CommonResponseDto.CommonResponse deleteMedication(CustomUserDetails userInfo, Long medicationId) {
+        Member member = memberRepository.findById(userInfo.getMember().getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        Medication medication = medicationRepository.findById(medicationId)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEDICATION_NOT_FOUND));
+
+        if (medication.getMember() != member)
+            throw new ApiException(ErrorCode.UNAUTHORIZED);
+
+        List<MedicationCheckList> checkLists = medicationCheckListRepository.findAllByMedication(medication);
+        for (MedicationCheckList checkList : checkLists) {
+            checkList.deleteMedication();
+            if (checkList.getGoalTime().isAfter(LocalDateTime.now()))
+                medicationCheckListRepository.delete(checkList);
+        }
+
+        medicationRepository.delete(medication);
+
+        return CommonResponseDto.CommonResponse.builder()
+                .success(true)
+                .message("삭제되었습니다.")
                 .build();
     }
 }
