@@ -3,15 +3,17 @@ package com.epi.epilog.app.service;
 import com.epi.epilog.app.dto.AccelerometerData;
 import com.epi.epilog.app.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FallDetectionService {
-    private static final double THRESHOLD_SVM = 1.5;
-    private static final double THRESHOLD_ANGLE = 30.0;
+    private static final double THRESHOLD_SVM = 3.0;
+    private static final double THRESHOLD_ANGLE = 52.0;
     private static final int SVM_THRESHOLD_COUNT = 65;
     private static final int BASELINE_WINDOW_SIZE = 10;
 
@@ -50,7 +52,8 @@ public class FallDetectionService {
                 svmThresholdExceedCount++;
             }
 
-            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT || angleY > THRESHOLD_ANGLE) {
+            if (svmThresholdExceedCount > SVM_THRESHOLD_COUNT && angleY > THRESHOLD_ANGLE) {
+                log.info("exceed count: " + svmThresholdExceedCount);
                 return true;
             }
 
@@ -58,7 +61,6 @@ public class FallDetectionService {
                 svmThresholdExceedCount--;
             }
         }
-
         return false;
     }
 
@@ -68,6 +70,7 @@ public class FallDetectionService {
      * @return
      */
     private double calculateSVM(Double x, Double y, Double z) {
+//        log.info("ASVM: " + Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)));
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
 
@@ -76,6 +79,7 @@ public class FallDetectionService {
      * @return 계산된 Y축 각도
      */
     private double calculateAngleY(Double x, Double y, Double z) {
+//        log.info("angle Y: " + Math.toDegrees(Math.acos(y / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)))));
         return Math.toDegrees(Math.acos(y / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2))));
     }
 }

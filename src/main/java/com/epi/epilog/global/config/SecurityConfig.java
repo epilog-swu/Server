@@ -25,6 +25,7 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     public static final String[] AUTH_WHITELIST = {
             "/api/auth/**",
+            "/detection/fall",
 //            "/api/diabetes/**",
             "/test"
     };
