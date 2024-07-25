@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
@@ -30,6 +31,29 @@ public class Log extends BaseEntity {
     private String title; // 제목
     private LocalDate date; // 발생일자
     private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format yyyy-mm-dd 00:00:00)
+
+    // 각 카테고리 별 기록 여부
+    @ColumnDefault("false")
+    private Boolean isFall;
+    @ColumnDefault("false")
+    private Boolean isBloodSugar;
+    @ColumnDefault("false")
+    private Boolean isBloodPressure;
+    @ColumnDefault("false")
+    private Boolean isWeight;
+    @ColumnDefault("false")
+    private Boolean isExercise;
+    @ColumnDefault("false")
+    private Boolean isMood;
+
+    @Nullable
+    private Double fallLongitude; // 낙상 위치 기록
+    @Nullable
+    private Double fallLatitude;
+    @Nullable
+    private String fallAddress;
+    @Nullable
+    private String fallAddressImage;
 
     @Nullable
     private Double bloodSugar; // 혈당
