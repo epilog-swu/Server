@@ -2,7 +2,7 @@ package com.epi.epilog.global.socket;
 
 import com.epi.epilog.app.service.FallDetectionService;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.epi.epilog.app.dto.AccelerometerData;
+import com.epi.epilog.app.dto.SensorData;
 import com.epi.epilog.global.utils.JwtUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -110,7 +110,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
         JsonNode fallNode = data.get("fall");
         if (fallNode != null && fallNode.isArray()) {
-            List<AccelerometerData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<AccelerometerData>>() {});
+            List<SensorData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<SensorData>>() {});
             boolean fallDetectedResult = fallDetectionService.isFallDetected(fallData);
             System.out.println("return value: " + fallDetectedResult);
 

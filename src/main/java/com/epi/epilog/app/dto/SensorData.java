@@ -7,8 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document(collection = "sensor_data")
-public class AccelerometerData {
-    private double x;
-    private double y;
-    private double z;
+public class SensorData {
+    private Double accX;
+    private Double accY;
+    private Double accZ;
+    private Double gyroX;
+    private Double gyroY;
+    private Double gyroZ;
 }
