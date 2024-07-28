@@ -45,9 +45,9 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         String token = extractTokenFromUri(uri);
 
         if (token != null && jwtUtil.validateJwt(token)) {
-            Long memberId = jwtUtil.getUserById(token);
+            String memberId = jwtUtil.getUserById(token);
             if (memberId != null) {
-                Member member = memberRepository.findById(memberId)
+                Member member = memberRepository.findById(Long.valueOf(memberId))
                         .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
                 // Member 객체를 CustomUserInfoDto로 변환

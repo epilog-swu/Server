@@ -75,8 +75,8 @@ public class JwtUtil {
         return false;
     }
 
-    public Long getUserById(String token) {
-        return parseClaims(token).get("memberId", Long.class); // 사용자 ID를 Long으로 반환
+    public String getUserById(String token) {
+        return parseClaims(token).get("memberId", String.class); // 사용자 ID를 Long으로 반환
     }
 
     private Claims parseClaims(String token) {
