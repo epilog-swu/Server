@@ -79,7 +79,7 @@ public class JwtUtil {
         return parseClaims(token).get("memberId", String.class); // 사용자 ID를 Long으로 반환
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {

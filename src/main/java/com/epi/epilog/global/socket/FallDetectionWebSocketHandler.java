@@ -7,15 +7,16 @@ import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.app.service.FallDetectionService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
+import com.epi.epilog.global.utils.CustomUserDetailService;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private final MemberRepository memberRepository;
 
+    private final CustomUserDetailService customUserDetailService;
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String uri = session.getUri().toString();
@@ -64,6 +66,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 sessions.add(session);
+                session.getAttributes().put("token", token);
                 log.info("연결되었습니다: ID(" + session.getId() + ")");
             } else {
                 log.error("Invalid token: " + token);
@@ -90,7 +93,8 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
                     handleFallEvent(session, data);
                     break;
                 case "emer":
-                    handleEmergencyEvent(session, data);
+                    String token = (String) session.getAttributes().get("token");
+                    handleEmergencyEvent(token, session, data);
                     break;
                 case "pong":
                     handlePongEvent(session, data);
@@ -101,29 +105,41 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             }
         } catch (ApiException e) {
             log.error("Error handling event: " + event, e);
-            session.close(CloseStatus.SERVER_ERROR);
+            if (session.isOpen()) {
+                session.close(CloseStatus.SERVER_ERROR);
+            }
         }
     }
 
-    private void handleEmergencyEvent(WebSocketSession session, JsonNode data) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
-            log.error("Unauthorized access attempt. Authentication: " + authentication);
-            throw new ApiException(ErrorCode.UNAUTHORIZED);
+    private void handleEmergencyEvent(String token, WebSocketSession session, JsonNode data) throws Exception {
+        if (jwtUtil.validateJwt(token)) {
+            // 사용자 정보 가져와서 UsernamePasswordAuthenticationToken 객체 생성
+            String userId = jwtUtil.getUserById(token);
+            try {
+                Member member = memberRepository.findById(Long.valueOf(userId))
+                        .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+                log.info("member info: " + member.getName());
+
+                String message = member.getName() + "님 낙상 감지됨";
+
+                log.info("message = " + message);
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("event", "emer");
+                response.put("success", true);
+                response.put("message", "보호자에게 비상연락을 전달했습니다.");
+
+                if (session.isOpen()) {
+                    session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+                } else {
+                    log.warn("Session is closed, cannot send message: " + session.getId());
+                }
+
+            } catch (Exception e) {
+                log.warn("claims exception: " + e);
+            }
         }
-
-        Member member = memberRepository.findById(((CustomUserDetails) authentication.getPrincipal()).getMember().getId())
-                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-
-        String message = member.getName() + "님 낙상 감지됨";
-
-        log.info("message = " + message);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("event", "emer");
-        response.put("success", true);
-        response.put("message", "보호자에게 비상연락을 전달했습니다.");
-        session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
     }
 
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
@@ -134,18 +150,27 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             log.info("return value: " + fallDetectedResult);
 
             Map<String, Object> response = new HashMap<>();
-
             response.put("event", "fall");
             response.put("success", fallDetectedResult);
             response.put("message", fallDetectedResult ? "낙상이 감지되었습니다." : "낙상이 감지되지 않았습니다.");
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+
+            if (session.isOpen()) {
+                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+            } else {
+                log.warn("Session is closed, cannot send message: " + session.getId());
+            }
         } else {
             log.warn("Invalid fall data received: " + fallNode);
             Map<String, Object> response = new HashMap<>();
             response.put("event", "fall");
             response.put("success", false);
             response.put("message", "Invalid fall data received.");
-            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+
+            if (session.isOpen()) {
+                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+            } else {
+                log.warn("Session is closed, cannot send message: " + session.getId());
+            }
         }
     }
 
