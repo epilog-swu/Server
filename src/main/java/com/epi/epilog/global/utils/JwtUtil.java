@@ -10,6 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -22,40 +27,23 @@ import java.time.ZonedDateTime;
 public class JwtUtil {
     private final Key key;
     private final Long accessTokenExpirationTime;
+    private final UserDetailsService userDetailsService;
 
-    /**
-     * 생성자에서 시크릿키 디코딩하여 jwt 필터에 저장
-     * @param secret
-     * @param accessTokenExpirationTime
-     */
     @Autowired
-    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration_time}") Long accessTokenExpirationTime) {
+    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration_time}") Long accessTokenExpirationTime, UserDetailsService userDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpirationTime = accessTokenExpirationTime;
+        this.userDetailsService = userDetailsService;
     }
 
-    /**
-     * accessToken 생성
-     * @param member
-     * @return
-     */
-    public String createAccessToken(CustomUserInfoDto member){
+    public String createAccessToken(CustomUserInfoDto member) {
         return createToken(member, accessTokenExpirationTime);
     }
 
-    /**
-     * JsonWebToken 생성
-     * @param member
-     * @param accessTokenExpirationTime
-     */
-    private String createToken(CustomUserInfoDto member, Long accessTokenExpirationTime){
-        // Claims 생성 및 초기화
+    private String createToken(CustomUserInfoDto member, Long accessTokenExpirationTime) {
         Claims claims = Jwts.claims();
-        claims.put("memberId", member.getId());
-//        claims.put("loginId", member.getLoginId());
-//        claims.put("name", member.getName());
-//        claims.put("code", member.getCode());
+        claims.put("memberId", member.getId().toString());
 
         ZonedDateTime now = ZonedDateTime.now();
         ZonedDateTime tokenValid = now.plusSeconds(accessTokenExpirationTime);
@@ -68,50 +56,55 @@ public class JwtUtil {
                 .compact();
     }
 
-    /**
-     * JWT 검증
-     * @param token
-     * @return
-     */
-    public boolean validateJwt(String token){
+    public boolean validateJwt(String token) {
         try {
-            if (token == null){
+            if (token == null) {
                 throw new ApiException(ErrorCode.INVALID_TOKEN);
             }
             Jwts.parserBuilder().setSigningKey(this.key).build().parseClaimsJws(token);
             return true;
-        } catch(io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
+        } catch (io.jsonwebtoken.security.SignatureException | MalformedJwtException e) {
             log.info("유효하지 않은 토큰", e);
-        } catch(ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             log.info("만료된 토큰", e);
-        } catch (UnsupportedJwtException e){
+        } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 토큰", e);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             log.info("JWT payload가 비어있음", e);
         }
         return false;
     }
 
-    /**
-     * JWT에서 멤버 ID 추출
-     * @param token
-     * @return
-     */
-    public Long getUserById(String token) {
-        return parseClaims(token).get("memberId", Long.class);
+    public String getUserById(String token) {
+        return parseClaims(token).get("memberId", String.class); // 사용자 ID를 Long으로 반환
     }
 
-    /**
-     * JWT payload 추출
-     * @param token
-     * @return
-     */
-    private Claims parseClaims(String token) {
-        try{
+    public Claims parseClaims(String token) {
+        try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        } catch(ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
 
+    public Authentication getAuthentication(String token) {
+        Claims claims = parseClaims(token);
+        Long memberId = claims.get("memberId", Long.class);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(memberId.toString());
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public String extractUsername(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.getSubject();
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

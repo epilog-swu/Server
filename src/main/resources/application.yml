@@ -1,9 +1,21 @@
 spring:
+  websocket:
+    message-size: 1GB
+    max-text-message-size: 1GB
+    max-binary-message-size: 1GB
+
   datasource:
-      driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
-      url: ${SPRING_DATASOURCE_URL}
-      username: ${SPRING_DATASOURCE_USERNAME}
-      password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      idle-timeout: 300000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+
   jpa:
     open-in-view: true
     hibernate:
@@ -14,9 +26,11 @@ spring:
     properties:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
   logging:
     level:
       org.hibernate.SQL: debug
+
   servlet:
     multipart:
       max-file-size: 200MB
