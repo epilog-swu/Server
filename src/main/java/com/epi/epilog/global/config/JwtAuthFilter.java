@@ -41,9 +41,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring(7);
             if (jwtUtil.validateJwt(token)) {
                 // 사용자 정보 가져와서 UsernamePasswordAuthenticationToken 객체 생성
-                Long userId = jwtUtil.getUserById(token);
+                String userId = jwtUtil.getUserById(token);
 //                log.info("JwtAuthFilter userId=" + userId.toString());
-                UserDetails userDetails = customUserDetailService.loadUserByUsername(userId.toString());
+                UserDetails userDetails = customUserDetailService.loadUserByUsername(userId);
 //                log.info("JwtAuthFilter UserDetails="+userDetails);
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

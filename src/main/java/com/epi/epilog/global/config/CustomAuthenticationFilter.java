@@ -19,6 +19,7 @@ import static com.epi.epilog.global.config.SecurityConfig.AUTH_WHITELIST;
 
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -28,6 +29,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)){
             throw new ApiException(ErrorCode.INVALID_TOKEN);

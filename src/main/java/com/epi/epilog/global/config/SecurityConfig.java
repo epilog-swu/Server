@@ -25,35 +25,39 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     public static final String[] AUTH_WHITELIST = {
             "/api/auth/**",
+            "/detection/fall",
 //            "/api/diabetes/**",
-            "/test"
+            "/test",
+            "/ws/**"  // WebSocket 엔드포인트 허용
     };
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // csrf, cors
         http.csrf(csrf -> csrf.disable());
         http.cors(Customizer.withDefaults());
+
         // session 비활성화
-        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS
-                ));
+        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         // form, basic http 비활성화
-        http.formLogin((form)->form.disable());
+        http.formLogin((form) -> form.disable());
         http.httpBasic(AbstractHttpConfigurer::disable);
 
         // usernamePasswordAuthenticationToken 앞에 jwt 필터체인 추가
         http.addFilterBefore(new JwtAuthFilter(jwtUtil, customUserDetailService), UsernamePasswordAuthenticationFilter.class);
-        // AuthenticationFilterChain 추가
-        http.addFilterBefore(new CustomAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
         // 권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
         );
+
         return http.build();
     }
 }

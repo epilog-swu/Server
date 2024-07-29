@@ -48,6 +48,7 @@ public class DiabetesCommandService {
         // create diabetes
         Log diabet = Log.builder()
                 .member(mem)
+                .isBloodSugar(true)
                 .date(form.getDate()!=null?form.getDate():LocalDate.now())
                 .occurrenceType(form.getOccurrenceType())
                 .title(createTitle(mem, form.getDate(), form.getOccurrenceType()))
