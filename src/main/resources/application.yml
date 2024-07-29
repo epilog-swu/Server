@@ -45,6 +45,8 @@ sms:
     secret: ${COOL_SMS_SECRET}
   map:
     api: ${GOOGLE_API_KEY}
+  server:
+    phone: ${SERVER_PHONE_NUMBER}
 
 kakao:
   api:
