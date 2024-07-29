@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -22,7 +20,6 @@ public class FallDetectionService {
     private static final int GSVM_THRESHOLD_COUNT = 20;
     private static final int ANGLE_THRESHOLD_COUNT = 20;
     private static final int BASELINE_WINDOW_SIZE = 10;
-    private static final double DELTA_TIME = 0.01;
     private static final double ALPHA = 0.98;
 
     public boolean isFallDetected(List<SensorData> data) {
@@ -100,10 +97,10 @@ public class FallDetectionService {
             double angleY = calculateThetaY(deltaX, deltaY, deltaZ);
             double angleZ = calculateThetaZ(deltaX, deltaY, deltaZ);
 
-            if (i % 10 == 0) {
-                log.info("Sensor values at index {}: accX = {}, accY = {}, accZ = {}, aSvm = {}, gSvm = {}", //, angleX = {}, angleY = {}, angleZ = {}",
-                        i, deltaX, deltaY, deltaZ, aSvm, gSvm); //, angleX, angleY, angleZ);
-            }
+//            if (i % 10 == 0) {
+//                log.info("Sensor values at index {}: accX = {}, accY = {}, accZ = {}, aSvm = {}, gSvm = {}", //, angleX = {}, angleY = {}, angleZ = {}",
+//                        i, deltaX, deltaY, deltaZ, aSvm, gSvm); //, angleX, angleY, angleZ);
+//            }
             //
             //
 
@@ -123,13 +120,9 @@ public class FallDetectionService {
                 angleZExceedCount++;
             }
 
-            if (i % 10 == 0) {
+//            if (i % 10 == 0) {
 //                log.info("gSvm: " + gSvm + " angleX: " + abs(abs(angleX) - abs(beforeAngleX)) + " angleY: " + abs(abs(angleY) - abs(beforeAngleY)) + " angleZ: " + abs(abs(angleZ) - abs(beforeAngleZ)));
-            }
-
-//            beforeAngleX = angleX;
-//            beforeAngleY = angleY;
-//            beforeAngleZ = angleZ;
+//            }
 
             if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
                     && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
@@ -137,11 +130,11 @@ public class FallDetectionService {
 //                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
 //                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
             ) {
-                log.info("(True result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
+//                log.info("(True result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
                 return true;
             }
         }
-        log.info("(False result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
+//        log.info("(False result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
         return false;
     }
 
