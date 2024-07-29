@@ -1,21 +1,23 @@
 package com.epi.epilog.global.socket;
 
 import com.epi.epilog.app.domain.member.Member;
+import com.epi.epilog.app.dto.EmerData;
 import com.epi.epilog.app.dto.SensorData;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.repository.MemberRepository;
+import com.epi.epilog.app.service.EmergencyService;
 import com.epi.epilog.app.service.FallDetectionService;
+import com.epi.epilog.app.service.SMSService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
-import com.epi.epilog.global.utils.CustomUserDetailService;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,13 +36,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 @RequiredArgsConstructor
 public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
+    @Value("${sms.server.phone}")
+    private String SERVER_PHONE;
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final FallDetectionService fallDetectionService;
+    private final EmergencyService emergencyService;
+    private final SMSService smsService;
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private final MemberRepository memberRepository;
 
-    private final CustomUserDetailService customUserDetailService;
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String uri = session.getUri().toString();
@@ -112,35 +117,37 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void handleEmergencyEvent(String token, WebSocketSession session, JsonNode data) throws Exception {
-        if (jwtUtil.validateJwt(token)) {
-            // 사용자 정보 가져와서 UsernamePasswordAuthenticationToken 객체 생성
-            String userId = jwtUtil.getUserById(token);
-            try {
-                Member member = memberRepository.findById(Long.valueOf(userId))
-                        .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-
-                log.info("member info: " + member.getName());
-
-                String message = member.getName() + "님 낙상 감지됨";
-
-                log.info("message = " + message);
-
-                Map<String, Object> response = new HashMap<>();
-                response.put("event", "emer");
-                response.put("success", true);
-                response.put("message", "보호자에게 비상연락을 전달했습니다.");
-
-                if (session.isOpen()) {
-                    session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
-                } else {
-                    log.warn("Session is closed, cannot send message: " + session.getId());
-                }
-
-            } catch (Exception e) {
-                log.warn("claims exception: " + e);
+        try {
+            if (!jwtUtil.validateJwt(token)) {
+                throw new ApiException(ErrorCode.INVALID_TOKEN);
             }
+            String userId = jwtUtil.getUserById(token);
+            Member member = memberRepository.findById(Long.valueOf(userId))
+                    .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+            EmerData emerData = objectMapper.readValue(data.toString(), new TypeReference<EmerData>() {});
+            String addressStr = emergencyService.emerEvent(emerData);
+
+            String message = member.getName() + "님 낙상 감지됨" + addressStr;
+            // sms 전송
+//            smsService.sendSms(member.getProtectorPhone(), SERVER_PHONE, message);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("event", "emer");
+            response.put("success", true);
+            response.put("message", message);
+
+            if (session.isOpen()) {
+                emergencyService.createLog(member, emerData);
+                session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
+                log.info("클라이언트에 메시지 전송");
+            } else {
+                log.warn("Session is closed, cannot send message: " + session.getId());
+            }
+        } catch (Exception e) {
+            log.warn("claims exception: " + e);
         }
     }
+
 
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
         JsonNode fallNode = data.get("fall");
