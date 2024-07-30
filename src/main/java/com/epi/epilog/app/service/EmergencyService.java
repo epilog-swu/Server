@@ -62,7 +62,7 @@ public class EmergencyService {
             Log logs = Log.builder()
                     .member(member)
                     .date(now.toLocalDate())
-                    .title(DateTimeConverter.convertLocalDateToString(now.toLocalDate()))
+                    .title(now.getMinute()==0?DateTimeConverter.krShortTimeFormatter.format(now):DateTimeConverter.krTimeFormatter.format(now))
                     .occurrenceType(now.toString())
                     .isFall(true)
                     .fallAddress(address)

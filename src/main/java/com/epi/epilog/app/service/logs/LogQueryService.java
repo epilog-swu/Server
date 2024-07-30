@@ -1,10 +1,12 @@
 package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.log.Log;
+import com.epi.epilog.app.domain.log.LogExercise;
 import com.epi.epilog.app.domain.log.OccurrenceType;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
+import com.epi.epilog.app.dto.PdfData;
 import com.epi.epilog.app.repository.LogExerciseRepository;
 import com.epi.epilog.app.repository.LogMoodRepository;
 import com.epi.epilog.app.repository.LogRepository;
@@ -258,5 +260,53 @@ public class LogQueryService {
                 .dayWeight(weightItemList)
                 .dayBodyFatPercentage(bodyFatPercentage)
                 .build();
+    }
+
+    public List<PdfData> generatedPdfEntries(CustomUserDetails userInfo, LocalDate start, LocalDate end) {
+        Member member = memberRepository.findById(userInfo.getMember().getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        List<Log> logs = logRepository.findAllByMemberAndStartAndEnd(member, start, end);
+
+        Map<LocalDate, List<Log>> logsByDate = logs.stream()
+                .collect(Collectors.groupingBy(Log::getDate));
+
+        List<PdfData> logDetails = new ArrayList<>();
+        for (Map.Entry<LocalDate, List<Log>> entry : logsByDate.entrySet()) {
+            String date = entry.getKey().toString();
+            List<PdfData.PdfLogDetail> details = entry.getValue().stream()
+                    .map(logDetail -> {
+                        List<LogExercise> logExercises = new ArrayList<>();
+                        if (logDetail.getIsExercise()!=null && logDetail.getIsExercise() == true) {
+                            logExercises = logExerciseRepository.findByLog(logDetail);
+                        }
+
+                        List<String> physicalActivity = logExercises.isEmpty() ? null
+                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
+
+                        List<String> mood = logDetail.getLogMood().isEmpty() ? null
+                                : logDetail.getLogMood().stream().map(Object::toString).collect(Collectors.toList());
+
+                        return PdfData.PdfLogDetail.builder()
+                                .time(Optional.ofNullable(logDetail.getTitle()).orElse(""))
+                                .location(Optional.ofNullable(logDetail.getFallAddress()).orElse(""))
+                                .mapImage(Optional.ofNullable(logDetail.getFallAddressImage()).orElse(""))
+                                .bloodSugar(Optional.ofNullable(logDetail.getBloodSugar()).orElse(0.0))
+                                .systolic(Optional.ofNullable(logDetail.getSystolicBloodPressure()).orElse(0.0))
+                                .diastolic(Optional.ofNullable(logDetail.getDiastolicBloodPressure()).orElse(0.0))
+                                .heartRate(Optional.ofNullable(logDetail.getHeartRate()).orElse(0))
+                                .weight(Optional.ofNullable(logDetail.getWeight()).orElse(0.0))
+                                .bodyFat(Optional.ofNullable(logDetail.getBodyFatPercentage()).orElse(0.0))
+                                .bodyImage(Optional.ofNullable(logDetail.getBodyPhoto()).orElse(""))
+                                .physicalActivity(physicalActivity)
+                                .physicalDetail(null) // 필요에 따라 추가
+                                .mood(mood)
+                                .moodDetail(null) // 필요에 따라 추가
+                                .build();
+                    }).collect(Collectors.toList());
+
+            logDetails.add(PdfData.builder().date(date).logs(details).build());
+        }
+        return logDetails;
     }
 }
