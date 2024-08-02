@@ -24,12 +24,12 @@
             }
         }
         @font-face {
-            font-family: 'DelaGothicOne';
-            src: url('classpath:/fonts/DelaGothicOne-Regular.ttf') format('truetype');
+            font-family: 'Dela Gothic One';
+            src: url('classpath:/templates/fonts/DelaGothicOne-Regular.ttf') format('truetype');
         }
         @font-face {
             font-family: 'NanumGothic';
-            src: url('classpath:/fonts/NanumGothic-Regular.ttf') format('truetype');
+            src: url('classpath:/templates/fonts/NanumGothic-Regular.ttf') format('truetype');
         }
         body {
             font-family: 'NanumGothic';
@@ -43,19 +43,16 @@
             min-height: 29.7cm;
         }
         .header {
-            background-color:
-                    #0A1128;
+            background-color: #0A1128;
             color: white;
             padding: 10px 30px;
         }
         h1 {
-            font-family: 'DelaGothicOne';
-            font-size: 40px;
+            font-family: 'Dela Gothic One';
+            font-size: 30px;
         }
         .footer {
             font-family: 'NanumGothic';
-            position: fixed;
-            bottom: 0;
             width: 100%;
             background-color: #FEFCFB;
             padding: 20px 40px;
@@ -64,8 +61,8 @@
             padding: 20px;
         }
         .content h1 {
-            font-family: 'DelaGothicOne';
-            font-size: 32px;
+            font-family: 'Dela Gothic One';
+            font-size: 27px;
             margin-bottom: 20px;
         }
         .content h2 {
@@ -74,9 +71,13 @@
             font-size: 26px;
             margin: 20px 0;
         }
-        h3{
+        h3 {
             font-family: 'NanumGothic';
             font-size: 18px;
+        }
+        h4 {
+            font-family: 'NanumGothic';
+            font-size: 15px;
         }
         .content .date {
             margin: 10px 0;
@@ -89,6 +90,11 @@
             width: 50px;
             height: auto;
             margin: 0 5px;
+        }
+        hr{
+            background: #C9C8C8;
+            height:1px;
+            border:0;
         }
     </style>
 </head>
@@ -108,7 +114,7 @@
                 <td style="width: 40%;">
                     <h1>Check out Your Personal Health Chronicle</h1>
                 </td>
-                <td style="width: 60%;">
+                <td style="width: 50%;">
                     <p style="margin-right: 10%;">
                         나의 건강 일지 보고서를 PDF로 확인해보세요.<br/><br/>
                         이 보고서는 낙상 위치, 혈당 수치, 혈압, 심박수 등 사용자가 기록한 모든 정보를 확인할 수 있습니다.<br/><br/>
@@ -120,20 +126,95 @@
         <div class="icons" style="width: 100%;" >
             <img src="header_pattern.png" style="width: 100%;" alt="Icon 1" />
         </div>
-        <h2>2024.07.11</h2>
-        <p class="date">2024.07.11 기록된 일지는 총 3개입니다.</p>
-        <h3>아침식사 전</h3>
-        <div class="images">
-            <img src="icon1.png" alt="Image 1"/>
-            <img src="icon2.png" alt="Image 2"/>
-            <img src="icon3.png" alt="Image 3"/>
-            <img src="icon4.png" alt="Image 4"/>
-            <img src="icon5.png" alt="Image 5"/>
-            <img src="icon6.png" alt="Image 6"/>
+        <div th:each="entry : ${entries}">
+            <h2 style="font-family: 'Dela Gothic One'; margin-top: 50px;" th:text="${entry.date}" >2999.12.31</h2>
+            <p class="date" th:text="'기록된 일지는 총 ' + ${entry.entryCount} + '개입니다.'">2999.12.31 기록된 일지는 총 0개입니다.</p>
+            <div th:each="log : ${entry.logs}">
+                <h3 th:text="${log.time}">아침식사 전</h3>
+                <div class="images">
+                    <img th:each="icon : ${log.icons}" th:src="@{classpath:/templates/{icon}.png(icon=${icon})}" alt="Image"/>
+                </div>
+                <div>
+                    <div th:if="${log.location!=''} and ${log.mapImage!=''}">
+                        <h4>낙상</h4>
+                        <div style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
+                            <p th:if="${log.location}" th:text="${log.location}">낙상이 발생했습니다. 경기도 남양주시 어쩌구 </p>
+                            <img th:if="${log.mapImage}" style="width: 50%;" th:src="${log.mapImage}" />
+                        </div>
+                    </div>
+                    <div th:if="${log.bloodSugar}">
+                        <h4>혈당</h4>
+                        <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
+                            <tr style="width: 100%;">
+                                <td style="width: 50%;">혈당</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.bloodSugar} + 'mg/dL'">0.0mg/dL</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div th:if="${log.systolic} or ${log.diastolic} or ${log.heartRate}">
+                        <h4>혈압</h4>
+                        <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
+                            <tr th:if="${log.systolic}" style="width: 100%;">
+                                <td style="width: 50%;">수축기 혈압</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.systolic} + 'mmHg'">0.0mmHg</td>
+                            </tr>
+                            <tr th:if="${log.diastolic}" style="width: 100%;">
+                                <td style="width: 50%;">이완기 혈압</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.diastolic} + 'mmHg'">0.0mmHg</td>
+                            </tr>
+                            <tr th:if="${log.heartRate}" style="width: 100%;">
+                                <td style="width: 50%;">심박수</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.heartRate} + 'rpm'">0.0rpm</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div th:if="${log.weight!=0.0} or ${log.bodyFat!=0.0} or ${log.bodyImage!=''}">
+                        <h4>몸무게</h4>
+                        <table style="width: 100%; background-color: #FCFCFC; padding: 10px; border-radius: 8px;">
+                            <tr style="width: 100%;" th:if="${log.weight!=0.0}" >
+                                <td style="width: 50%;">몸무게</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.weight} + 'kg'">0.0kg</td>
+                            </tr>
+                            <tr style="width: 100%;" th:if="${log.bodyFat!=0.0}">
+                                <td style="width: 50%;">체지방률</td>
+                                <td style="width: 50%; text-align: end;" th:text="${log.bodyFat} + '%'">0.0%</td>
+                            </tr>
+                            <tr th:if="${log.bodyImage!=''}">
+                                <td >
+                                    <img th:src="${log.bodyImage}" style="width: 50%;" alt="body image"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div th:if="${log.physicalActivity} ">
+                        <h4>운동</h4>
+                        <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
+                            <tr style="width: 100%;">
+                                <td th:text="${log.physicalActivity}">오늘 을(를) 했습니다.</td>
+                            </tr>
+                            <tr style="width: 100%;" th:if="${log.physicalDetail}">
+                                <td th:text="'(직접입력) ' + ${log.physicalDetail}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div th:if="${log.mood}">
+                        <h4>기분</h4>
+                        <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
+                            <tr style="width: 100%;">
+                                <td th:text="${log.mood}">오늘은 을(를) 느꼈습니다.</td>
+                            </tr>
+                            <tr style="width: 100%;" th:if="${log.moodDetail}">
+                                <td th:text="'(직접입력) ' + ${log.moodDetail}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr/>
+            </div>
         </div>
     </div>
     <div class="footer">
-        <p>Dialog 2024 | 보고서 생성일 2024.07.11</p>
+        <p>Dialog 2024 | 개발 양수빈・박현아・신서영</p>
     </div>
 </div>
 </body>

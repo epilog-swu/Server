@@ -262,6 +262,13 @@ public class LogQueryService {
                 .build();
     }
 
+    /**
+     * PDF 변환
+     * @param userInfo
+     * @param start
+     * @param end
+     * @return
+     */
     public List<PdfData> generatedPdfEntries(CustomUserDetails userInfo, LocalDate start, LocalDate end) {
         Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
@@ -269,7 +276,7 @@ public class LogQueryService {
         List<Log> logs = logRepository.findAllByMemberAndStartAndEnd(member, start, end);
 
         Map<LocalDate, List<Log>> logsByDate = logs.stream()
-                .collect(Collectors.groupingBy(Log::getDate));
+                .collect(Collectors.groupingBy(Log::getDate, TreeMap::new, Collectors.toList()));
 
         List<PdfData> logDetails = new ArrayList<>();
         for (Map.Entry<LocalDate, List<Log>> entry : logsByDate.entrySet()) {
@@ -277,7 +284,7 @@ public class LogQueryService {
             List<PdfData.PdfLogDetail> details = entry.getValue().stream()
                     .map(logDetail -> {
                         List<LogExercise> logExercises = new ArrayList<>();
-                        if (logDetail.getIsExercise()!=null && logDetail.getIsExercise() == true) {
+                        if (logDetail.getIsExercise() != null && logDetail.getIsExercise()) {
                             logExercises = logExerciseRepository.findByLog(logDetail);
                         }
 
@@ -286,6 +293,20 @@ public class LogQueryService {
 
                         List<String> mood = logDetail.getLogMood().isEmpty() ? null
                                 : logDetail.getLogMood().stream().map(Object::toString).collect(Collectors.toList());
+
+                        List<String> icons = new ArrayList<>();
+                        if (logDetail.getIsFall())
+                            icons.add("icon1");
+                        if (logDetail.getIsBloodSugar())
+                            icons.add("icon2");
+                        if (logDetail.getIsBloodPressure())
+                            icons.add("icon3");
+                        if (logDetail.getIsWeight())
+                            icons.add("icon4");
+                        if (logDetail.getIsExercise())
+                            icons.add("icon5");
+                        if (logDetail.getIsMood())
+                            icons.add("icon6");
 
                         return PdfData.PdfLogDetail.builder()
                                 .time(Optional.ofNullable(logDetail.getTitle()).orElse(""))
@@ -301,12 +322,14 @@ public class LogQueryService {
                                 .physicalActivity(physicalActivity)
                                 .physicalDetail(null) // 필요에 따라 추가
                                 .mood(mood)
-                                .moodDetail(null) // 필요에 따라 추가
+                                .moodDetail(null)
+                                .icons(icons)
                                 .build();
                     }).collect(Collectors.toList());
 
-            logDetails.add(PdfData.builder().date(date).logs(details).build());
+            logDetails.add(PdfData.builder().date(date).logs(details).entryCount(details.size()).build());
         }
+        log.info("log details: " + logDetails);
         return logDetails;
     }
 }

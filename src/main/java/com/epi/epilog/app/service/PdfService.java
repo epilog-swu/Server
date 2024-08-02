@@ -2,13 +2,13 @@ package com.epi.epilog.app.service;
 
 
 import com.lowagie.text.pdf.BaseFont;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.List;
 import com.epi.epilog.app.dto.PdfData;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +30,14 @@ public class PdfService {
         ITextRenderer renderer = new ITextRenderer();
 
         String baseUri = this.getClass().getResource("/templates/").toString();
-        renderer.setDocumentFromString(htmlContent, baseUri);
+//        renderer.setDocumentFromString(htmlContent, baseUri);
 
-        String fontPathNanumGothic = "/fonts/NanumGothic-Regular.ttf";
-        String fontPathDelaGothicOne = "/fonts/DelaGothicOne-Regular.ttf";
-        renderer.getFontResolver().addFont(this.getClass().getResource(fontPathNanumGothic).toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        renderer.getFontResolver().addFont(this.getClass().getResource(fontPathDelaGothicOne).toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        String fontPathNanumGothic = "/templates/fonts/NanumGothic-Regular.ttf";
+        String fontPathDelaGothicOne = "/templates/fonts/DelaGothicOne-Regular.ttf";
+        renderer.getFontResolver().addFont(new ClassPathResource(fontPathNanumGothic).getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        renderer.getFontResolver().addFont(new ClassPathResource(fontPathDelaGothicOne).getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+        renderer.setDocumentFromString(htmlContent, baseUri);
 
         renderer.layout();
         renderer.createPDF(baos);
