@@ -1,8 +1,11 @@
 package com.epi.epilog.app.controller;
 
+import com.epi.epilog.app.dto.CommonResponseDto;
+import com.epi.epilog.app.dto.LogsRequestDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
 import com.epi.epilog.app.dto.PdfData;
 import com.epi.epilog.app.service.PdfService;
+import com.epi.epilog.app.service.logs.LogCommandService;
 import com.epi.epilog.app.service.logs.LogQueryService;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.DateTimeConverter;
@@ -13,10 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,6 +28,7 @@ import java.util.List;
 @RequestMapping("/api/logs")
 public class LogController {
     private final LogQueryService logQueryService;
+    private final LogCommandService logCommandService;
     private final PdfService pdfService;
 
     /**
@@ -107,6 +108,11 @@ public class LogController {
     /**
      * 일지 등록
      */
+    @PostMapping("")
+    public CommonResponseDto.CommonResponse createLog(@RequestBody LogsRequestDto.LogCreateForm form) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return logCommandService.createLog( ((CustomUserDetails) authentication.getPrincipal()), form);
+    }
 
     /**
      * 일지 수정
