@@ -18,9 +18,8 @@ public class OccurenceTypeValidator implements ConstraintValidator<ValidOccurenc
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
-            return false; // null 값은 유효하지 않음
+            return false;
         }
-        // Enum 값이거나 시간 형식인지 검사
         return OccurrenceType.isValid(value) || TIME_PATTERN.matcher(value).matches();
     }
 }

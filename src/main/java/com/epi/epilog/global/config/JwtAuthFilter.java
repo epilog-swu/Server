@@ -35,16 +35,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
-//        log.info("jwt filter header="+authorizationHeader);
         // 헤더 유효성 검사
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
             if (jwtUtil.validateJwt(token)) {
                 // 사용자 정보 가져와서 UsernamePasswordAuthenticationToken 객체 생성
                 String userId = jwtUtil.getUserById(token);
-//                log.info("JwtAuthFilter userId=" + userId.toString());
                 UserDetails userDetails = customUserDetailService.loadUserByUsername(userId);
-//                log.info("JwtAuthFilter UserDetails="+userDetails);
                 if (userDetails != null) {
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
