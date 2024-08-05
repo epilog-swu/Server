@@ -1,5 +1,6 @@
 package com.epi.epilog.app.dto;
 
+import com.epi.epilog.app.domain.annotations.ValidOccurenceType;
 import lombok.Data;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ public class LogsRequestDto {
     @Data
     public static class LogCreateForm {
         private String date;
+        @ValidOccurenceType
         private String occurenceType;
         private Double bloodSugar;
         private Double systolicBloodPressure;

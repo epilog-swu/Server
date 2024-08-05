@@ -70,7 +70,7 @@ public class DiabetesCommandService {
      * @param occurrenceType
      * @return
      */
-    private String createTitle(Member member, LocalDate date, String occurrenceType) {
+    public String createTitle(Member member, LocalDate date, String occurrenceType) {
         if (OccurrenceType.isValid(occurrenceType)) {
             List<Log> logs = logRepository.findAllByDateAndMember(date, member);
             Map<String, Integer> titleCount = logs.stream()

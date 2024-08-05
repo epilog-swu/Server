@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class LogCommandService {
+    private final DiabetesCommandService diabetesCommandService;
     private final MemberRepository memberRepository;
     private final LogMoodRepository logMoodRepository;
     private final LogExerciseRepository logExerciseRepository;
@@ -44,6 +45,8 @@ public class LogCommandService {
 
             Log log = Log.builder()
                     .member(member)
+                    .occurrenceType(form.getOccurenceType())
+                    .title(diabetesCommandService.createTitle(member, DateTimeConverter.convertToLocalDate(form.getDate()), form.getOccurenceType()))
                     .date(DateTimeConverter.convertToLocalDate(form.getDate()))
                     .occurrenceType(form.getOccurenceType())
                     .isFall(false)
