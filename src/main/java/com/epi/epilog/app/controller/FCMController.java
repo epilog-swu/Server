@@ -27,16 +27,9 @@ public class FCMController {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             Boolean success = fcmService.saveFCMToken(form, userDetails.getMember());
 
-            if (!success) {
-                return CommonResponseDto.CommonResponse.builder()
-                        .success(false)
-                        .message("토큰 저장에 실패했습니다.")
-                        .build();
-            }
-
             return CommonResponseDto.CommonResponse.builder()
-                    .success(true)
-                    .message("토큰 저장에 성공했습니다.")
+                    .success(success==false?false:true)
+                    .message(success==false?"토큰 저장에 실패했습니다.":"토큰 저장에 성공했습니다.")
                     .build();
 
         } catch (Exception e) {

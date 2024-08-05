@@ -92,7 +92,7 @@ public class DiabetesCommandService {
                 if (occurrenceType.length() >= 19) { // Check if occurrenceType has the correct length
                     String timePart = occurrenceType.substring(11); // Extract the time part from the string
                     LocalTime time = LocalTime.parse(timePart, TIME_FORMATTER);
-                    return String.format("%02d시 %02d분 %02d초", time.getHour(), time.getMinute(), time.getSecond());
+                    return String.format("%02d시 %02d분", time.getHour(), time.getMinute());
                 } else {
                     throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
                 }

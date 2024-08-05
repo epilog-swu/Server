@@ -120,23 +120,46 @@ public class LogsResponseDto {
     }
 
     /**
-     * 일지 등록
-     */
-    public static class createLogForm {
-
-    }
-
-    /**
-     * 일지 수정
-     */
-    public static class patchLogForm {
-
-    }
-
-    /**
      * 일지 상세 조회
      */
-    public static class getLogDetail {
+    @Data
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    public static class DetailAllLog {
+        private String title;
+        private List<String> keyword;
+        private Double bloodSugar;
+        private Double systolicBloodPressure;
+        private Double diastolicBloodPressure;
+        private Double heartRate;
+        private Double weight;
+        private Double bodyFatPercentage;
+        private String bodyPhoto;
+        private FallDetail fall;
+        private LogDetail exercise;
+        private LogDetail mood;
+    }
 
+    @Data
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    public static class FallDetail {
+        private String address;
+        private String mapImage;
+    }
+
+    @Data
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    public static class LogDetail {
+        private String comment;
+        private String details;
+        private List<String> keyword;
     }
 }

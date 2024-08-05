@@ -11,6 +11,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -63,7 +65,7 @@ public class Log extends BaseEntity {
     @Nullable
     private Double diastolicBloodPressure; // 이완기 혈압
     @Nullable
-    private Integer heartRate; // 심박수
+    private Double heartRate; // 심박수
 
     @Nullable
     private Double weight; // 몸무게
@@ -71,4 +73,7 @@ public class Log extends BaseEntity {
     private Double bodyFatPercentage; // 체지방률
     @Nullable
     private String bodyPhoto; // 눈바디 사진
+
+    @OneToMany(mappedBy = "log")
+    private List<LogMood> logMood = new ArrayList<>();
 }

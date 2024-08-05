@@ -148,7 +148,6 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
         JsonNode fallNode = data.get("fall");
         if (fallNode != null && fallNode.isArray()) {
