@@ -65,7 +65,7 @@ public class Log extends BaseEntity {
     @Nullable
     private Double diastolicBloodPressure; // 이완기 혈압
     @Nullable
-    private Integer heartRate; // 심박수
+    private Double heartRate; // 심박수
 
     @Nullable
     private Double weight; // 몸무게

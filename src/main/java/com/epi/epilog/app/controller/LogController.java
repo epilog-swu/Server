@@ -42,6 +42,7 @@ public class LogController {
         if (date == null) {
              date  = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+
         queryDate = DateTimeConverter.convertToLocalDate(date);
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -59,6 +60,7 @@ public class LogController {
         if (date == null){
             date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
+
         LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -121,6 +123,11 @@ public class LogController {
     /**
      * 일지 상세 조회
      */
+    @GetMapping("/{logId}")
+    public LogsResponseDto.DetailAllLog detailLog(@PathVariable("logId") Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return logQueryService.getDetailLog( ((CustomUserDetails) authentication.getPrincipal()), id);
+    }
 
     /**
      * PDF 변환하기
@@ -143,5 +150,4 @@ public class LogController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(new InputStreamResource(new ByteArrayInputStream(baos.toByteArray())));
     }
-
 }

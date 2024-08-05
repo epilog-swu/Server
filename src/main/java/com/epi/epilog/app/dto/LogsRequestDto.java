@@ -17,7 +17,7 @@ public class LogsRequestDto {
         private Double bloodSugar;
         private Double systolicBloodPressure;
         private Double diastolicBloodPressure;
-        private Integer heartRate;
+        private Double heartRate;
         private Double weight;
         private Double bodyFatPercentage;
         private String bodyPhoto;
