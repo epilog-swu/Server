@@ -28,7 +28,11 @@ public enum ErrorCode {
 
     // 3xxx
     OVER_COUNT_DIABETES(HttpStatus.BAD_REQUEST, 3000, "최대 입력 개수를 넘었습니다."),
-    CANT_SEND_SMS(HttpStatus.BAD_REQUEST, 3001, "SMS 발송에 실패했습니다.");
+    CANT_SEND_SMS(HttpStatus.BAD_REQUEST, 3001, "SMS 발송에 실패했습니다."),
+
+    // 5xxx
+    TIME_PARSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "시간 파싱에 실패했습니다."),
+    OCCURENCE_PARSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5002, "발생시간 파싱에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final int code;
