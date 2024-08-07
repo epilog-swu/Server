@@ -3,6 +3,7 @@ package com.epi.epilog.app.domain.log;
 import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.member.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,8 +31,11 @@ public class Log extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
+    @NotNull
     private String title; // 제목
+    @NotNull
     private LocalDate date; // 발생일자
+    @NotNull
     private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format yyyy-mm-dd 00:00:00)
 
     // 각 카테고리 별 기록 여부
