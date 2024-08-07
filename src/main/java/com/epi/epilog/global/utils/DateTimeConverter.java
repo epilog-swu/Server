@@ -17,6 +17,7 @@ import java.time.format.DateTimeParseException;
 public class DateTimeConverter {
     public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static DateTimeFormatter krDateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
     public static DateTimeFormatter krTimeFormatter = DateTimeFormatter.ofPattern("H시 m분");
     public static DateTimeFormatter krShortTimeFormatter = DateTimeFormatter.ofPattern("H시");
 

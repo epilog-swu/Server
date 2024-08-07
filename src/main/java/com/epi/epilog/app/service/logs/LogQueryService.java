@@ -109,7 +109,7 @@ public class LogQueryService {
                 LogsResponseDto.DayLogsItem
                         .builder()
                         .id(log.getId())
-                        .title(log.getTitle())
+                        .title(log.getDate().format(DateTimeConverter.krDateFormatter)+" "+log.getTitle())
                         .keyword(getKeywords(log))
                         .build()
         ).collect(Collectors.toList());
