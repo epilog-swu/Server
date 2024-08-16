@@ -76,7 +76,8 @@ public class LogCommandService {
                                 .log(log)
                                 .type(moodRequest.getType() != null ? moodRequest.getType() : "")
                                 .details(moodRequest.getDetails())
-                                .detailsState(moodRequest.getDetails() != null)
+                                .detailsState(moodRequest.getType().equals("직접입력")
+                                        ?true : false)
                                 .build())
                         .collect(Collectors.toList());
                 logMoodRepository.saveAll(logMoods);
@@ -86,9 +87,10 @@ public class LogCommandService {
                 List<LogExercise> logExerciseList = form.getExercise().stream()
                         .map(exercise -> LogExercise.builder()
                                 .log(log)
-                                .type(exercise.getType() != null ? exercise.getType() : "")
+                                .type(exercise.getType() != null ? exercise.getType() : null)
                                 .details(exercise.getDetails())
-                                .detailsState(exercise.getDetails() != null)
+                                .detailsState(exercise.getType().equals("직접입력")
+                                        ?true : false)
                                 .build())
                         .collect(Collectors.toList());
                 logExerciseRepository.saveAll(logExerciseList);
