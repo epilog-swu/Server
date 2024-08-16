@@ -28,7 +28,7 @@ public class SecurityConfig {
             "/detection/fall",
 //            "/api/diabetes/**",
             "/test",
-            "/ws/**"  // WebSocket 엔드포인트 허용
+            "/ws/**"
     };
 
     @Bean
