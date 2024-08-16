@@ -168,7 +168,7 @@
                             </tr>
                         </table>
                     </div>
-                    <div th:if="${log.weight!=0.0} or ${log.bodyFat!=0.0} or ${log.bodyImage!=''}">
+                    <div th:if="${log.weight != 0.0} or ${log.bodyFat != 0.0} or (${log.bodyImage != ''} and ${log.bodyImage != null})">
                         <h4>몸무게</h4>
                         <table style="width: 100%; background-color: #FCFCFC; padding: 10px; border-radius: 8px;">
                             <tr style="width: 100%;" th:if="${log.weight!=0.0}" >
@@ -179,7 +179,7 @@
                                 <td style="width: 50%;">체지방률</td>
                                 <td style="width: 50%; text-align: end;" th:text="${log.bodyFat} + '%'">0.0%</td>
                             </tr>
-                            <tr th:if="${log.bodyImage!=''}">
+                            <tr th:if="${log.bodyImage!=''} and ${log.bodyImage!=null}">
                                 <td >
                                     <img th:src="${log.bodyImage}" style="width: 50%;" alt="body image"/>
                                 </td>
@@ -190,10 +190,10 @@
                         <h4>운동</h4>
                         <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
                             <tr style="width: 100%;">
-                                <td th:text="${log.physicalActivity}">오늘 을(를) 했습니다.</td>
+                                <td th:text="${log.physicalActivity.getComment()}">오늘 을(를) 했습니다.</td>
                             </tr>
-                            <tr style="width: 100%;" th:if="${log.physicalDetail}">
-                                <td th:text="'(직접입력) ' + ${log.physicalDetail}"></td>
+                            <tr style="width: 100%;" th:if="${log.physicalActivity.details != ''}">
+                                <td th:text="'(직접입력) ' + ${log.physicalActivity.details}"></td>
                             </tr>
                         </table>
                     </div>
@@ -201,10 +201,10 @@
                         <h4>기분</h4>
                         <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
                             <tr style="width: 100%;">
-                                <td th:text="${log.mood}">오늘은 을(를) 느꼈습니다.</td>
+                                <td th:text="${log.mood.getComment()}">오늘은 을(를) 느꼈습니다.</td>
                             </tr>
-                            <tr style="width: 100%;" th:if="${log.moodDetail}">
-                                <td th:text="'(직접입력) ' + ${log.moodDetail}"></td>
+                            <tr style="width: 100%;" th:if="${log.mood.details != ''}">
+                                <td th:text="'(직접입력) ' + ${log.mood.details}"></td>
                             </tr>
                         </table>
                     </div>

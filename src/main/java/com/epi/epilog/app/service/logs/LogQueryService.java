@@ -27,9 +27,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class LogQueryService {
     private final MemberRepository memberRepository;
     private final LogRepository logRepository;
@@ -127,9 +127,9 @@ public class LogQueryService {
             keywordList.add("혈압");
         if (log.getWeight() != null || log.getBodyFatPercentage() != null || log.getBodyPhoto() != null)
             keywordList.add("몸무게");
-        if (log.getIsMood())
+        if (log.getIsMood() && !log.getLogMood().isEmpty())
             keywordList.add("기분");
-        if (log.getIsExercise())
+        if (log.getIsExercise() && !logExerciseRepository.findByLog(log).isEmpty())
             keywordList.add("운동");
         return keywordList;
     }
@@ -287,11 +287,11 @@ public class LogQueryService {
                             logExercises = logExerciseRepository.findByLog(logDetail);
                         }
 
-                        List<String> physicalActivity = logExercises.isEmpty() ? null
-                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
+//                        List<String> physicalActivity = logExercises.isEmpty() ? null
+//                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
 
-                        List<String> mood = logDetail.getLogMood().isEmpty() ? null
-                                : logDetail.getLogMood().stream().map(Object::toString).collect(Collectors.toList());
+                        LogsResponseDto.LogDetail exerciseList = createExerciseList(logDetail);
+                        LogsResponseDto.LogDetail moodList = createMoodList(logDetail);
 
                         List<String> icons = getKeywordIcons(logDetail);
 
@@ -306,10 +306,8 @@ public class LogQueryService {
                                 .weight(Optional.ofNullable(logDetail.getWeight()).orElse(0.0))
                                 .bodyFat(Optional.ofNullable(logDetail.getBodyFatPercentage()).orElse(0.0))
                                 .bodyImage(Optional.ofNullable(logDetail.getBodyPhoto()).orElse(""))
-                                .physicalActivity(physicalActivity)
-                                .physicalDetail(null) // 필요에 따라 추가
-                                .mood(mood)
-                                .moodDetail(null)
+                                .physicalActivity(exerciseList)
+                                .mood(moodList)
                                 .icons(icons)
                                 .build();
                     }).collect(Collectors.toList());
@@ -359,9 +357,11 @@ public class LogQueryService {
                 .mapImage(log.getFallAddressImage()!=null?log.getFallAddressImage():null)
                 .build();
 
+        List<String> keywords = getKeywords(log);
+
         return LogsResponseDto.DetailAllLog.builder()
                 .title(log.getDate() + " " + log.getTitle())
-                .keyword(getKeywords(log))
+                .keyword(keywords)
                 .bloodSugar(log.getBloodSugar()!=null? log.getBloodSugar() : null)
                 .systolicBloodPressure(log.getSystolicBloodPressure()!=null?log.getSystolicBloodPressure():null)
                 .diastolicBloodPressure(log.getDiastolicBloodPressure()!=null?log.getDiastolicBloodPressure():null)
@@ -370,19 +370,26 @@ public class LogQueryService {
                 .bodyFatPercentage(log.getBodyFatPercentage()!=null?log.getBodyFatPercentage():null)
                 .bodyPhoto(log.getBodyPhoto()!=null?log.getBodyPhoto():null)
                 .fall(fall.getAddress()!=null||fall.getMapImage()!=null?fall:null)
-                .exercise(log.getIsExercise()?createExerciseList(log):null)
-                .mood(log.getIsMood()?createMoodList(log):null)
+                .exercise(!keywords.stream().filter(keyword -> keyword.equals("운동")).collect(Collectors.toList()).isEmpty()?createExerciseList(log):null)
+                .mood((!keywords.stream().filter(keyword -> keyword.equals("기분")).collect(Collectors.toList()).isEmpty())?createMoodList(log):null)
                 .build();
     }
 
-    private LogsResponseDto.LogDetail createMoodList(Log log) {
+    private LogsResponseDto.LogDetail createMoodList(Log log_one) {
         List<String> moodKeyword = new ArrayList<>();
         StringBuilder details = new StringBuilder();
-        log.getLogMood().stream()
+
+        if (log_one.getLogMood().isEmpty() || log_one.getLogMood() == null){
+            return null;
+        }
+
+        log_one.getLogMood().stream()
                 .filter(logMood -> !logMood.isDetailsState())
                 .forEach(logMood -> moodKeyword.add(logMood.getType()));
 
-        log.getLogMood().stream()
+        log.info("moodList: " + log_one.getLogMood().get(0).getType());
+
+        log_one.getLogMood().stream()
                 .filter(mood -> mood.isDetailsState() == true)
                 .forEach(mood -> details.append(mood.getDetails()));
 
@@ -395,10 +402,17 @@ public class LogQueryService {
                 .build();
     }
 
-    private LogsResponseDto.LogDetail createExerciseList(Log log) {
+    private LogsResponseDto.LogDetail createExerciseList(Log log_one) {
         List<LogExercise> exerciseList;
 
-        exerciseList = logExerciseRepository.findByLog(log);
+        exerciseList = logExerciseRepository.findByLog(log_one);
+
+        if (exerciseList.isEmpty() || exerciseList == null) {
+            return null;
+        }
+
+        log.info("exerciseList: " + exerciseList.get(0).getType());
+
         List<String> exerciseKeyword = new ArrayList<>();
         StringBuilder details = new StringBuilder();
 
@@ -422,13 +436,16 @@ public class LogQueryService {
     private String createComment(List<String> keyword, String type){
         StringBuilder comment = new StringBuilder();
         if (type.equals("mood")) {
-            comment.append("오늘 ");
+            comment.append("오늘은 ");
             for (int i = 0; i< keyword.size(); i++) {
                 comment.append(keyword.get(i));
                 if (i == keyword.size() - 1)
                     comment.append(" 감정을 느꼈습니다.");
                 else
                     comment.append(", ");
+            }
+            if (keyword.isEmpty()) {
+                comment.append("특이사항이 없습니다.");
             }
         }
         if (type.equals("exercise")) {
@@ -439,6 +456,9 @@ public class LogQueryService {
                     comment.append(" 신체활동을 했습니다.");
                 else
                     comment.append(", ");
+            }
+            if (keyword.isEmpty()){
+                comment.append("아무 활동도 하지 않았습니다.");
             }
         }
         return comment.toString();

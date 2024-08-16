@@ -36,10 +36,8 @@ public class PdfData extends BaseEntity {
         private double bodyFat;
         private String bodyImage;
 
-        private List<String> physicalActivity;
-        private String physicalDetail;
+        private LogsResponseDto.LogDetail physicalActivity;
 
-        private List<String> mood;
-        private String moodDetail;
+        private LogsResponseDto.LogDetail mood;
     }
 }

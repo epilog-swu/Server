@@ -45,10 +45,6 @@ public class FallDetectionService {
         double pitch = 0.0;
         double roll = 0.0;
 
-//        double beforeAngleX = 0;
-//        double beforeAngleY = 0;
-//        double beforeAngleZ = 0;
-
         for (int i = 0; i < BASELINE_WINDOW_SIZE; i++) {
             SensorData entry = data.get(i);
             baseX += entry.getAccX();
@@ -126,9 +122,9 @@ public class FallDetectionService {
 
             if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
                     && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
-//                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
-//                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
-//                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
+                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
+                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
+                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
             ) {
 //                log.info("(True result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
                 return true;
