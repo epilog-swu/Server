@@ -190,10 +190,10 @@
                         <h4>운동</h4>
                         <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
                             <tr style="width: 100%;">
-                                <td th:text="${log.physicalActivity}">오늘 을(를) 했습니다.</td>
+                                <td th:text="${log.physicalActivity.getComment()}">오늘 을(를) 했습니다.</td>
                             </tr>
-                            <tr style="width: 100%;" th:if="${log.physicalDetail}">
-                                <td th:text="'(직접입력) ' + ${log.physicalDetail}"></td>
+                            <tr style="width: 100%;" th:if="${log.physicalActivity.getDetails()}">
+                                <td th:text="'(직접입력) ' + ${log.physicalActivity.getDetails()}"></td>
                             </tr>
                         </table>
                     </div>
@@ -201,10 +201,10 @@
                         <h4>기분</h4>
                         <table style="width: 100%; background-color: #FCFCFC; padding: 10px;border-radius: 8px;">
                             <tr style="width: 100%;">
-                                <td th:text="${log.mood}">오늘은 을(를) 느꼈습니다.</td>
+                                <td th:text="${log.mood.getComment()}">오늘은 을(를) 느꼈습니다.</td>
                             </tr>
-                            <tr style="width: 100%;" th:if="${log.moodDetail}">
-                                <td th:text="'(직접입력) ' + ${log.moodDetail}"></td>
+                            <tr style="width: 100%;" th:if="${log.mood.getDetails()}">
+                                <td th:text="'(직접입력) ' + ${log.mood.getDetails()}"></td>
                             </tr>
                         </table>
                     </div>

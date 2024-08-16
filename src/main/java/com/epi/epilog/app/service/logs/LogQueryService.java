@@ -287,11 +287,11 @@ public class LogQueryService {
                             logExercises = logExerciseRepository.findByLog(logDetail);
                         }
 
-                        List<String> physicalActivity = logExercises.isEmpty() ? null
-                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
+//                        List<String> physicalActivity = logExercises.isEmpty() ? null
+//                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
 
-                        List<String> mood = logDetail.getLogMood().isEmpty() ? null
-                                : logDetail.getLogMood().stream().map(Object::toString).collect(Collectors.toList());
+                        LogsResponseDto.LogDetail exerciseList = createExerciseList(logDetail);
+                        LogsResponseDto.LogDetail moodList = createMoodList(logDetail);
 
                         List<String> icons = getKeywordIcons(logDetail);
 
@@ -306,10 +306,8 @@ public class LogQueryService {
                                 .weight(Optional.ofNullable(logDetail.getWeight()).orElse(0.0))
                                 .bodyFat(Optional.ofNullable(logDetail.getBodyFatPercentage()).orElse(0.0))
                                 .bodyImage(Optional.ofNullable(logDetail.getBodyPhoto()).orElse(""))
-                                .physicalActivity(physicalActivity)
-                                .physicalDetail(null) // 필요에 따라 추가
-                                .mood(mood)
-                                .moodDetail(null)
+                                .physicalActivity(exerciseList)
+                                .mood(moodList)
                                 .icons(icons)
                                 .build();
                     }).collect(Collectors.toList());
@@ -380,6 +378,10 @@ public class LogQueryService {
     private LogsResponseDto.LogDetail createMoodList(Log log_one) {
         List<String> moodKeyword = new ArrayList<>();
         StringBuilder details = new StringBuilder();
+
+        if (log_one.getLogMood().isEmpty() || log_one.getLogMood() == null){
+            return null;
+        }
 
         log_one.getLogMood().stream()
                 .filter(logMood -> !logMood.isDetailsState())
