@@ -2,12 +2,10 @@ package com.epi.epilog.app.domain.log;
 
 import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.member.Member;
+import com.epi.epilog.app.repository.LogRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
 
