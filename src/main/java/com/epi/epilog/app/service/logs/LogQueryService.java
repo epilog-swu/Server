@@ -393,6 +393,8 @@ public class LogQueryService {
                 .filter(mood -> mood.isDetailsState() == true)
                 .forEach(mood -> details.append(mood.getDetails()));
 
+
+
         String moodComment = createComment(moodKeyword, "mood");
 
         return LogsResponseDto.LogDetail.builder()
@@ -445,7 +447,7 @@ public class LogQueryService {
                     comment.append(", ");
             }
             if (keyword.isEmpty()) {
-                comment.append("특이사항이 없습니다.");
+                comment.append("선택된 특이사항이 없습니다.");
             }
         }
         if (type.equals("exercise")) {
@@ -458,7 +460,7 @@ public class LogQueryService {
                     comment.append(", ");
             }
             if (keyword.isEmpty()){
-                comment.append("아무 활동도 하지 않았습니다.");
+                comment.append("선택된 활동이 없습니다.");
             }
         }
         return comment.toString();
