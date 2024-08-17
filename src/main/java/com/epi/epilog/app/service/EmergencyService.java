@@ -63,7 +63,7 @@ public class EmergencyService {
                     .member(member)
                     .date(now.toLocalDate())
                     .title(now.getMinute()==0?DateTimeConverter.krShortTimeFormatter.format(now):DateTimeConverter.krTimeFormatter.format(now))
-                    .occurrenceType(now.toString())
+                    .occurrenceType(DateTimeConverter.convertLocalDateTimeToString(now))
                     .isFall(true)
                     .isMood(false)
                     .isExercise(false)
