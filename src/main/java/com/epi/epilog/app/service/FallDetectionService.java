@@ -103,11 +103,6 @@ public class FallDetectionService {
             double angleY = calculateThetaY(deltaX, deltaY, deltaZ);
             double angleZ = calculateThetaZ(deltaX, deltaY, deltaZ);
 
-//            if (i % 10 == 0) {
-//                log.info("Sensor values at index {}: accX = {}, accY = {}, accZ = {}, aSvm = {}, gSvm = {}", //, angleX = {}, angleY = {}, angleZ = {}",
-//                        i, deltaX, deltaY, deltaZ, aSvm, gSvm); //, angleX, angleY, angleZ);
-//            }
-
             if (aSvm > THRESHOLD_ASVM) {
                 aSvmThresholdExceedCount++;
             }
