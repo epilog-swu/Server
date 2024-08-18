@@ -57,7 +57,6 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
                 Member member = memberRepository.findById(Long.valueOf(memberId))
                         .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
-                // Member 객체를 CustomUserInfoDto로 변환
                 CustomUserInfoDto userInfoDto = new CustomUserInfoDto(
                         member.getId(),
                         member.getLoginId(),
@@ -154,6 +153,11 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             List<SensorData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<SensorData>>() {});
             boolean fallDetectedResult = fallDetectionService.isFallDetected(fallData);
             log.info("return value: " + fallDetectedResult);
+
+            if (fallDetectedResult) {
+                fallDetectedResult = fallDetectionService.isAIFallDetected(fallData);
+                log.info("ai return value: " + fallDetectedResult);
+            }
 
             Map<String, Object> response = new HashMap<>();
             response.put("event", "fall");
