@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FallDetectionService {
     private static final double THRESHOLD_ASVM = 5.5;
-    private static final double THRESHOLD_GSVM = 150;
+    private static final double THRESHOLD_GSVM = 100;
     private static final double THRESHOLD_ANGLE_X = 60.0;
     private static final double THRESHOLD_ANGLE_Y = 60.0;
     private static final double THRESHOLD_ANGLE_Z = 30.0;
@@ -119,14 +119,20 @@ public class FallDetectionService {
 //                angleZExceedCount++;
 //            }
 
-            if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
-                    && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
+            if (aSvmThresholdExceedCount < ASVM_THRESHOLD_COUNT) {
+                return false;
+            }
+            if (gSvmThresholdExceedCount < GSVM_THRESHOLD_COUNT) {
+                return false;
+            }
+//                    && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
 //                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
 //                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
 //                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
-            ) {
-                return true;
-            }
+//            ) {
+//                return true;
+//            }
+            return true;
         }
         return false;
     }
