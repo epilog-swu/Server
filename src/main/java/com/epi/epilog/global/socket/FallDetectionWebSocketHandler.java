@@ -156,6 +156,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
             if (fallDetectedResult) {
                 fallDetectedResult = fallDetectionService.isAIFallDetected(fallData);
+                log.info("ai return value: " + fallDetectedResult);
             }
 
             Map<String, Object> response = new HashMap<>();
