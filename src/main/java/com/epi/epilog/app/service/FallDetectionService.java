@@ -1,9 +1,16 @@
 package com.epi.epilog.app.service;
 
 import com.epi.epilog.app.dto.SensorData;
+import com.epi.epilog.global.exception.ApiException;
+import com.epi.epilog.global.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -21,6 +28,9 @@ public class FallDetectionService {
     private static final int ANGLE_THRESHOLD_COUNT = 20;
     private static final int BASELINE_WINDOW_SIZE = 10;
     private static final double ALPHA = 0.98;
+    private final RestTemplate restTemplate;
+    @Value("${fall.domain}")
+    private String ai_domain;
 
     public boolean isFallDetected(List<SensorData> data) {
         if (data.size() < BASELINE_WINDOW_SIZE) {
@@ -97,8 +107,6 @@ public class FallDetectionService {
 //                log.info("Sensor values at index {}: accX = {}, accY = {}, accZ = {}, aSvm = {}, gSvm = {}", //, angleX = {}, angleY = {}, angleZ = {}",
 //                        i, deltaX, deltaY, deltaZ, aSvm, gSvm); //, angleX, angleY, angleZ);
 //            }
-            //
-            //
 
             if (aSvm > THRESHOLD_ASVM) {
                 aSvmThresholdExceedCount++;
@@ -116,21 +124,15 @@ public class FallDetectionService {
                 angleZExceedCount++;
             }
 
-//            if (i % 10 == 0) {
-//                log.info("gSvm: " + gSvm + " angleX: " + abs(abs(angleX) - abs(beforeAngleX)) + " angleY: " + abs(abs(angleY) - abs(beforeAngleY)) + " angleZ: " + abs(abs(angleZ) - abs(beforeAngleZ)));
-//            }
-
             if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
                     && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
                     && angleXExceedCount > ANGLE_THRESHOLD_COUNT
                     && angleYExceedCount > ANGLE_THRESHOLD_COUNT
                     && angleZExceedCount > ANGLE_THRESHOLD_COUNT
             ) {
-//                log.info("(True result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
                 return true;
             }
         }
-//        log.info("(False result) Exceed count - ASVM: " + aSvmThresholdExceedCount + ", GSVM: " + gSvmThresholdExceedCount + ", Zcount: " + angleZExceedCount + ", Xcount: " + angleXExceedCount + ", YCount: " + angleYExceedCount);
         return false;
     }
 
@@ -170,5 +172,40 @@ public class FallDetectionService {
 
     public static double calculateDeltaRoll(Double gyroY, Double dt){
         return gyroY * dt;
+    }
+
+    public boolean isAIFallDetected(List<SensorData> fallData) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            FallData fallDataList = new FallData(fallData);
+
+            String jsonString = objectMapper.writeValueAsString(fallDataList);
+
+            String url = ai_domain + "api/ai/predict";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+
+            HttpEntity<String> requestEntity = new HttpEntity<>(jsonString, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+            if (HttpStatus.OK != response.getStatusCode()){
+                throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
+            }
+            String responseBody = response.getBody();
+            JSONObject jsonResponse = new JSONObject(responseBody);
+
+            return jsonResponse.getBoolean("result");
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);
+        }
+    }
+
+    public static class FallData {
+        public List<SensorData> fall;
+
+        public FallData(List<SensorData> fall) {
+            this.fall = fall;
+        }
     }
 }
