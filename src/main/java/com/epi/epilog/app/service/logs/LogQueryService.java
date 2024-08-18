@@ -384,16 +384,12 @@ public class LogQueryService {
         }
 
         log_one.getLogMood().stream()
-                .filter(logMood -> !logMood.isDetailsState())
+                .filter(logMood -> !logMood.getType().equals("직접입력"))
                 .forEach(logMood -> moodKeyword.add(logMood.getType()));
 
-        log.info("moodList: " + log_one.getLogMood().get(0).getType());
-
         log_one.getLogMood().stream()
-                .filter(mood -> mood.isDetailsState() == true)
+                .filter(mood -> mood.getType().equals("직접입력"))
                 .forEach(mood -> details.append(mood.getDetails()));
-
-
 
         String moodComment = createComment(moodKeyword, "mood");
 
@@ -413,17 +409,15 @@ public class LogQueryService {
             return null;
         }
 
-        log.info("exerciseList: " + exerciseList.get(0).getType());
-
         List<String> exerciseKeyword = new ArrayList<>();
         StringBuilder details = new StringBuilder();
 
         exerciseList.stream()
-                .filter(exercise -> !exercise.isDetailsState())
+                .filter(exercise -> !exercise.getType().equals("직접입력"))
                 .forEach(exercise -> exerciseKeyword.add(exercise.getType()));
 
         exerciseList.stream()
-                .filter(exercise -> exercise.isDetailsState() == true)
+                .filter(exercise -> exercise.getType().equals("직접입력"))
                 .forEach(exercise -> details.append(exercise.getDetails()));
 
         String exComment = createComment(exerciseKeyword, "exercise");

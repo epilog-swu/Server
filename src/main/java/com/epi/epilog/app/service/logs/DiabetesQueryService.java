@@ -33,7 +33,7 @@ public class DiabetesQueryService {
         List<DiabetesResponseDto.DiabetesBloodSugar> bloodSugars = new ArrayList<>();
 
         if (logs != null){
-            bloodSugars = logs.stream().map(diabet ->
+            bloodSugars = logs.stream().filter(diabet -> diabet.getBloodSugar() != null).map(diabet ->
                     DiabetesResponseDto.DiabetesBloodSugar
                             .builder()
                             .bloodSugar(diabet.getBloodSugar())
