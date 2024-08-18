@@ -103,32 +103,27 @@ public class FallDetectionService {
             double angleY = calculateThetaY(deltaX, deltaY, deltaZ);
             double angleZ = calculateThetaZ(deltaX, deltaY, deltaZ);
 
-//            if (i % 10 == 0) {
-//                log.info("Sensor values at index {}: accX = {}, accY = {}, accZ = {}, aSvm = {}, gSvm = {}", //, angleX = {}, angleY = {}, angleZ = {}",
-//                        i, deltaX, deltaY, deltaZ, aSvm, gSvm); //, angleX, angleY, angleZ);
-//            }
-
             if (aSvm > THRESHOLD_ASVM) {
                 aSvmThresholdExceedCount++;
             }
             if (gSvm > THRESHOLD_GSVM) {
                 gSvmThresholdExceedCount++;
             }
-            if (angleX > THRESHOLD_ANGLE_X) {
-                angleXExceedCount++;
-            }
-            if (angleY > THRESHOLD_ANGLE_Y) {
-                angleYExceedCount++;
-            }
-            if (angleZ > THRESHOLD_ANGLE_Z) {
-                angleZExceedCount++;
-            }
+//            if (angleX > THRESHOLD_ANGLE_X) {
+//                angleXExceedCount++;
+//            }
+//            if (angleY > THRESHOLD_ANGLE_Y) {
+//                angleYExceedCount++;
+//            }
+//            if (angleZ > THRESHOLD_ANGLE_Z) {
+//                angleZExceedCount++;
+//            }
 
             if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
                     && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
-                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
-                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
-                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
             ) {
                 return true;
             }
