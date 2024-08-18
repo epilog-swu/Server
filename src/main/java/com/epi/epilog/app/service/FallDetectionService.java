@@ -109,21 +109,21 @@ public class FallDetectionService {
             if (gSvm > THRESHOLD_GSVM) {
                 gSvmThresholdExceedCount++;
             }
-            if (angleX > THRESHOLD_ANGLE_X) {
-                angleXExceedCount++;
-            }
-            if (angleY > THRESHOLD_ANGLE_Y) {
-                angleYExceedCount++;
-            }
-            if (angleZ > THRESHOLD_ANGLE_Z) {
-                angleZExceedCount++;
-            }
+//            if (angleX > THRESHOLD_ANGLE_X) {
+//                angleXExceedCount++;
+//            }
+//            if (angleY > THRESHOLD_ANGLE_Y) {
+//                angleYExceedCount++;
+//            }
+//            if (angleZ > THRESHOLD_ANGLE_Z) {
+//                angleZExceedCount++;
+//            }
 
             if (aSvmThresholdExceedCount > ASVM_THRESHOLD_COUNT
                     && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
-                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
-                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
-                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
+//                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
             ) {
                 return true;
             }
