@@ -32,9 +32,13 @@ public class DiabetesQueryService {
 
         List<DiabetesResponseDto.DiabetesBloodSugar> bloodSugars = new ArrayList<>();
 
-        if (logs != null){
-            bloodSugars = logs.stream().filter(diabet -> diabet.getBloodSugar() != null).map(diabet ->
-                    DiabetesResponseDto.DiabetesBloodSugar
+        List<Log> logs1 = logs.stream()
+                .filter(diabet -> diabet.getBloodSugar() != null)
+                .collect(Collectors.toList());
+
+        if (logs1 != null && !logs1.isEmpty()){
+            bloodSugars = logs1.stream()
+                    .map(diabet -> DiabetesResponseDto.DiabetesBloodSugar
                             .builder()
                             .bloodSugar(diabet.getBloodSugar())
                             .occurrenceType(diabet.getOccurrenceType())
