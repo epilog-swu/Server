@@ -35,8 +35,10 @@
 
 ## 기능 관련 추가 설명
 #### SVM 임계값 기반 알고리즘
-<img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="800px" />
+<img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="780px" />
 
+## 데이터베이스 설계
+<img src="https://github.com/user-attachments/assets/d1cb9200-8ab8-49da-96e4-2392e49b6a34" width="780px" alert="ERD" />
 
 ## 아키텍처
 <img src="https://github.com/user-attachments/assets/9d861c2b-38fc-4849-81c4-a490762ac912" width="780px" alert="architecture"/>
