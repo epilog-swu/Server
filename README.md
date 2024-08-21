@@ -41,7 +41,7 @@
 <img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="780px" alert="ERD" />
 
 ## 시스템 아키텍처
-<img src="https://github.com/user-attachments/assets/9d861c2b-38fc-4849-81c4-a490762ac912" width="780px" alert="architecture"/>
+<img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="780px" alert="architecture"/>
 
 ## 디렉토리 구조
 ```
