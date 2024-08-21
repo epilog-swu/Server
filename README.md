@@ -46,7 +46,7 @@
 
 ## 디렉토리 구조
 ```
-.
+📁 Server
 ├── HELP.md
 ├── build.gradle
 ├── gradle
