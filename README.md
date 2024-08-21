@@ -33,14 +33,14 @@
 워치와 모바일 어디서나 기록을 남길 수 있게 하여 접근성을 높였습니다. <br/>
 작성된 기록은 그래프와 보고서 형태로 확인 가능하며, 서면 제출에 용이하도록 선택한 기간의 기록을 PDF로 변환하는 기능을 제공합니다.
 
-## 기능 관련 추가 설명
+## 비고
 #### SVM 임계값 기반 알고리즘
 <img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="780px" />
 
-## 데이터베이스 설계
-<img src="https://github.com/user-attachments/assets/d1cb9200-8ab8-49da-96e4-2392e49b6a34" width="780px" alert="ERD" />
+## ERD
+<img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="780px" alert="ERD" />
 
-## 아키텍처
+## 시스템 아키텍처
 <img src="https://github.com/user-attachments/assets/9d861c2b-38fc-4849-81c4-a490762ac912" width="780px" alert="architecture"/>
 
 ## 디렉토리 구조
