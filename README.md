@@ -77,7 +77,6 @@
         │                   └── utils
         └── resources
             ├── application.yml
-            ├── application2.yml
             └── templates
                 ├── diabetes_log.html
                 └── fonts
