@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.fall;
 
 import com.epi.epilog.app.dto.SensorData;
 import com.epi.epilog.global.exception.ApiException;

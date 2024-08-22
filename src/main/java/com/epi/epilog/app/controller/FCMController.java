@@ -2,7 +2,7 @@ package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.FCMDto;
-import com.epi.epilog.app.service.FCMService;
+import com.epi.epilog.app.service.auth.FCMService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;

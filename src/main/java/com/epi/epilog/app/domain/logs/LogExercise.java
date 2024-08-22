@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.log;
+package com.epi.epilog.app.domain.logs;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
@@ -16,15 +16,17 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class LogMedication {
+public class LogExercise {
     @Id
-    @Column(name="log_medication_id")
+    @Column(name="log_exercise_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="log_id")
     private Log log;
-    private String medicationName;
-    @ColumnDefault("0")
-    private Integer dosage; // 복용량
+    @ColumnDefault("false")
+    private boolean detailsState;
+    private String type;
+    @Nullable
+    private String details;
 }

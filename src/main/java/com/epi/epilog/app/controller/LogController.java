@@ -4,7 +4,7 @@ import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.LogsRequestDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
 import com.epi.epilog.app.dto.PdfData;
-import com.epi.epilog.app.service.PdfService;
+import com.epi.epilog.app.service.fall.PdfService;
 import com.epi.epilog.app.service.logs.LogCommandService;
 import com.epi.epilog.app.service.logs.LogQueryService;
 import com.epi.epilog.global.utils.CustomUserDetails;

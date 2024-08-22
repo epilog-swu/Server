@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
@@ -28,6 +28,7 @@ public class ChecklistSchedulerService {
     private final MealCheckListRepository mealCheckListRepository;
     private final MedicationRepository medicationRepository;
     private final MedicationCheckListRepository medicationCheckListRepository;
+    private final MedicationCommandService medicationCommandService;
 
     /**
      * 식사 체크리스트 스케줄러
@@ -51,25 +52,9 @@ public class ChecklistSchedulerService {
     /**
      * 복약 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 0 15 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void medicineChecklistScheduler(){
-        List<Medication> all = medicationRepository.findAll();
-        if (!all.isEmpty()){
-            List<MedicationCheckList> collect = all.stream()
-                    .flatMap(medication -> medication.getTimes().stream()
-                            .map(times -> MedicationCheckList.builder()
-                                    .medication(medication)
-                                    .isComplete(false)
-                                    .title((times.getMinute() != 0 ?
-                                            times.format(DateTimeConverter.krTimeFormatter) :
-                                            times.format(DateTimeConverter.krShortTimeFormatter))
-                                            + " " + medication.getMedicationName())
-                                    .goalTime(LocalDate.now().plusDays(1).atTime(times))
-                                    .medicationStatus(MedicationStatus.상태없음)
-                                    .build()))
-                    .collect(Collectors.toList());
-            medicationCheckListRepository.saveAll(collect);
-        }
+        medicationCommandService.createAutoMedicationChecklist(false, null);
     }
 }

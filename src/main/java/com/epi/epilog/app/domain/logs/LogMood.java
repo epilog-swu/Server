@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.log;
+package com.epi.epilog.app.domain.logs;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
@@ -16,9 +16,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
-public class LogExercise {
+public class LogMood {
     @Id
-    @Column(name="log_exercise_id")
+    @Column(name="log_mood_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
