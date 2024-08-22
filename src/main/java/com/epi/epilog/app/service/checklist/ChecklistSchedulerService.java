@@ -28,6 +28,7 @@ public class ChecklistSchedulerService {
     private final MealCheckListRepository mealCheckListRepository;
     private final MedicationRepository medicationRepository;
     private final MedicationCheckListRepository medicationCheckListRepository;
+    private final MedicationCommandService medicationCommandService;
 
     /**
      * 식사 체크리스트 스케줄러
@@ -54,26 +55,6 @@ public class ChecklistSchedulerService {
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void medicineChecklistScheduler(){
-        List<Medication> all = medicationRepository.findAll();
-        if (!all.isEmpty()){
-            List<MedicationCheckList> collect = all.stream()
-                    .filter(medication->medication.getEndless()==true
-                            || medication.getEndDate().isAfter(LocalDate.now().plusDays(8)))
-                    .filter(medication -> medication.getWeeks() == null
-                            || (medication.getWeeks() != null && medication.getWeeks().contains(LocalDate.now().getDayOfWeek())))
-                    .flatMap(medication -> medication.getTimes().stream()
-                            .map(times -> MedicationCheckList.builder()
-                                    .medication(medication)
-                                    .isComplete(false)
-                                    .title((times.getMinute() != 0 ?
-                                            times.format(DateTimeConverter.krTimeFormatter) :
-                                            times.format(DateTimeConverter.krShortTimeFormatter))
-                                            + " " + medication.getMedicationName())
-                                    .goalTime(LocalDate.now().plusDays(8).atTime(times))
-                                    .medicationStatus(MedicationStatus.상태없음)
-                                    .build()))
-                    .collect(Collectors.toList());
-            medicationCheckListRepository.saveAll(collect);
-        }
+        medicationCommandService.createAutoMedicationChecklist(false, null);
     }
 }
