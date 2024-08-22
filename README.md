@@ -35,14 +35,14 @@
 서면 제출에 용이하도록 선택한 기간의 기록을 PDF로 변환하는 기능을 제공합니다.
 
 ## 비고
-#### SVM 임계값 기반 알고리즘
-<img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="780px" />
+### SVM 임계값 기반 알고리즘
+<img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="680px" />
 
 ### ERD
 <img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="700px" alert="ERD" />
 
 ### 시스템 아키텍처
-<img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="700px" alert="architecture"/>
+<img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="650px" alert="architecture"/>
 
 ## 디렉토리 구조
 ```
@@ -98,4 +98,5 @@
 
 #### 🔗 관련 링크
 > 개발과 관련된 더 다양한 이야기를 확인해주세요!<br/>
+> <a href="https://bini-team.notion.site/API-1d36c84daf184653b2f5985e68207657?pvs=4">API 명세서 보러가기</a> <br/>
 > <a href="https://github.com/epilog-swu/Front/wiki">Github Wiki 보러가기</a><br/>
