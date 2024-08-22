@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.auth;
 
 import com.epi.epilog.app.domain.member.FCMToken;
 import com.epi.epilog.app.domain.member.Member;

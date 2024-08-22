@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.auth;
 
 import com.epi.epilog.app.domain.enums.WeekType;
 import com.epi.epilog.app.domain.medication.Medication;

@@ -60,13 +60,14 @@ public class MedicineQueryService {
 
     private MedicationResponseDto.ChecklistStateDto convertToChecklistStateDto(MedicationCheckList medicine) {
         String formattedGoalTime = DateTimeConverter.formatTime(medicine.getGoalTime());
-        String formattedActualTime = medicine.getActualTime() != null
+        String formattedActualTime = (medicine.getActualTime() != null && medicine.getMedicationStatus() != MedicationStatus.상태없음)
                 ? DateTimeConverter.formatTime(medicine.getActualTime())
                 : null;
 
-        String title = medicine.getActualTime() == null ?
-                medicine.getTitle() :
-                formattedActualTime + " " + medicine.getMedication().getMedicationName();
+        String title = (medicine.getMedicationStatus() == MedicationStatus.상태없음
+                || medicine.getActualTime() == null)
+                ? medicine.getTitle()
+                : formattedActualTime + " " + medicine.getMedication().getMedicationName();
 
         return MedicationResponseDto.ChecklistStateDto.builder()
                 .id(medicine.getId())
