@@ -22,11 +22,15 @@ public class MedicationQueryService {
     private final MedicationRepository medicationRepository;
     private final MemberRepository memberRepository;
     public MedicationResponseDto.GetMedicationForm getMedicationDetails(Long medicationId, CustomUserDetails userInfo) {
+
         Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
         List<Medication> medicationList = medicationRepository.findAllByMemberOrderByCreatedAt(member);
+
         Integer index = 0;
         Boolean check = false;
+
         for (Medication medication : medicationList) {
             if (medication.getId() == medicationId) {
                 check = true;
@@ -34,9 +38,11 @@ public class MedicationQueryService {
             }
             index++;
         }
+
         if (medicationList.isEmpty() || check == false) {
             throw new ApiException(ErrorCode.MEDICATION_NOT_FOUND);
         }
+
         return MedicationResponseDto.GetMedicationForm
                 .builder()
                 .id(medicationList.get(index).getId())
@@ -46,7 +52,7 @@ public class MedicationQueryService {
                 .times(medicationList.get(index).getTimes())
                 .isAlarm(medicationList.get(index).getIsAlarm())
                 .startDate(medicationList.get(index).getStartDate())
-                .endDate(medicationList.get(index).getStartDate() != null? medicationList.get(index).getStartDate() : null)
+                .endDate(medicationList.get(index).getEndDate() != null? medicationList.get(index).getEndDate() : null)
                 .weeks(medicationList.get(index).getWeeks().stream().map(weekType -> weekType.toString()).collect(Collectors.toList()))
                 .effectiveness(medicationList.get(index).getEffectiveness())
                 .precautions(medicationList.get(index).getPrecautions())

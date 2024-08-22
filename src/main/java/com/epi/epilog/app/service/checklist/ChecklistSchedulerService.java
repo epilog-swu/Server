@@ -59,6 +59,8 @@ public class ChecklistSchedulerService {
             List<MedicationCheckList> collect = all.stream()
                     .filter(medication->medication.getEndless()==true
                             || medication.getEndDate().isAfter(LocalDate.now().plusDays(8)))
+                    .filter(medication -> medication.getWeeks() == null
+                            || (medication.getWeeks() != null && medication.getWeeks().contains(LocalDate.now().getDayOfWeek())))
                     .flatMap(medication -> medication.getTimes().stream()
                             .map(times -> MedicationCheckList.builder()
                                     .medication(medication)
