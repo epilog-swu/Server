@@ -1,6 +1,6 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.fall;
 
-import com.epi.epilog.app.domain.log.Log;
+import com.epi.epilog.app.domain.logs.Log;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.EmerData;
 import com.epi.epilog.app.repository.LogRepository;

@@ -1,6 +1,6 @@
 package com.epi.epilog.app.service.logs;
 
-import com.epi.epilog.app.domain.log.Log;
+import com.epi.epilog.app.domain.logs.Log;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;

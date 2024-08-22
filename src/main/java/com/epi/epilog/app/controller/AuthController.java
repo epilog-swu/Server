@@ -2,7 +2,7 @@ package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.AuthFormDto;
 import com.epi.epilog.app.dto.CommonResponseDto;
-import com.epi.epilog.app.service.AuthService;
+import com.epi.epilog.app.service.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

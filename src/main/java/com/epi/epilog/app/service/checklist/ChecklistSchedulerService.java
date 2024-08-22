@@ -1,4 +1,4 @@
-package com.epi.epilog.app.service;
+package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
@@ -51,12 +51,14 @@ public class ChecklistSchedulerService {
     /**
      * 복약 체크리스트 스케줄러
      */
-    @Scheduled(cron = "0 0 15 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void medicineChecklistScheduler(){
         List<Medication> all = medicationRepository.findAll();
         if (!all.isEmpty()){
             List<MedicationCheckList> collect = all.stream()
+                    .filter(medication->medication.getEndless()==true
+                            || medication.getEndDate().isAfter(LocalDate.now().plusDays(8)))
                     .flatMap(medication -> medication.getTimes().stream()
                             .map(times -> MedicationCheckList.builder()
                                     .medication(medication)
@@ -65,7 +67,7 @@ public class ChecklistSchedulerService {
                                             times.format(DateTimeConverter.krTimeFormatter) :
                                             times.format(DateTimeConverter.krShortTimeFormatter))
                                             + " " + medication.getMedicationName())
-                                    .goalTime(LocalDate.now().plusDays(1).atTime(times))
+                                    .goalTime(LocalDate.now().plusDays(8).atTime(times))
                                     .medicationStatus(MedicationStatus.상태없음)
                                     .build()))
                     .collect(Collectors.toList());

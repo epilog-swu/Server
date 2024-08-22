@@ -1,4 +1,4 @@
-package com.epi.epilog.app.domain.log;
+package com.epi.epilog.app.domain.logs;
 
 public enum OccurrenceType {
     BEFORE_BREAKFAST("아침식사 전", 1),

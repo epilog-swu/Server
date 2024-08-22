@@ -1,8 +1,7 @@
-package com.epi.epilog.app.domain.log;
+package com.epi.epilog.app.domain.logs;
 
 import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.member.Member;
-import com.epi.epilog.app.repository.LogRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
