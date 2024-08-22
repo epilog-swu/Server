@@ -21,6 +21,13 @@ import java.util.stream.Collectors;
 public class MedicationQueryService {
     private final MedicationRepository medicationRepository;
     private final MemberRepository memberRepository;
+
+    /**
+     *
+     * @param medicationId
+     * @param userInfo
+     * @return
+     */
     public MedicationResponseDto.GetMedicationForm getMedicationDetails(Long medicationId, CustomUserDetails userInfo) {
 
         Member member = memberRepository.findById(userInfo.getMember().getId())

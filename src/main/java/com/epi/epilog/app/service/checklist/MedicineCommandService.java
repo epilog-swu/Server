@@ -22,6 +22,13 @@ public class MedicineCommandService {
     private final MemberRepository memberRepository;
     private final MedicationCheckListRepository medicationCheckListRepository;
 
+    /**
+     * 복약 체크리스트 상태 수정
+     * @param id 복약 체크리스트 ID
+     * @param form 수정 폼
+     * @param userInfo 사용자 정보
+     * @return
+     */
     @Transactional
     public CommonResponseDto.CommonResponse medicineCheck(Long id, MedicationResponseDto.MedicineChecklistUpdateDto form, CustomUserDetails userInfo) {
         Member member = memberRepository.findById(userInfo.getMember().getId())

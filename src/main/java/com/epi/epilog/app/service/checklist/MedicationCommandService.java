@@ -34,7 +34,7 @@ public class MedicationCommandService {
     private final MedicationCheckListRepository medicationCheckListRepository;
 
     /**
-     * 생성
+     * 복용약 생성
      * @param userInfo
      * @param form
      * @return
@@ -82,7 +82,7 @@ public class MedicationCommandService {
     }
 
     /**
-     * 수정
+     * 복용약 수정
      * @param userInfo
      * @param medicationId
      * @param form
@@ -155,7 +155,7 @@ public class MedicationCommandService {
     }
 
     /**
-     * 삭제
+     * 복용약 삭제
      * @param userInfo
      * @param medicationId
      * @return
