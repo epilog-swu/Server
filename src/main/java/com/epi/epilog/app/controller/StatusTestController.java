@@ -8,10 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class StatusTestController {
+    /**
+     * elastic beanstalk health check
+     * @return
+     */
     @GetMapping("/test")
     public ResponseEntity<String> testAPI(){
         return ResponseEntity.ok("successful");
     }
+
+    /**
+     * spring security test
+     * @return
+     */
     @GetMapping("/auth/test")
     public ResponseEntity<String> testAuthAPI(){
         return ResponseEntity.ok("successful");

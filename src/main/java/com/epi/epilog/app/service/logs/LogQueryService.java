@@ -146,9 +146,9 @@ public class LogQueryService {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
         Double average = getAverage(logs);
-        // get prevAverage
+        // 식전 혈당 평균
         Double preAverage = getPrePostAverage(logs, OccurrenceType.BEFORE_BREAKFAST, OccurrenceType.BEFORE_LUNCH, OccurrenceType.BEFORE_DINNER);
-        // get postAverage
+        // 식후 혈당 평균
         Double postAverage = getPrePostAverage(logs, OccurrenceType.AFTER_BREAKFAST, OccurrenceType.AFTER_LUNCH, OccurrenceType.AFTER_DINNER);
 
 
@@ -282,13 +282,10 @@ public class LogQueryService {
             String date = entry.getKey().toString();
             List<PdfData.PdfLogDetail> details = entry.getValue().stream()
                     .map(logDetail -> {
-                        List<LogExercise> logExercises = new ArrayList<>();
-                        if (logDetail.getIsExercise() != null && logDetail.getIsExercise()) {
-                            logExercises = logExerciseRepository.findByLog(logDetail);
-                        }
-
-//                        List<String> physicalActivity = logExercises.isEmpty() ? null
-//                                : logExercises.stream().map(Object::toString).collect(Collectors.toList());
+//                        List<LogExercise> logExercises = new ArrayList<>();
+//                        if (logDetail.getIsExercise() != null && logDetail.getIsExercise()) {
+//                            logExercises = logExerciseRepository.findByLog(logDetail);
+//                        }
 
                         LogsResponseDto.LogDetail exerciseList = createExerciseList(logDetail);
                         LogsResponseDto.LogDetail moodList = createMoodList(logDetail);
@@ -389,6 +386,7 @@ public class LogQueryService {
 
         log_one.getLogMood().stream()
                 .filter(mood -> mood.getType().equals("직접입력"))
+                .filter(mood -> mood.getDetails() != null)
                 .forEach(mood -> details.append(mood.getDetails()));
 
         String moodComment = createComment(moodKeyword, "mood");
@@ -418,6 +416,7 @@ public class LogQueryService {
 
         exerciseList.stream()
                 .filter(exercise -> exercise.getType().equals("직접입력"))
+                .filter(exercise -> exercise.getDetails() != null)
                 .forEach(exercise -> details.append(exercise.getDetails()));
 
         String exComment = createComment(exerciseKeyword, "exercise");
