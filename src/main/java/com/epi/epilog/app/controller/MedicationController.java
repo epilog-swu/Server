@@ -7,11 +7,13 @@ import com.epi.epilog.app.service.checklist.MedicationCommandService;
 import com.epi.epilog.app.service.checklist.MedicationQueryService;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/medications")
 @RequiredArgsConstructor
 public class MedicationController {
@@ -39,6 +41,7 @@ public class MedicationController {
     public CommonResponseDto.CommonResponse addMedication(@RequestBody MedicationRequestDto.MedicationAddedForm form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userInfo = (CustomUserDetails) authentication.getPrincipal();
+        log.info("요청");
         return medicationCommandService.addMedication(userInfo, form);
     }
 

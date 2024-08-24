@@ -38,6 +38,9 @@
 ### SVM 임계값 기반 알고리즘
 <img src="https://github.com/user-attachments/assets/28df5aaf-164e-4334-8f3f-e15cfaeb2997" width="680px" />
 
+### 전체 낙상 감지 알고리즘
+<img src="https://github.com/user-attachments/assets/2fdde6dc-f34b-4e05-94e2-5215da097764" width="680px" />
+
 ### ERD
 <img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="700px" alert="ERD" />
 
