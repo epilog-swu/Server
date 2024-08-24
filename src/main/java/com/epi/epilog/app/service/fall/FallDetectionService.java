@@ -20,9 +20,9 @@ import java.util.List;
 public class FallDetectionService {
     private static final double THRESHOLD_ASVM = 5.5;
     private static final double THRESHOLD_GSVM = 100;
-    private static final double THRESHOLD_ANGLE_X = 60.0;
-    private static final double THRESHOLD_ANGLE_Y = 60.0;
-    private static final double THRESHOLD_ANGLE_Z = 30.0;
+    private static final double THRESHOLD_ANGLE_X = 40.0;
+    private static final double THRESHOLD_ANGLE_Y = 40.0;
+    private static final double THRESHOLD_ANGLE_Z = 40.0;
     private static final int ASVM_THRESHOLD_COUNT = 60;
     private static final int GSVM_THRESHOLD_COUNT = 20;
     private static final int ANGLE_THRESHOLD_COUNT = 20;
@@ -79,7 +79,7 @@ public class FallDetectionService {
             double deltaZ = entry.getAccZ() - baseZ;
             double deltaGyroX = entry.getGyroX() - baseGyroX;
             double deltaGyroY = entry.getGyroY() - baseGyroY;
-            double deltaGyroZ = entry.getGyroZ() - baseGyroZ;
+//            double deltaGyroZ = entry.getGyroZ() - baseGyroZ;
 
             double aSvm = calculateASVM(deltaX, deltaY, deltaZ);
             double pitchAcc = calculatePitch(deltaX, deltaY, deltaZ);
@@ -109,15 +109,15 @@ public class FallDetectionService {
             if (gSvm > THRESHOLD_GSVM) {
                 gSvmThresholdExceedCount++;
             }
-//            if (angleX > THRESHOLD_ANGLE_X) {
-//                angleXExceedCount++;
-//            }
-//            if (angleY > THRESHOLD_ANGLE_Y) {
-//                angleYExceedCount++;
-//            }
-//            if (angleZ > THRESHOLD_ANGLE_Z) {
-//                angleZExceedCount++;
-//            }
+            if (angleX > THRESHOLD_ANGLE_X) {
+                angleXExceedCount++;
+            }
+            if (angleY > THRESHOLD_ANGLE_Y) {
+                angleYExceedCount++;
+            }
+            if (angleZ > THRESHOLD_ANGLE_Z) {
+                angleZExceedCount++;
+            }
 
             if (aSvmThresholdExceedCount < ASVM_THRESHOLD_COUNT) {
                 log.info("ASVM_COUNT: " + aSvmThresholdExceedCount);
@@ -127,13 +127,12 @@ public class FallDetectionService {
                 log.info("GSVM_COUNT: " + gSvmThresholdExceedCount);
                 return false;
             }
-//                    && gSvmThresholdExceedCount > GSVM_THRESHOLD_COUNT
-//                    && angleXExceedCount > ANGLE_THRESHOLD_COUNT
-//                    && angleYExceedCount > ANGLE_THRESHOLD_COUNT
-//                    && angleZExceedCount > ANGLE_THRESHOLD_COUNT
-//            ) {
-//                return true;
-//            }
+            if (angleXExceedCount < ANGLE_THRESHOLD_COUNT
+                    && angleYExceedCount < ANGLE_THRESHOLD_COUNT
+                    && angleZExceedCount < ANGLE_THRESHOLD_COUNT
+            ) {
+                return false;
+            }
             return true;
         }
         return false;
