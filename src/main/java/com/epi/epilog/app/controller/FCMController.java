@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FCMController {
     private final FCMService fcmService;
 
+    /**
+     * token 저장
+     * @param form
+     * @return
+     */
     @PostMapping("/token")
     public CommonResponseDto.CommonResponse saveFCMToken(@RequestBody FCMDto.FCMRequestForm form) {
         try {

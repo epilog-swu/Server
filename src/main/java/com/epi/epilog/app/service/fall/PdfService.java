@@ -30,7 +30,6 @@ public class PdfService {
         ITextRenderer renderer = new ITextRenderer();
 
         String baseUri = this.getClass().getResource("/templates/").toString();
-//        renderer.setDocumentFromString(htmlContent, baseUri);
 
         String fontPathNanumGothic = "/templates/fonts/NanumGothic-Regular.ttf";
         String fontPathDelaGothicOne = "/templates/fonts/DelaGothicOne-Regular.ttf";

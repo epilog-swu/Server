@@ -117,10 +117,6 @@ public class LogController {
     }
 
     /**
-     * 일지 수정
-     */
-
-    /**
      * 일지 상세 조회
      */
     @GetMapping("/{logId}")
