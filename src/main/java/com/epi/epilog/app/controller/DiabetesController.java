@@ -26,6 +26,11 @@ public class DiabetesController {
     private final DiabetesCommandService diabetesCommandService;
     private final DiabetesQueryService diabetesQueryService;
 
+    /**
+     * 워치 일별 혈당 목록 조회
+     * @param date
+     * @return
+     */
     @GetMapping("/bloodsugars")
     public DiabetesResponseDto.BloodSugarTodayResponse bloodSugarList(@RequestParam(value = "date", required = false) LocalDate date){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -33,6 +38,11 @@ public class DiabetesController {
         return diabetesQueryService.showBloodSugarList(userDetails.getMember(), date!=null?date:LocalDate.now());
     }
 
+    /**
+     * 워치 혈당입력
+     * @param form
+     * @return
+     */
     @PostMapping("/bloodsugar")
     public CommonResponseDto.CommonResponse createBloodSugar(@RequestBody @Valid DiabetesRequestDto.BloodSugarRequest form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

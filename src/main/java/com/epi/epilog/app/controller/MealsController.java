@@ -22,6 +22,11 @@ public class MealsController {
     private final MealsQueryService mealsQueryService;
     private final MealsCommandService mealsCommandService;
 
+    /**
+     * 식사 체크리스트 조회
+     * @param date
+     * @return
+     */
     @GetMapping("")
     public MealsResponseDto.ChecklistDto mealsChecklist(@RequestParam(value = "date", required = false)LocalDate date){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,7 +35,8 @@ public class MealsController {
     }
 
     /**
-     * 유저 검증하는 절차 추가해야 함
+     * 식사 체크리스트 상태 수정
+     * 유저 검증하는 절차 추가
      * @param id
      * @param form
      * @return
