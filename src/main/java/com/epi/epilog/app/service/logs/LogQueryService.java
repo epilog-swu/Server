@@ -282,10 +282,6 @@ public class LogQueryService {
             String date = entry.getKey().toString();
             List<PdfData.PdfLogDetail> details = entry.getValue().stream()
                     .map(logDetail -> {
-//                        List<LogExercise> logExercises = new ArrayList<>();
-//                        if (logDetail.getIsExercise() != null && logDetail.getIsExercise()) {
-//                            logExercises = logExerciseRepository.findByLog(logDetail);
-//                        }
 
                         LogsResponseDto.LogDetail exerciseList = createExerciseList(logDetail);
                         LogsResponseDto.LogDetail moodList = createMoodList(logDetail);
