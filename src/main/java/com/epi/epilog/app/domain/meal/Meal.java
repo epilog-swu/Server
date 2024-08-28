@@ -1,5 +1,6 @@
 package com.epi.epilog.app.domain.meal;
 
+import com.epi.epilog.app.domain.enums.MealType;
 import com.epi.epilog.app.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

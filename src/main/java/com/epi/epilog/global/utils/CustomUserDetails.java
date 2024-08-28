@@ -3,11 +3,8 @@ package com.epi.epilog.global.utils;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter

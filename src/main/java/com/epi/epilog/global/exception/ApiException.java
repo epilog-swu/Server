@@ -1,7 +1,6 @@
 package com.epi.epilog.global.exception;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class ApiException extends RuntimeException{

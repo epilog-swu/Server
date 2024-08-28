@@ -46,6 +46,11 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private final MemberRepository memberRepository;
 
+    /**
+     * 웹소켓 연결
+     * @param session
+     * @throws Exception
+     */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String uri = session.getUri().toString();
@@ -82,10 +87,15 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * 이벤트 분기 (fall, emer)
+     * @param session
+     * @param message
+     * @throws Exception
+     */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        log.info("Received message: " + payload);
 
         JsonNode jsonNode = objectMapper.readTree(payload);
         String event = jsonNode.get("event").asText();
@@ -100,9 +110,6 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
                     String token = (String) session.getAttributes().get("token");
                     handleEmergencyEvent(token, session, data);
                     break;
-                case "pong":
-                    handlePongEvent(session, data);
-                    break;
                 default:
                     log.warn("Unknown event: " + event);
                     break;
@@ -115,6 +122,13 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * emer - 후속 조치 이벤트
+     * @param token
+     * @param session
+     * @param data
+     * @throws Exception
+     */
     private void handleEmergencyEvent(String token, WebSocketSession session, JsonNode data) throws Exception {
         try {
             if (!jwtUtil.validateJwt(token)) {
@@ -127,8 +141,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             String addressStr = emergencyService.emerEvent(emerData);
 
             String message = member.getName() + "님 낙상 감지됨" + addressStr;
-            // sms 전송
-//            smsService.sendSms(member.getProtectorPhone(), SERVER_PHONE, message);
+            smsService.sendSms(member.getProtectorPhone(), SERVER_PHONE, message);
 
             Map<String, Object> response = new HashMap<>();
             response.put("event", "emer");
@@ -138,7 +151,6 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             if (session.isOpen()) {
                 emergencyService.createLog(member, emerData);
                 session.sendMessage(new TextMessage(objectMapper.writeValueAsString(response)));
-                log.info("클라이언트에 메시지 전송");
             } else {
                 log.warn("Session is closed, cannot send message: " + session.getId());
             }
@@ -147,16 +159,22 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
+    /**
+     * fall - 낙상 모니터링 이벤트
+     * @param session
+     * @param data
+     * @throws Exception
+     */
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
         JsonNode fallNode = data.get("fall");
         if (fallNode != null && fallNode.isArray()) {
             List<SensorData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<SensorData>>() {});
             boolean fallDetectedResult = fallDetectionService.isFallDetected(fallData);
-            log.info("return value: " + fallDetectedResult);
+            log.info("[fall monitoring] sensor algorithm return value: " + fallDetectedResult);
 
             if (fallDetectedResult) {
                 fallDetectedResult = fallDetectionService.isAIFallDetected(fallData);
-                log.info("ai return value: " + fallDetectedResult);
+                log.info("[fall monitoring] ai algorithm return value: " + fallDetectedResult);
             }
 
             Map<String, Object> response = new HashMap<>();
@@ -184,8 +202,12 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void handlePongEvent(WebSocketSession session, JsonNode data) {}
-
+    /**
+     * 웹소켓 연결 해제
+     * @param session
+     * @param status
+     * @throws Exception
+     */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessions.remove(session);

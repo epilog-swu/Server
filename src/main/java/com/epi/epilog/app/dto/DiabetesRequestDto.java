@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-
 public class DiabetesRequestDto {
     @Data
     @Getter

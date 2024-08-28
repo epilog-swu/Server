@@ -1,7 +1,6 @@
 package com.epi.epilog.app.domain.member;
 
 import jakarta.persistence.*;
-import kotlin.Lazy;
 import lombok.*;
 
 @Entity

@@ -11,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +24,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        log.info("username = "+ Long.valueOf(username));
         Member member = memberRepository.findById(Long.valueOf(username)).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         CustomUserInfoDto infoDto = modelMapper.map(member, CustomUserInfoDto.class);
-//        log.info("infoDto="+infoDto.toString());
         return new CustomUserDetails(infoDto);
     }
 }

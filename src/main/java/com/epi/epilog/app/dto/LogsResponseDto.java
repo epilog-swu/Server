@@ -1,8 +1,6 @@
 package com.epi.epilog.app.dto;
 
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.List;
 
 public class LogsResponseDto {

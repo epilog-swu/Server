@@ -3,7 +3,6 @@ package com.epi.epilog.app.domain.meal;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Builder

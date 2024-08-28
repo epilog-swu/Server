@@ -11,6 +11,10 @@ import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Log 정렬
+ */
 @Slf4j
 public class CustomLogsComparator implements Comparator<Log> {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");

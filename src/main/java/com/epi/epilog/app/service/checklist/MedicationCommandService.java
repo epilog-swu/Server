@@ -3,7 +3,7 @@ package com.epi.epilog.app.service.checklist;
 import com.epi.epilog.app.domain.enums.WeekType;
 import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
-import com.epi.epilog.app.domain.medication.MedicationStatus;
+import com.epi.epilog.app.domain.enums.MedicationStatus;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.MedicationRequestDto;

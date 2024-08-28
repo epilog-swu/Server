@@ -1,5 +1,6 @@
 package com.epi.epilog.app.domain.meal;
 
+import com.epi.epilog.app.domain.enums.MealStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

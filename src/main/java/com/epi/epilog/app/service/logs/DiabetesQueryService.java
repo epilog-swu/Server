@@ -25,6 +25,12 @@ public class DiabetesQueryService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 워치 혈당 그래프 조회
+     * @param member
+     * @param date
+     * @return
+     */
     public DiabetesResponseDto.BloodSugarTodayResponse showBloodSugarList(CustomUserInfoDto member, LocalDate date) {
         Member newMember = memberRepository.findById(member.getId())
                 .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));

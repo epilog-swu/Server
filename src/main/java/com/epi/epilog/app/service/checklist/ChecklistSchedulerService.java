@@ -1,33 +1,19 @@
 package com.epi.epilog.app.service.checklist;
 
-import com.epi.epilog.app.domain.medication.Medication;
-import com.epi.epilog.app.domain.medication.MedicationCheckList;
-import com.epi.epilog.app.domain.medication.MedicationStatus;
 import com.epi.epilog.app.repository.MealCheckListRepository;
 import com.epi.epilog.app.repository.MealRepository;
 import com.epi.epilog.app.repository.MedicationCheckListRepository;
 import com.epi.epilog.app.repository.MedicationRepository;
-import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class ChecklistSchedulerService {
-    private final MealRepository mealRepository;
-    private final MealCheckListRepository mealCheckListRepository;
-    private final MedicationRepository medicationRepository;
-    private final MedicationCheckListRepository medicationCheckListRepository;
     private final MedicationCommandService medicationCommandService;
 
     /**

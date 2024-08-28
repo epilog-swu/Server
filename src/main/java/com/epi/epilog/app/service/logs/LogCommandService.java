@@ -31,6 +31,7 @@ public class LogCommandService {
     private final LogMoodRepository logMoodRepository;
     private final LogExerciseRepository logExerciseRepository;
     private final LogRepository logRepository;
+
     /**
      * 일지 등록
      * @param principal 유저 정보

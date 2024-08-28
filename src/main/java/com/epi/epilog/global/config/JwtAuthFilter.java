@@ -1,7 +1,5 @@
 package com.epi.epilog.global.config;
 
-import com.epi.epilog.global.exception.ApiException;
-import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetailService;
 import com.epi.epilog.global.utils.JwtUtil;
 import jakarta.servlet.FilterChain;

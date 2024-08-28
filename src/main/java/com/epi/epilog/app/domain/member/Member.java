@@ -1,6 +1,9 @@
 package com.epi.epilog.app.domain.member;
 
 import com.epi.epilog.app.domain.BaseEntity;
+import com.epi.epilog.app.domain.enums.ActivityLevel;
+import com.epi.epilog.app.domain.enums.AgeType;
+import com.epi.epilog.app.domain.enums.GenderType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
