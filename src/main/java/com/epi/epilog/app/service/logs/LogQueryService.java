@@ -146,9 +146,7 @@ public class LogQueryService {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
         Double average = getAverage(logs);
-        // 식전 혈당 평균
         Double preAverage = getPrePostAverage(logs, OccurrenceType.BEFORE_BREAKFAST, OccurrenceType.BEFORE_LUNCH, OccurrenceType.BEFORE_DINNER);
-        // 식후 혈당 평균
         Double postAverage = getPrePostAverage(logs, OccurrenceType.AFTER_BREAKFAST, OccurrenceType.AFTER_LUNCH, OccurrenceType.AFTER_DINNER);
 
 
