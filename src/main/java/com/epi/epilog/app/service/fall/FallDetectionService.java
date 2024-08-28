@@ -18,20 +18,25 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class FallDetectionService {
-    private static final double THRESHOLD_ASVM = 5.5;
+    private static final double THRESHOLD_ASVM = 4.5;
     private static final double THRESHOLD_GSVM = 100;
     private static final double THRESHOLD_ANGLE_X = 40.0;
     private static final double THRESHOLD_ANGLE_Y = 40.0;
     private static final double THRESHOLD_ANGLE_Z = 40.0;
-    private static final int ASVM_THRESHOLD_COUNT = 60;
-    private static final int GSVM_THRESHOLD_COUNT = 20;
-    private static final int ANGLE_THRESHOLD_COUNT = 20;
+    private static final int ASVM_THRESHOLD_COUNT = 65;
+    private static final int GSVM_THRESHOLD_COUNT = 65;
+    private static final int ANGLE_THRESHOLD_COUNT = 65;
     private static final int BASELINE_WINDOW_SIZE = 10;
     private static final double ALPHA = 0.98;
     private final RestTemplate restTemplate;
     @Value("${fall.domain}")
     private String ai_domain;
 
+    /**
+     * 1차 낙상 감지 (센서 데이터 임계값 기반)
+     * @param data
+     * @return
+     */
     public boolean isFallDetected(List<SensorData> data) {
         if (data.size() < BASELINE_WINDOW_SIZE) {
             log.warn("Not enough sensor data: required {}, but got {}", BASELINE_WINDOW_SIZE, data.size());
@@ -79,7 +84,7 @@ public class FallDetectionService {
             double deltaZ = entry.getAccZ() - baseZ;
             double deltaGyroX = entry.getGyroX() - baseGyroX;
             double deltaGyroY = entry.getGyroY() - baseGyroY;
-//            double deltaGyroZ = entry.getGyroZ() - baseGyroZ;
+            double deltaGyroZ = entry.getGyroZ() - baseGyroZ;
 
             double aSvm = calculateASVM(deltaX, deltaY, deltaZ);
             double pitchAcc = calculatePitch(deltaX, deltaY, deltaZ);
@@ -176,6 +181,11 @@ public class FallDetectionService {
         return gyroY * dt;
     }
 
+    /**
+     * 2차 낙상 감지 (AI 예측 기반)
+     * @param fallData
+     * @return
+     */
     public boolean isAIFallDetected(List<SensorData> fallData) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();

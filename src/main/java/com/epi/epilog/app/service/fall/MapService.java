@@ -25,6 +25,12 @@ public class MapService {
     private String bitlyKey;
     private final RestTemplate restTemplate;
 
+    /**
+     * Map Image 생성
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     public String getMapImageUrl(double latitude, double longitude) {
         return String.format(
                 "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=17&size=500x300&sensor=false&markers=color:red%%7Clabel:L%%7C%f,%f&key=%s",
@@ -32,6 +38,13 @@ public class MapService {
         );
     }
 
+    /**
+     * 위도/경도 -> 주소 변경
+     * @param latitude
+     * @param longitude
+     * @return
+     * @throws JsonProcessingException
+     */
     public String getAddress(double latitude, double longitude) throws JsonProcessingException {
         String url = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=" + longitude + "&y=" + latitude;
 
@@ -54,6 +67,12 @@ public class MapService {
         return null;
     }
 
+    /**
+     * 단축 URL 생성
+     * @param longUrl
+     * @return
+     * @throws Exception
+     */
     public String createShortURL(String longUrl) throws Exception {
         String url = "https://api-ssl.bitly.com/v4/shorten";
 
@@ -67,12 +86,10 @@ public class MapService {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-//        log.info("body = "+response.getBody().toString());
 
         if (response.getStatusCode() == HttpStatus.OK) {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(response.getBody());
-//            log.info("url = "+response.getBody());
             return root.path("id").asText();
         } else {
             return longUrl;

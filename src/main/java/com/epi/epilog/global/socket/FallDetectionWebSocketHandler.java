@@ -127,8 +127,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             String addressStr = emergencyService.emerEvent(emerData);
 
             String message = member.getName() + "님 낙상 감지됨" + addressStr;
-            // sms 전송
-//            smsService.sendSms(member.getProtectorPhone(), SERVER_PHONE, message);
+            smsService.sendSms(member.getProtectorPhone(), SERVER_PHONE, message);
 
             Map<String, Object> response = new HashMap<>();
             response.put("event", "emer");
