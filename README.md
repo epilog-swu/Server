@@ -1,4 +1,4 @@
-## 스마트워치를 활용한 AI 낙상 감지 및 혈당 관리 서비스 Dialog
+## 스마트워치와 AI를 활용한 낙상 감지 및 혈당 관리 서비스, Dialog
 
 <img src="https://github.com/user-attachments/assets/58c6b8ef-c166-45f4-8403-4bb12c023c6f" width="800px" alert="logo"/>
 
@@ -45,19 +45,12 @@
 <img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="700px" alert="ERD" />
 
 ### 시스템 아키텍처
-<img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="650px" alert="architecture"/>
+<img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="680px" alert="architecture"/>
 
 ## 디렉토리 구조
 ```
 📁 Server
-├── HELP.md
 ├── build.gradle
-├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── gradlew
-├── gradlew.bat
 ├── settings.gradle
 └── src
     ├── main
@@ -82,6 +75,7 @@
             ├── application.yml
             └── templates
                 ├── diabetes_log.html
+                ├── images
                 └── fonts
 ```
 
