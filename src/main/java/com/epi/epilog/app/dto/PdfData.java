@@ -1,9 +1,7 @@
 package com.epi.epilog.app.dto;
 
-
 import com.epi.epilog.app.domain.BaseEntity;
 import lombok.*;
-
 import java.util.List;
 
 @Getter
@@ -37,7 +35,6 @@ public class PdfData extends BaseEntity {
         private String bodyImage;
 
         private LogsResponseDto.LogDetail physicalActivity;
-
         private LogsResponseDto.LogDetail mood;
     }
 }

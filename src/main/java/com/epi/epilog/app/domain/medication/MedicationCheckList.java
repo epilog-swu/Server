@@ -1,6 +1,7 @@
 package com.epi.epilog.app.domain.medication;
 
 import com.epi.epilog.app.domain.BaseEntity;
+import com.epi.epilog.app.domain.enums.MedicationStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

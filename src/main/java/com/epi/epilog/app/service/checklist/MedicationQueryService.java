@@ -23,7 +23,7 @@ public class MedicationQueryService {
     private final MemberRepository memberRepository;
 
     /**
-     *
+     * 복용약 상세정보 조회
      * @param medicationId
      * @param userInfo
      * @return

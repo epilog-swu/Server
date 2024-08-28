@@ -103,7 +103,7 @@
     <div class="header">
         <table style="width: 100%;" >
             <tr>
-                <td style="width: 8%;"><img src="logo.png" style="height: 40px;" alt="app logo" /></td>
+                <td style="width: 8%;"><img src="images/logo.png" style="height: 40px;" alt="app logo" /></td>
                 <td><h1>DIALOG</h1></td>
             </tr>
         </table>
@@ -124,7 +124,7 @@
             </tr>
         </table>
         <div class="icons" style="width: 100%;" >
-            <img src="header_pattern.png" style="width: 100%;" alt="Icon 1" />
+            <img src="images/header_pattern.png" style="width: 100%;" alt="Icon 1" />
         </div>
         <div th:each="entry : ${entries}">
             <h2 style="font-family: 'Dela Gothic One'; margin-top: 50px;" th:text="${entry.date}" >2999.12.31</h2>
@@ -132,7 +132,7 @@
             <div th:each="log : ${entry.logs}">
                 <h3 th:text="${log.time}">아침식사 전</h3>
                 <div class="images">
-                    <img th:each="icon : ${log.icons}" th:src="@{classpath:/templates/{icon}.png(icon=${icon})}" alt="Image"/>
+                    <img th:each="icon : ${log.icons}" th:src="@{classpath:/templates/images/{icon}.png(icon=${icon})}" alt="Image"/>
                 </div>
                 <div>
                     <div th:if="${log.location!=''} and ${log.mapImage!=''}">

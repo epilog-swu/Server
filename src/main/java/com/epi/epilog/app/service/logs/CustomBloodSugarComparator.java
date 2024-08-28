@@ -1,6 +1,7 @@
 package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.dto.DiabetesResponseDto;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -8,6 +9,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Log - 워치 혈당 정렬
+ */
 public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDto.DiabetesBloodSugar> {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final Map<String, Integer> EVENT_ORDER = new HashMap<>();
@@ -28,7 +32,6 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
             return orderComparison;
         }
 
-        // If the occurrence types have the same order, compare by time
         return compareTimes(o1.getOccurrenceType(), o2.getOccurrenceType());
     }
 
@@ -54,7 +57,7 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
     }
 
 
-    private boolean isBetween(LocalTime time, LocalTime start, LocalTime end) {
+    private boolean isBetween(LocalTime time, @NotNull LocalTime start, LocalTime end) {
         if (start.isBefore(end)) {
             return !time.isBefore(start) && time.isBefore(end);
         } else {
@@ -62,23 +65,14 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
         }
     }
 
-//    private int compareTimes(String dateTime1, String dateTime2) {
-//        LocalTime parsedTime1 = LocalTime.parse(dateTime1.substring(11), TIME_FORMATTER);
-//        LocalTime parsedTime2 = LocalTime.parse(dateTime2.substring(11), TIME_FORMATTER);
-//        return parsedTime1.compareTo(parsedTime2);
-//    }
-
     private int compareTimes(String dateTime1, String dateTime2) {
         if (dateTime1.equals(dateTime2)) {
-            // 두 개의 occurrenceType이 완전히 동일한 경우
-            return 1; // 첫 번째 객체를 더 크다고 판단합니다.
+            return 1;
         } else if (dateTime1.length() > 11 && dateTime2.length() > 11) {
-            // 둘 다 날짜와 시간을 포함하는 형식인 경우
             LocalTime parsedTime1 = LocalTime.parse(dateTime1.substring(11), TIME_FORMATTER);
             LocalTime parsedTime2 = LocalTime.parse(dateTime2.substring(11), TIME_FORMATTER);
             return parsedTime1.compareTo(parsedTime2);
         } else {
-            // 다른 모든 경우, dateTime1을 더 크다고 판단
             return 1;
         }
     }

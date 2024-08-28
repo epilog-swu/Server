@@ -2,7 +2,7 @@ package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.logs.Log;
 import com.epi.epilog.app.domain.member.Member;
-import com.epi.epilog.app.domain.logs.OccurrenceType;
+import com.epi.epilog.app.domain.enums.OccurrenceType;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;
@@ -33,8 +33,12 @@ public class DiabetesCommandService {
     private final Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-
-
+    /**
+     * 워치 혈당 추가
+     * @param form
+     * @param member
+     * @return
+     */
     public CommonResponseDto.CommonResponse createBloodSugar(
             DiabetesRequestDto.BloodSugarRequest form, CustomUserInfoDto member) {
         Member mem = memberRepository.findById(member.getId()).orElseThrow(()->
@@ -45,7 +49,6 @@ public class DiabetesCommandService {
             throw new ApiException(ErrorCode.OVER_COUNT_DIABETES);
         }
 
-        // create diabetes
         Log diabet = Log.builder()
                 .member(mem)
                 .isBloodSugar(true)
@@ -61,7 +64,6 @@ public class DiabetesCommandService {
                 .build();
         logRepository.save(diabet);
 
-        // return form
         return CommonResponseDto.CommonResponse.builder()
                 .message("일지가 추가됐습니다. - "+diabet.getTitle())
                 .success(true)

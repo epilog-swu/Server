@@ -2,7 +2,7 @@ package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.logs.Log;
 import com.epi.epilog.app.domain.logs.LogExercise;
-import com.epi.epilog.app.domain.logs.OccurrenceType;
+import com.epi.epilog.app.domain.enums.OccurrenceType;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
@@ -146,9 +146,7 @@ public class LogQueryService {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
         Double average = getAverage(logs);
-        // 식전 혈당 평균
         Double preAverage = getPrePostAverage(logs, OccurrenceType.BEFORE_BREAKFAST, OccurrenceType.BEFORE_LUNCH, OccurrenceType.BEFORE_DINNER);
-        // 식후 혈당 평균
         Double postAverage = getPrePostAverage(logs, OccurrenceType.AFTER_BREAKFAST, OccurrenceType.AFTER_LUNCH, OccurrenceType.AFTER_DINNER);
 
 
@@ -307,7 +305,6 @@ public class LogQueryService {
 
             logDetails.add(PdfData.builder().date(date).logs(details).entryCount(details.size()).build());
         }
-        log.info("log details: " + logDetails);
         return logDetails;
     }
 

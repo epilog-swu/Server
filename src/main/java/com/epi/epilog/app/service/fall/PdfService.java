@@ -20,6 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class PdfService {
     private final TemplateEngine templateEngine;
 
+    /**
+     * PDF 인코딩
+     * @param diabetesLog
+     * @param entries
+     * @return
+     * @throws Exception
+     */
     public ByteArrayOutputStream createPdf(String diabetesLog, List<PdfData> entries) throws Exception {
         Context context = new Context();
         context.setVariable("entries", entries);

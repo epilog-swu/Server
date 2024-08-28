@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 public class MealsCommandService {
-    private final MemberRepository memberRepository;
     private final MealCheckListRepository mealCheckListRepository;
 
     /**
