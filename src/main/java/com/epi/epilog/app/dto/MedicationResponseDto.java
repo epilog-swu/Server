@@ -4,7 +4,6 @@ import com.epi.epilog.app.domain.enums.MedicationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;

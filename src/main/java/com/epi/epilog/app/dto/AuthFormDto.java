@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.util.List;
 
-
 public class AuthFormDto {
     @Data
     @AllArgsConstructor

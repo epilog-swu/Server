@@ -14,10 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 public class ChecklistSchedulerService {
-    private final MealRepository mealRepository;
-    private final MealCheckListRepository mealCheckListRepository;
-    private final MedicationRepository medicationRepository;
-    private final MedicationCheckListRepository medicationCheckListRepository;
     private final MedicationCommandService medicationCommandService;
 
     /**
