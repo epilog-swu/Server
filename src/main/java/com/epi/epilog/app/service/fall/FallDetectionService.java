@@ -125,11 +125,9 @@ public class FallDetectionService {
             }
 
             if (aSvmThresholdExceedCount < ASVM_THRESHOLD_COUNT) {
-                log.info("ASVM_COUNT: " + aSvmThresholdExceedCount);
                 return false;
             }
             if (gSvmThresholdExceedCount < GSVM_THRESHOLD_COUNT) {
-                log.info("GSVM_COUNT: " + gSvmThresholdExceedCount);
                 return false;
             }
             if (angleXExceedCount < ANGLE_THRESHOLD_COUNT

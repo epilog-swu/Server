@@ -305,7 +305,6 @@ public class LogQueryService {
 
             logDetails.add(PdfData.builder().date(date).logs(details).entryCount(details.size()).build());
         }
-        log.info("log details: " + logDetails);
         return logDetails;
     }
 

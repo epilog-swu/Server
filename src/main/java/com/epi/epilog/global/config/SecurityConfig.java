@@ -42,17 +42,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
         http.cors(Customizer.withDefaults());
 
-        // session 비활성화
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // form, basic http 비활성화
         http.formLogin((form) -> form.disable());
         http.httpBasic(AbstractHttpConfigurer::disable);
 
-        // usernamePasswordAuthenticationToken 앞에 jwt 필터체인 추가
         http.addFilterBefore(new JwtAuthFilter(jwtUtil, customUserDetailService), UsernamePasswordAuthenticationFilter.class);
 
-        // 권한 규칙 설정
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()

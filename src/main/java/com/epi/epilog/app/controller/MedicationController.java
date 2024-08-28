@@ -41,7 +41,6 @@ public class MedicationController {
     public CommonResponseDto.CommonResponse addMedication(@RequestBody MedicationRequestDto.MedicationAddedForm form){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userInfo = (CustomUserDetails) authentication.getPrincipal();
-        log.info("요청");
         return medicationCommandService.addMedication(userInfo, form);
     }
 
