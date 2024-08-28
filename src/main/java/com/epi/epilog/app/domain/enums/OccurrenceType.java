@@ -1,5 +1,8 @@
-package com.epi.epilog.app.domain.logs;
+package com.epi.epilog.app.domain.enums;
 
+/**
+ *  Log 발생시간 및 우선순위
+ */
 public enum OccurrenceType {
     BEFORE_BREAKFAST("아침식사 전", 1),
     AFTER_BREAKFAST("아침식사 후", 2),
@@ -37,6 +40,6 @@ public enum OccurrenceType {
                 return type.getOrder();
             }
         }
-        return Integer.MAX_VALUE; // HH:mm 형식의 문자열은 가장 뒤로 정렬
+        return Integer.MAX_VALUE;
     }
 }

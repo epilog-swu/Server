@@ -2,7 +2,7 @@ package com.epi.epilog.app.service.logs;
 
 import com.epi.epilog.app.domain.logs.Log;
 import com.epi.epilog.app.domain.member.Member;
-import com.epi.epilog.app.domain.logs.OccurrenceType;
+import com.epi.epilog.app.domain.enums.OccurrenceType;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.DiabetesRequestDto;

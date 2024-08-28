@@ -1,6 +1,6 @@
 package com.epi.epilog.app.dto;
 
-import com.epi.epilog.app.domain.meal.MealStatus;
+import com.epi.epilog.app.domain.enums.MealStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 

@@ -7,11 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 

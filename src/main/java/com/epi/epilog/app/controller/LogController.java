@@ -126,7 +126,11 @@ public class LogController {
     }
 
     /**
-     * PDF 변환하기
+     * PDF 변환
+     * @param start 시작일
+     * @param end 마지막일
+     * @return
+     * @throws Exception
      */
     @GetMapping("/convert")
     public ResponseEntity<InputStreamResource> createdPDF(@RequestParam(value = "start", required = true)LocalDate start,

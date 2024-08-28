@@ -4,8 +4,6 @@ import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
 import com.epi.epilog.app.service.checklist.MealsCommandService;
 import com.epi.epilog.app.service.checklist.MealsQueryService;
-import com.epi.epilog.global.exception.ApiException;
-import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

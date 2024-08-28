@@ -1,6 +1,6 @@
 package com.epi.epilog.app.dto;
 
-import com.epi.epilog.app.domain.member.GenderType;
+import com.epi.epilog.app.domain.enums.GenderType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 

@@ -1,13 +1,9 @@
 package com.epi.epilog.app.domain.meal;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
-
-import java.util.List;
 
 @Entity
 @Getter

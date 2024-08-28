@@ -2,7 +2,7 @@ package com.epi.epilog.app.service.checklist;
 
 import com.epi.epilog.app.domain.medication.Medication;
 import com.epi.epilog.app.domain.medication.MedicationCheckList;
-import com.epi.epilog.app.domain.medication.MedicationStatus;
+import com.epi.epilog.app.domain.enums.MedicationStatus;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MedicationResponseDto;
@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
