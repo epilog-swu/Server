@@ -7,8 +7,8 @@ public class FCMDto {
     @Data
     @Getter
     @Builder
-    @NoArgsConstructor(access= AccessLevel.PRIVATE)
-    @AllArgsConstructor(access=AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class FCMRequestForm {
         @NotNull
         private String token;

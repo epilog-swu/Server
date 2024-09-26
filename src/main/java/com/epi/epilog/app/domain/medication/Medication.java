@@ -26,7 +26,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class Medication extends BaseEntity {
     @Id
-    @Column(name="medication_id")
+    @Column(name = "medication_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
@@ -47,17 +47,17 @@ public class Medication extends BaseEntity {
     @ElementCollection
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name="MedicationWeeks", joinColumns = @JoinColumn(name="medication_id"))
+    @CollectionTable(name = "MedicationWeeks", joinColumns = @JoinColumn(name = "medication_id"))
     @Nullable
     private List<WeekType> weeks = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name="MedicationTimes", joinColumns = @JoinColumn(name="medication_id"))
+    @CollectionTable(name = "MedicationTimes", joinColumns = @JoinColumn(name = "medication_id"))
     @Nullable
     private List<LocalTime> times = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     @NotNull
     private Member member;
 }

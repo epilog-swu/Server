@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class MedicationCheckList extends BaseEntity {
     @Id
-    @Column(name="medication_checklist_id")
+    @Column(name = "medication_checklist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
@@ -32,21 +32,23 @@ public class MedicationCheckList extends BaseEntity {
     private MedicationStatus medicationStatus = MedicationStatus.상태없음;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="medication_id")
+    @JoinColumn(name = "medication_id")
     private Medication medication;
 
-    public void updateMedicationStatus(MedicationStatus status){
+    public void updateMedicationStatus(MedicationStatus status) {
         this.medicationStatus = status;
-        if (status == MedicationStatus.상태없음){
+        if (status == MedicationStatus.상태없음) {
             this.isComplete = false;
         } else {
             this.isComplete = true;
         }
     }
-    public void updateActualTime(LocalDateTime time){
+
+    public void updateActualTime(LocalDateTime time) {
         this.actualTime = time;
     }
+
     public void deleteMedication() {
         this.medication = null;
     }
- }
+}

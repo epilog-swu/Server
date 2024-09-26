@@ -7,16 +7,16 @@ import lombok.*;
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access= AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FCMToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="fcm_id")
+    @Column(name = "fcm_id")
     private Long id;
     @Column(unique = true)
     private String token;
 
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 }

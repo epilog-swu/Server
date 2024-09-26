@@ -13,21 +13,22 @@ public class AuthFormDto {
     public static class PatientLoginFormDto {
         @NotNull(message = "아이디를 입력해주세요.")
         private String loginId;
-        @NotNull(message="비밀번호를 입력해주세요.")
+        @NotNull(message = "비밀번호를 입력해주세요.")
         private String password;
     }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class ProtectorLoginFormDto{
+    public static class ProtectorLoginFormDto {
         @NotNull(message = "연동코드를 입력해주세요.")
         private String code;
     }
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor(access=AccessLevel.PRIVATE)
-    public static class SignupFormDto{
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class SignupFormDto {
         private String loginId;
         private String password;
         private String name;
@@ -41,7 +42,7 @@ public class AuthFormDto {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor(access=AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
     @Getter
     public static class SignUpResponseDto {

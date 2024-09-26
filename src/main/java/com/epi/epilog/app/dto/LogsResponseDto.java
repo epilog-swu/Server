@@ -1,6 +1,7 @@
 package com.epi.epilog.app.dto;
 
 import lombok.*;
+
 import java.util.List;
 
 public class LogsResponseDto {
@@ -11,7 +12,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class MonthLogsCount {
         private int year;
         private int month;
@@ -22,7 +23,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayLogsCount {
         private String date;
         private int count;
@@ -35,7 +36,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayLogsList {
         private String date;
         private int count;
@@ -46,7 +47,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayLogsItem {
         private Long id;
         private String title;
@@ -60,7 +61,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayAvgBloodSugar {
         private String date;
         private double average;
@@ -75,7 +76,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayBloodSugarList {
         private String date;
         private int count;
@@ -86,7 +87,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DayBloodSugarItem {
         private String title;
         private double bloodSugar;
@@ -99,7 +100,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class MonthWeightList {
         private int year;
         private int month;
@@ -111,7 +112,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class MonthWeightItem {
         private String date;
         private double value;
@@ -124,7 +125,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DetailAllLog {
         private String title;
         private List<String> keyword;
@@ -144,7 +145,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class FallDetail {
         private String address;
         private String mapImage;
@@ -154,7 +155,7 @@ public class LogsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class LogDetail {
         private String comment;
         private String details;

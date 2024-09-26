@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -17,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class LogExercise {
     @Id
-    @Column(name="log_exercise_id")
+    @Column(name = "log_exercise_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ColumnDefault("false")
@@ -27,6 +28,6 @@ public class LogExercise {
     private String details;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="log_id")
+    @JoinColumn(name = "log_id")
     private Log log;
 }

@@ -19,11 +19,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access=PROTECTED)
-@AllArgsConstructor(access=PRIVATE)
+@NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 public class Meal {
     @Id
-    @Column(name="meal_id")
+    @Column(name = "meal_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
@@ -32,10 +32,10 @@ public class Meal {
     private Boolean isAlarm;
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name="MealTimes", joinColumns = @JoinColumn(name="meal_id"))
+    @CollectionTable(name = "MealTimes", joinColumns = @JoinColumn(name = "meal_id"))
     private List<LocalTime> times = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 }

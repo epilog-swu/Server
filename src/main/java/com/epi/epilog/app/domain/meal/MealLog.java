@@ -12,7 +12,7 @@ import org.springframework.lang.Nullable;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MealLog {
     @Id
-    @Column(name="meal_log_id")
+    @Column(name = "meal_log_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;

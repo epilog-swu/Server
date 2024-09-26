@@ -3,6 +3,7 @@ package com.epi.epilog.app.dto;
 import com.epi.epilog.app.domain.enums.MealStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class MealsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ChecklistDto {
         public LocalDate date;
         public List<ChecklistStateDto> checklist;
@@ -21,8 +22,8 @@ public class MealsResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
-    public static class ChecklistStateDto{
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ChecklistStateDto {
         public Long id;
         public String goalTime;
         public String title;
@@ -32,7 +33,7 @@ public class MealsResponseDto {
 
     @Data
     @Getter
-    public static class MealChecklistUpdateDto{
+    public static class MealChecklistUpdateDto {
         @NotNull
         public String time;
         @NotNull

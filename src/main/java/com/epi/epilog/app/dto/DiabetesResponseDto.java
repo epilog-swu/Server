@@ -13,7 +13,7 @@ public class DiabetesResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static public class BloodSugarTodayResponse {
         public int total;
         public LocalDate date;
@@ -24,7 +24,7 @@ public class DiabetesResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     static public class DiabetesBloodSugar {
         public String occurrenceType;
         public Double bloodSugar;

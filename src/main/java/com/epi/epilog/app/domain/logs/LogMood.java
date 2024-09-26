@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class LogMood {
     @Id
-    @Column(name="log_mood_id")
+    @Column(name = "log_mood_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ColumnDefault("false")
@@ -28,6 +28,6 @@ public class LogMood {
     private String details;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="log_id")
+    @JoinColumn(name = "log_id")
     private Log log;
 }
