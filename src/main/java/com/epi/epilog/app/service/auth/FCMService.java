@@ -22,16 +22,16 @@ public class FCMService {
 
     @Transactional
     public Boolean saveFCMToken(FCMDto.FCMRequestForm form, CustomUserInfoDto member) {
-        try{
+        try {
             Member repoMember = memberRepository.findById(member.getId())
-                    .orElseThrow(()->new ApiException(ErrorCode.USER_NOT_FOUND));
+                    .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
             FCMToken token = FCMToken.builder()
                     .token(form.getToken())
                     .member(repoMember)
                     .build();
             fcmRepository.save(token);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

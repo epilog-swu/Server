@@ -39,12 +39,14 @@ public class MealsQueryService {
 
         List<MealsResponseDto.ChecklistStateDto> checklist = new ArrayList<>();
 
-        if (!mealCheckLists.isEmpty()){
+        if (!mealCheckLists.isEmpty()) {
             checklist = mealCheckLists.stream()
                     .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
                             .id(meal.getId())
                             .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
-                            .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
+                            .title((meal.getGoalTime().getMinute() == 0
+                                    ? meal.getGoalTime().format(hourFormatter)
+                                    : meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
                             .state(meal.getMealStatus().toString())
                             .isComplete(meal.getIsComplete())
                             .build()

@@ -31,11 +31,13 @@ public class MedicineQueryService {
 
     /**
      * 일별 복약 체크리스트 목록 조회
+     *
      * @param date
      * @param memberDto
      * @return
      */
-    public MedicationResponseDto.ChecklistDto medicineChecklist(LocalDate date, CustomUserInfoDto memberDto) {
+    public MedicationResponseDto.ChecklistDto medicineChecklist(LocalDate date,
+                                                                CustomUserInfoDto memberDto) {
         Member member = memberRepository.findById(memberDto.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
@@ -57,7 +59,8 @@ public class MedicineQueryService {
 
     private MedicationResponseDto.ChecklistStateDto convertToChecklistStateDto(MedicationCheckList medicine) {
         String formattedGoalTime = DateTimeConverter.formatTime(medicine.getGoalTime());
-        String formattedActualTime = (medicine.getActualTime() != null && medicine.getMedicationStatus() != MedicationStatus.상태없음)
+        String formattedActualTime = (medicine.getActualTime() != null
+                && medicine.getMedicationStatus() != MedicationStatus.상태없음)
                 ? DateTimeConverter.formatTime(medicine.getActualTime())
                 : null;
 

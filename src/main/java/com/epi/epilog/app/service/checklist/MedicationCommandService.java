@@ -35,26 +35,28 @@ public class MedicationCommandService {
 
     /**
      * 복용약 생성
+     *
      * @param userInfo
      * @param form
      * @return
      */
     @Transactional
     public CommonResponseDto.CommonResponse addMedication
-            (CustomUserDetails userInfo, MedicationRequestDto.MedicationAddedForm form) {
+    (CustomUserDetails userInfo, MedicationRequestDto.MedicationAddedForm form) {
         Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
-        List<WeekType> weekTypeList = form.getWeeks().stream().map(week->{
-            if(week.equals("월")) return WeekType.월;
-            if(week.equals("화")) return WeekType.화;
-            if(week.equals("수")) return WeekType.수;
-            if(week.equals("목")) return WeekType.목;
-            if(week.equals("금")) return WeekType.금;
-            if(week.equals("토")) return WeekType.토;
-            if(week.equals("일")) return WeekType.일;
-            throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);}
-            ).collect(Collectors.toList());
+        List<WeekType> weekTypeList = form.getWeeks().stream().map(week -> {
+                    if (week.equals("월")) return WeekType.월;
+                    if (week.equals("화")) return WeekType.화;
+                    if (week.equals("수")) return WeekType.수;
+                    if (week.equals("목")) return WeekType.목;
+                    if (week.equals("금")) return WeekType.금;
+                    if (week.equals("토")) return WeekType.토;
+                    if (week.equals("일")) return WeekType.일;
+                    throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);
+                }
+        ).collect(Collectors.toList());
 
         Medication medication = Medication.builder()
                 .medicationName(form.getMedicationName())
@@ -83,13 +85,16 @@ public class MedicationCommandService {
 
     /**
      * 복용약 수정
+     *
      * @param userInfo
      * @param medicationId
      * @param form
      * @return
      */
     @Transactional
-    public CommonResponseDto.CommonResponse patchMedication(CustomUserDetails userInfo, Long medicationId, MedicationRequestDto.MedicationAddedForm form) {
+    public CommonResponseDto.CommonResponse patchMedication(CustomUserDetails userInfo,
+                                                            Long medicationId,
+                                                            MedicationRequestDto.MedicationAddedForm form) {
         Medication medication = medicationRepository.findById(medicationId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEDICATION_NOT_FOUND));
 
@@ -123,14 +128,22 @@ public class MedicationCommandService {
         if (form.getWeeks() != null) {
             List<WeekType> weekTypeList = form.getWeeks().stream().map(week -> {
                 switch (week) {
-                    case "월": return WeekType.월;
-                    case "화": return WeekType.화;
-                    case "수": return WeekType.수;
-                    case "목": return WeekType.목;
-                    case "금": return WeekType.금;
-                    case "토": return WeekType.토;
-                    case "일": return WeekType.일;
-                    default: throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);
+                    case "월":
+                        return WeekType.월;
+                    case "화":
+                        return WeekType.화;
+                    case "수":
+                        return WeekType.수;
+                    case "목":
+                        return WeekType.목;
+                    case "금":
+                        return WeekType.금;
+                    case "토":
+                        return WeekType.토;
+                    case "일":
+                        return WeekType.일;
+                    default:
+                        throw new ApiException(ErrorCode.INVALID_FORMAT_ERROR);
                 }
             }).collect(Collectors.toList());
             medicationBuilder.weeks(weekTypeList);
@@ -156,6 +169,7 @@ public class MedicationCommandService {
 
     /**
      * 복용약 삭제
+     *
      * @param userInfo
      * @param medicationId
      * @return
@@ -189,6 +203,7 @@ public class MedicationCommandService {
     /**
      * 복약 체크리스트 자동 생성
      * create flag -> true일 경우 복용약 추가 / false일 경우 스케줄러
+     *
      * @param create 생성 flag
      */
     @Transactional
@@ -202,9 +217,11 @@ public class MedicationCommandService {
                 LocalDate targetDate = today.plusDays(i);
 
                 if (targetDate.isAfter(newMedication.getEndDate()))
-                    return ;
+                    return;
 
-                WeekType todayWeekType = WeekType.valueOf(targetDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN).substring(0, 1));
+                WeekType todayWeekType = WeekType.valueOf(targetDate.getDayOfWeek()
+                        .getDisplayName(TextStyle.SHORT, Locale.KOREAN)
+                        .substring(0, 1));
 
                 if (newMedication.getWeeks().contains(todayWeekType)) {
                     newMedication.getTimes().forEach(time -> {
@@ -226,12 +243,13 @@ public class MedicationCommandService {
             medicationCheckListRepository.saveAll(checkLists);
         } else {
             List<Medication> all = medicationRepository.findAll();
-            if (!all.isEmpty()){
+            if (!all.isEmpty()) {
                 List<MedicationCheckList> collect = all.stream()
-                        .filter(medication->medication.getEndless()==true
+                        .filter(medication -> medication.getEndless() == true
                                 || medication.getEndDate().isAfter(LocalDate.now().plusDays(8)))
                         .filter(medication -> medication.getWeeks() == null
-                                || (medication.getWeeks() != null && medication.getWeeks().contains(LocalDate.now().getDayOfWeek())))
+                                || (medication.getWeeks() != null
+                                && medication.getWeeks().contains(LocalDate.now().getDayOfWeek())))
                         .flatMap(medication -> medication.getTimes().stream()
                                 .map(times -> MedicationCheckList.builder()
                                         .medication(medication)

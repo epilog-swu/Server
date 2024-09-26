@@ -10,6 +10,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+
 import com.epi.epilog.app.dto.PdfData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class PdfService {
 
     /**
      * PDF 인코딩
+     *
      * @param diabetesLog
      * @param entries
      * @return
@@ -40,8 +42,12 @@ public class PdfService {
 
         String fontPathNanumGothic = "/templates/fonts/NanumGothic-Regular.ttf";
         String fontPathDelaGothicOne = "/templates/fonts/DelaGothicOne-Regular.ttf";
-        renderer.getFontResolver().addFont(new ClassPathResource(fontPathNanumGothic).getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-        renderer.getFontResolver().addFont(new ClassPathResource(fontPathDelaGothicOne).getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        renderer.getFontResolver()
+                .addFont(new ClassPathResource(fontPathNanumGothic)
+                        .getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        renderer.getFontResolver()
+                .addFont(new ClassPathResource(fontPathDelaGothicOne)
+                        .getURL().toString(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         renderer.setDocumentFromString(htmlContent, baseUri);
 

@@ -17,8 +17,7 @@ import java.util.Base64;
 @EnableScheduling
 @SpringBootApplication(scanBasePackages = "com.epi.epilog")
 public class EpilogApplication {
-
-	public static void main(String[] args) throws Exception{
-		SpringApplication.run(EpilogApplication.class, args);
-	}
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(EpilogApplication.class, args);
+    }
 }

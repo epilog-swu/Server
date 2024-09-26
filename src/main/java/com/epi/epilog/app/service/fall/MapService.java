@@ -27,11 +27,13 @@ public class MapService {
 
     /**
      * Map Image 생성
+     *
      * @param latitude
      * @param longitude
      * @return
      */
     public String getMapImageUrl(double latitude, double longitude) {
+        // TODO: 문자열 상수로 빼기
         return String.format(
                 "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=17&size=500x300&sensor=false&markers=color:red%%7Clabel:L%%7C%f,%f&key=%s",
                 latitude, longitude, latitude, longitude, apiKey
@@ -40,12 +42,14 @@ public class MapService {
 
     /**
      * 위도/경도 -> 주소 변경
+     *
      * @param latitude
      * @param longitude
      * @return
      * @throws JsonProcessingException
      */
     public String getAddress(double latitude, double longitude) throws JsonProcessingException {
+        // TODO: 문자열 상수로 빼기
         String url = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=" + longitude + "&y=" + latitude;
 
         HttpHeaders headers = new HttpHeaders();
@@ -69,6 +73,7 @@ public class MapService {
 
     /**
      * 단축 URL 생성
+     *
      * @param longUrl
      * @return
      * @throws Exception

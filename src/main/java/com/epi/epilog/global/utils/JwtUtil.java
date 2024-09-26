@@ -29,7 +29,9 @@ public class JwtUtil {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration_time}") Long accessTokenExpirationTime, UserDetailsService userDetailsService) {
+    public JwtUtil(@Value("${jwt.secret}") String secret,
+                   @Value("${jwt.expiration_time}") Long accessTokenExpirationTime,
+                   UserDetailsService userDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpirationTime = accessTokenExpirationTime;
