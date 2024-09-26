@@ -4,7 +4,6 @@ import com.epi.epilog.app.domain.meal.MealCheckList;
 import com.epi.epilog.app.dto.CommonResponseDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
 import com.epi.epilog.app.repository.MealCheckListRepository;
-import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.DateTimeConverter;

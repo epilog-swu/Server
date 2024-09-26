@@ -2,7 +2,12 @@ package com.epi.epilog.app.dto;
 
 import com.epi.epilog.app.domain.enums.GenderType;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
