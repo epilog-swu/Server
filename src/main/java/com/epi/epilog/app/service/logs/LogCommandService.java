@@ -34,6 +34,7 @@ public class LogCommandService {
 
     /**
      * 일지 등록
+     *
      * @param principal 유저 정보
      * @param form
      * @return
@@ -44,10 +45,13 @@ public class LogCommandService {
             Member member = memberRepository.findById(principal.getMember().getId())
                     .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
+            // TODO: Optional 객체 사용해서 리팩토링하기. 가독성 지나치게 나쁨
             Log log = Log.builder()
                     .member(member)
                     .occurrenceType(form.getOccurenceType())
-                    .title(diabetesCommandService.createTitle(member, DateTimeConverter.convertToLocalDate(form.getDate()), form.getOccurenceType()))
+                    .title(diabetesCommandService.createTitle(member,
+                            DateTimeConverter.convertToLocalDate(form.getDate()),
+                            form.getOccurenceType()))
                     .date(DateTimeConverter.convertToLocalDate(form.getDate()))
                     .occurrenceType(form.getOccurenceType())
                     .isFall(false)
@@ -61,8 +65,12 @@ public class LogCommandService {
                     .isExercise(form.getExercise() != null && !form.getExercise().isEmpty())
                     .isMood(form.getMood() != null && !form.getMood().isEmpty())
                     .bloodSugar(form.getBloodSugar() != null ? form.getBloodSugar() : null)
-                    .systolicBloodPressure(form.getSystolicBloodPressure() != null ? form.getSystolicBloodPressure() : null)
-                    .diastolicBloodPressure(form.getDiastolicBloodPressure() != null ? form.getDiastolicBloodPressure() : null)
+                    .systolicBloodPressure(form.getSystolicBloodPressure() != null
+                            ? form.getSystolicBloodPressure()
+                            : null)
+                    .diastolicBloodPressure(form.getDiastolicBloodPressure() != null
+                            ? form.getDiastolicBloodPressure()
+                            : null)
                     .heartRate(form.getHeartRate() != null ? form.getHeartRate() : null)
                     .weight(form.getWeight() != null ? form.getWeight() : null)
                     .bodyFatPercentage(form.getBodyFatPercentage() != null ? form.getBodyFatPercentage() : null)
@@ -78,7 +86,7 @@ public class LogCommandService {
                                 .type(moodRequest.getType() != null ? moodRequest.getType() : "")
                                 .details(moodRequest.getDetails())
                                 .detailsState(moodRequest.getType().equals("직접입력")
-                                        ?true : false)
+                                        ? true : false)
                                 .build())
                         .collect(Collectors.toList());
                 logMoodRepository.saveAll(logMoods);
@@ -91,13 +99,13 @@ public class LogCommandService {
                                 .type(exercise.getType() != null ? exercise.getType() : null)
                                 .details(exercise.getDetails())
                                 .detailsState(exercise.getType().equals("직접입력")
-                                        ?true : false)
+                                        ? true : false)
                                 .build())
                         .collect(Collectors.toList());
                 logExerciseRepository.saveAll(logExerciseList);
             }
             return CommonResponseDto.CommonResponse.builder().message("작성에 성공했습니다").success(true).build();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ApiException(ErrorCode.USER_NOT_FOUND, e);
         }
     }

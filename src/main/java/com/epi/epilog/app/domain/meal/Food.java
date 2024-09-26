@@ -1,17 +1,28 @@
 package com.epi.epilog.app.domain.meal;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Builder
 @Getter
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Food {
     @Id
-    @Column(name="food_id")
+    @Column(name = "food_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String foodName;
@@ -25,7 +36,8 @@ public class Food {
     private Double fat;
     @ColumnDefault("0")
     private Double sugar;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="meal_log_id")
+    @JoinColumn(name = "meal_log_id")
     private MealLog mealLog;
 }

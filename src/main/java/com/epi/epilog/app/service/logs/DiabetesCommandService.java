@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class DiabetesCommandService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
+    // TODO: 패턴 상수로 빼기
     private final Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -96,8 +97,8 @@ public class DiabetesCommandService {
             }
         } else {
             if (TIME_PATTERN.matcher(occurrenceType).matches()) {
-                if (occurrenceType.length() >= 19) { // Check if occurrenceType has the correct length
-                    String timePart = occurrenceType.substring(11); // Extract the time part from the string
+                if (occurrenceType.length() >= 19) {
+                    String timePart = occurrenceType.substring(11);
                     LocalTime time = LocalTime.parse(timePart, TIME_FORMATTER);
                     return String.format("%02d시 %02d분", time.getHour(), time.getMinute());
                 } else {

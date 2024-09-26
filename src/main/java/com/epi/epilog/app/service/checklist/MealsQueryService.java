@@ -12,6 +12,7 @@ import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MealsQueryService {
     private final MemberRepository memberRepository;
     private final MealCheckListRepository mealCheckListRepository;
@@ -39,12 +41,14 @@ public class MealsQueryService {
 
         List<MealsResponseDto.ChecklistStateDto> checklist = new ArrayList<>();
 
-        if (!mealCheckLists.isEmpty()){
+        if (!mealCheckLists.isEmpty()) {
             checklist = mealCheckLists.stream()
                     .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
                             .id(meal.getId())
                             .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
-                            .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
+                            .title((meal.getGoalTime().getMinute() == 0
+                                    ? meal.getGoalTime().format(hourFormatter)
+                                    : meal.getGoalTime().format(formatter)) + " " + meal.getMeal().toString())
                             .state(meal.getMealStatus().toString())
                             .isComplete(meal.getIsComplete())
                             .build()

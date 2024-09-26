@@ -3,7 +3,12 @@ package com.epi.epilog.global.utils;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +34,9 @@ public class JwtUtil {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration_time}") Long accessTokenExpirationTime, UserDetailsService userDetailsService) {
+    public JwtUtil(@Value("${jwt.secret}") String secret,
+                   @Value("${jwt.expiration_time}") Long accessTokenExpirationTime,
+                   UserDetailsService userDetailsService) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpirationTime = accessTokenExpirationTime;

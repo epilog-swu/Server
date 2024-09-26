@@ -36,10 +36,10 @@ public class AuthService {
         String loginId = form.getLoginId();
         String password = form.getPassword();
         Member member = memberRepository.findByLoginId(loginId);
-        if (member == null){
+        if (member == null) {
             throw new ApiException(ErrorCode.LOGIN_FAILED);
         }
-        if (!passwordEncoder.matches(password, member.getPassword())){
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new ApiException(ErrorCode.LOGIN_FAILED);
         }
         CustomUserInfoDto memberInfoDto = modelMapper.map(member, CustomUserInfoDto.class);
@@ -58,7 +58,7 @@ public class AuthService {
 
     public CommonResponseDto.CommonResponse idValidationCheck(String userId) {
         Member member = memberRepository.findByLoginId(userId);
-        if (member == null){
+        if (member == null) {
             return CommonResponseDto.CommonResponse.builder()
                     .success(true)
                     .message("사용 가능한 아이디입니다.")

@@ -25,6 +25,7 @@ public class CustomBloodSugarComparator implements Comparator<DiabetesResponseDt
         EVENT_ORDER.put("저녁식사 후", 8);
         EVENT_ORDER.put("자기 전", 10);
     }
+
     @Override
     public int compare(DiabetesResponseDto.DiabetesBloodSugar o1, DiabetesResponseDto.DiabetesBloodSugar o2) {
         int orderComparison = Integer.compare(getOrder(o1.getOccurrenceType()), getOrder(o2.getOccurrenceType()));

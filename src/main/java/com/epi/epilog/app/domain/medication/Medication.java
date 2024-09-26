@@ -3,7 +3,18 @@ package com.epi.epilog.app.domain.medication;
 import com.epi.epilog.app.domain.BaseEntity;
 import com.epi.epilog.app.domain.enums.WeekType;
 import com.epi.epilog.app.domain.member.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,22 +37,18 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class Medication extends BaseEntity {
     @Id
-    @Column(name="medication_id")
+    @Column(name = "medication_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    @NotNull
-    private Member member;
     @NotNull
     private String medicationName;
     private LocalDate startDate;
     @Nullable
     private LocalDate endDate;
     @NotNull
-    private Boolean endless;
+    private boolean endless;
     @NotNull
-    private Boolean isAlarm;
+    private boolean isAlarm;
     @Nullable
     private String precautions; // 주의사항
     @Nullable
@@ -51,12 +58,17 @@ public class Medication extends BaseEntity {
     @ElementCollection
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name="MedicationWeeks", joinColumns = @JoinColumn(name="medication_id"))
+    @CollectionTable(name = "MedicationWeeks", joinColumns = @JoinColumn(name = "medication_id"))
     @Nullable
     private List<WeekType> weeks = new ArrayList<>();
     @ElementCollection
     @Builder.Default
-    @CollectionTable(name="MedicationTimes", joinColumns = @JoinColumn(name="medication_id"))
+    @CollectionTable(name = "MedicationTimes", joinColumns = @JoinColumn(name = "medication_id"))
     @Nullable
     private List<LocalTime> times = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    @NotNull
+    private Member member;
 }

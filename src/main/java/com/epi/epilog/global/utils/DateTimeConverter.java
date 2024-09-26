@@ -21,6 +21,7 @@ public class DateTimeConverter {
 
     /**
      * 날짜 문자열 -> LocalDate 변환
+     *
      * @param dateString
      * @return
      */
@@ -39,6 +40,7 @@ public class DateTimeConverter {
 
     /**
      * 날짜+시간 문자열 -> LocalDateTime 변환
+     *
      * @param dateTimeString
      * @return
      */
@@ -57,13 +59,14 @@ public class DateTimeConverter {
     /**
      * LocalDate -> 날짜 문자열
      * (yyyy-mm-dd)
+     *
      * @param date
      * @return
      */
-    public static String convertLocalDateToString(LocalDate date){
+    public static String convertLocalDateToString(LocalDate date) {
         try {
             return dateFormatter.format(date);
-        } catch(DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             log.info("Invalid date format: " + date);
             throw new ApiException(ErrorCode.INVALID_DATE_ERROR);
         }
@@ -72,14 +75,15 @@ public class DateTimeConverter {
     /**
      * LocalDateTime -> 날짜+시간 문자열
      * (yyyy-mm-dd hh:mm:ss)
+     *
      * @param dateTime
      * @return
      */
     public static String convertLocalDateTimeToString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        try{
+        try {
             return dateTime.format(formatter);
-        } catch(DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             log.info("Invalid date time format: " + dateTime);
             throw new ApiException(ErrorCode.INVALID_DATETIME_ERROR);
         }
@@ -87,6 +91,7 @@ public class DateTimeConverter {
 
     /**
      * 분(mm)을 포함할지, 안 포함할지 결정
+     *
      * @param time
      * @return
      */
