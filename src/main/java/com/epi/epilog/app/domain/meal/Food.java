@@ -25,6 +25,7 @@ public class Food {
     private Double fat;
     @ColumnDefault("0")
     private Double sugar;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="meal_log_id")
     private MealLog mealLog;

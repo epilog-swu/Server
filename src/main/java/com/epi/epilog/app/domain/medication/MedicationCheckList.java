@@ -23,9 +23,6 @@ public class MedicationCheckList extends BaseEntity {
     @Column(name="medication_checklist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="medication_id")
-    private Medication medication;
     private String title;
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;
@@ -33,6 +30,10 @@ public class MedicationCheckList extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private MedicationStatus medicationStatus = MedicationStatus.상태없음;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="medication_id")
+    private Medication medication;
 
     public void updateMedicationStatus(MedicationStatus status){
         this.medicationStatus = status;

@@ -26,9 +26,6 @@ public class Meal {
     @Column(name="meal_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
     @Enumerated(EnumType.STRING)
     private MealType mealType;
     @ColumnDefault("true")
@@ -37,4 +34,8 @@ public class Meal {
     @Builder.Default
     @CollectionTable(name="MealTimes", joinColumns = @JoinColumn(name="meal_id"))
     private List<LocalTime> times = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
 }

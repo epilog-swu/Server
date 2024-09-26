@@ -21,12 +21,13 @@ public class LogMood {
     @Column(name="log_mood_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="log_id")
-    private Log log;
     @ColumnDefault("false")
     private boolean detailsState;
     private String type;
     @Nullable
     private String details;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="log_id")
+    private Log log;
 }

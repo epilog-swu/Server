@@ -15,6 +15,7 @@ public class FCMToken {
     private Long id;
     @Column(unique = true)
     private String token;
+
     @JoinColumn(name="member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

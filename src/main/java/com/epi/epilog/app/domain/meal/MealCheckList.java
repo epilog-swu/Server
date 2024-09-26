@@ -17,9 +17,6 @@ public class MealCheckList {
     @Column(name="meal_checklist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="meal_id")
-    private Meal meal;
     private String title;
     private LocalDateTime goalTime;
     private LocalDateTime actualTime;

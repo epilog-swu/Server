@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.lang.Nullable;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -20,11 +22,11 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 public class Log extends BaseEntity {
     @Id
-    @Column(name="log_id")
+    @Column(name = "log_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
     @NotNull
     private String title; // 제목
@@ -32,10 +34,8 @@ public class Log extends BaseEntity {
     private LocalDate date; // 발생일자
     @NotNull
     private String occurrenceType; // 발생시간 (식전 / 식후 / 자기 전 / format yyyy-mm-dd 00:00:00)
-
-    // 각 카테고리 별 기록 여부
     @ColumnDefault("false")
-    private Boolean isFall;
+    private Boolean isFall; // 각 카테고리 별 기록 여부 (낙상)
     @ColumnDefault("false")
     private Boolean isBloodSugar;
     @ColumnDefault("false")
@@ -46,7 +46,6 @@ public class Log extends BaseEntity {
     private Boolean isExercise;
     @ColumnDefault("false")
     private Boolean isMood;
-
     @Nullable
     private Double fallLongitude; // 낙상 위치 기록
     @Nullable
@@ -55,17 +54,14 @@ public class Log extends BaseEntity {
     private String fallAddress;
     @Nullable
     private String fallAddressImage;
-
     @Nullable
     private Double bloodSugar; // 혈당
-
     @Nullable
     private Double systolicBloodPressure; // 수축기 혈압
     @Nullable
     private Double diastolicBloodPressure; // 이완기 혈압
     @Nullable
     private Double heartRate; // 심박수
-
     @Nullable
     private Double weight; // 몸무게
     @Nullable

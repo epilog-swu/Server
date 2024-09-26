@@ -29,10 +29,6 @@ public class Medication extends BaseEntity {
     @Column(name="medication_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    @NotNull
-    private Member member;
     @NotNull
     private String medicationName;
     private LocalDate startDate;
@@ -59,4 +55,9 @@ public class Medication extends BaseEntity {
     @CollectionTable(name="MedicationTimes", joinColumns = @JoinColumn(name="medication_id"))
     @Nullable
     private List<LocalTime> times = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    @NotNull
+    private Member member;
 }
