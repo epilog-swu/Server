@@ -10,7 +10,8 @@ public enum OccurrenceType {
     AFTER_LUNCH("점심식사 후", 5),
     BEFORE_DINNER("저녁식사 전", 7),
     AFTER_DINNER("저녁식사 후", 8),
-    BEFORE_SLEEP("자기 전", 10);
+    BEFORE_SLEEP("자기 전", 10),
+    ;
 
     private final String value;
     private final Integer order;
