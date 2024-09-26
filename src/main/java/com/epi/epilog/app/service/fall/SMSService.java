@@ -28,6 +28,7 @@ public class SMSService {
      * @throws Exception
      */
     public void sendSms(String to, String from, String text) throws Exception {
+        // TODO: 상수로 빼기
         DefaultMessageService messageService = NurigoApp.INSTANCE
                 .initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
 

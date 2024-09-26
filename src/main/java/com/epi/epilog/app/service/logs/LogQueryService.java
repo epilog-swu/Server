@@ -28,12 +28,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Slf4j
+@Transactional(readOnly = true)
 public class LogQueryService {
     private final MemberRepository memberRepository;
     private final LogRepository logRepository;
-    private final LogMoodRepository logMoodRepository;
     private final LogExerciseRepository logExerciseRepository;
 
     /**
