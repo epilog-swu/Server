@@ -31,8 +31,8 @@ public class AuthFormDto {
         private String loginId;
         private String password;
         private String name;
-        private Double stature;
-        private Double weight;
+        private double stature;
+        private double weight;
         private GenderType gender;
         private String protectorName;
         private String protectorPhone;
@@ -45,7 +45,7 @@ public class AuthFormDto {
     @Builder
     @Getter
     public static class SignUpResponseDto {
-        private Boolean success;
+        private boolean success;
         private String code;
         private String token;
     }

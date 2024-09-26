@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SensorData {
-    private Double accX;
-    private Double accY;
-    private Double accZ;
-    private Double gyroX;
-    private Double gyroY;
-    private Double gyroZ;
+    private double accX;
+    private double accY;
+    private double accZ;
+    private double gyroX;
+    private double gyroY;
+    private double gyroZ;
 }

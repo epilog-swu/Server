@@ -21,8 +21,8 @@ public class MedicationRequestDto {
         private List<LocalTime> times;
         private LocalDate startDate;
         private LocalDate endDate;
-        private Boolean endless;
-        private Boolean isAlarm;
+        private boolean endless;
+        private boolean isAlarm;
         private List<String> weeks;
         private String effectiveness;
         private String precautions;

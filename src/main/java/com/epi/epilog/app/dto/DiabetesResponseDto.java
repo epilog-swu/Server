@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class DiabetesResponseDto {
-
     /**
      * 오늘의 혈당 기록 리스트
      */
@@ -16,7 +15,7 @@ public class DiabetesResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access =  AccessLevel.PRIVATE)
     static public class BloodSugarTodayResponse {
-        public Integer total;
+        public int total;
         public LocalDate date;
         public List<DiabetesBloodSugar> diabetes;
     }

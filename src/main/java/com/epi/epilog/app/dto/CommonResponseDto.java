@@ -9,7 +9,7 @@ public class CommonResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     static public class SuccessResponse {
-        public Boolean success;
+        public boolean success;
     }
 
     @Data
@@ -19,7 +19,7 @@ public class CommonResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     static public class CommonResponse {
         public String message;
-        public Boolean success;
+        public boolean success;
     }
 
     @Data

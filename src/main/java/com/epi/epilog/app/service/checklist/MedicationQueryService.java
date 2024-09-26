@@ -59,7 +59,7 @@ public class MedicationQueryService {
                 .prevId(index > 0 ? medicationList.get(index - 1).getId() : null)
                 .medicationName(medicationList.get(index).getMedicationName())
                 .times(medicationList.get(index).getTimes())
-                .isAlarm(medicationList.get(index).getIsAlarm())
+                .isAlarm(medicationList.get(index).isAlarm())
                 .startDate(medicationList.get(index).getStartDate())
                 .endDate(medicationList.get(index).getEndDate() != null
                         ? medicationList.get(index).getEndDate() : null)

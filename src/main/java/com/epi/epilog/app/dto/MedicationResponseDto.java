@@ -4,6 +4,7 @@ import com.epi.epilog.app.domain.enums.MedicationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -13,10 +14,10 @@ public class MedicationResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ChecklistDto {
         private LocalDate date;
-        private  Long medicationId;
+        private Long medicationId;
         private List<MedicationResponseDto.ChecklistStateDto> checklist;
     }
 
@@ -24,19 +25,20 @@ public class MedicationResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
-    public static class ChecklistStateDto{
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ChecklistStateDto {
         private Long id;
         private String goalTime;
         private String title;
         private String time;
         private String medicationName;
-        private Boolean isComplete;
+        private boolean isComplete;
         private String state;
     }
+
     @Data
     @Getter
-    public static class MedicineChecklistUpdateDto{
+    public static class MedicineChecklistUpdateDto {
         @NotNull
         private String time;
         @NotNull
@@ -47,13 +49,13 @@ public class MedicationResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    @NoArgsConstructor(access =  AccessLevel.PRIVATE)
-    public static class GetMedicationForm{
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class GetMedicationForm {
         private Long id;
         private Long nextId;
         private Long prevId;
         private String medicationName;
-        private Boolean isAlarm;
+        private boolean isAlarm;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         private List<LocalTime> times;
         private LocalDate startDate;

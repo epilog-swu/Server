@@ -26,7 +26,7 @@ public class MealsResponseDto {
         public Long id;
         public String goalTime;
         public String title;
-        public Boolean isComplete;
+        public boolean isComplete;
         public String state;
     }
 

@@ -63,8 +63,8 @@ public class MedicationCommandService {
                 .times(form.getTimes())
                 .startDate(form.getStartDate())
                 .endDate(form.getEndDate())
-                .endless(form.getEndless())
-                .isAlarm(form.getIsAlarm())
+                .endless(form.isEndless())
+                .isAlarm(form.isAlarm())
                 .weeks(weekTypeList)
                 .effectiveness(form.getEffectiveness())
                 .precautions(form.getPrecautions())
@@ -119,12 +119,8 @@ public class MedicationCommandService {
         if (form.getEndDate() != null) {
             medicationBuilder.endDate(form.getEndDate());
         }
-        if (form.getEndless() != null) {
-            medicationBuilder.endless(form.getEndless());
-        }
-        if (form.getIsAlarm() != null) {
-            medicationBuilder.isAlarm(form.getIsAlarm());
-        }
+        medicationBuilder.endless(form.isEndless());
+        medicationBuilder.isAlarm(form.isAlarm());
         if (form.getWeeks() != null) {
             List<WeekType> weekTypeList = form.getWeeks().stream().map(week -> {
                 switch (week) {
@@ -245,7 +241,7 @@ public class MedicationCommandService {
             List<Medication> all = medicationRepository.findAll();
             if (!all.isEmpty()) {
                 List<MedicationCheckList> collect = all.stream()
-                        .filter(medication -> medication.getEndless() == true
+                        .filter(medication -> medication.isEndless() == true
                                 || medication.getEndDate().isAfter(LocalDate.now().plusDays(8)))
                         .filter(medication -> medication.getWeeks() == null
                                 || (medication.getWeeks() != null

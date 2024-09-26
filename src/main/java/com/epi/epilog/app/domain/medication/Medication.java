@@ -35,9 +35,9 @@ public class Medication extends BaseEntity {
     @Nullable
     private LocalDate endDate;
     @NotNull
-    private Boolean endless;
+    private boolean endless;
     @NotNull
-    private Boolean isAlarm;
+    private boolean isAlarm;
     @Nullable
     private String precautions; // 주의사항
     @Nullable

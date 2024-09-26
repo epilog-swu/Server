@@ -18,6 +18,6 @@ public class DiabetesRequestDto {
         @ValidOccurenceType
         public String occurrenceType;
         @NotNull
-        public Double bloodSugar;
+        public double bloodSugar;
     }
 }
