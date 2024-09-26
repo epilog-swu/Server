@@ -11,11 +11,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MedicationCheckListRepository extends JpaRepository<MedicationCheckList, Long> {
-    @Query("select m from MedicationCheckList m where m.medication.member =:member and m.goalTime between :start and :end")
-    public List<MedicationCheckList> findAllByMemberAndGoalTime(@Param("member") Member member, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+    @Query("select m from MedicationCheckList m " +
+            "where m.medication.member =:member and m.goalTime between :start and :end")
+    public List<MedicationCheckList> findAllByMemberAndGoalTime(@Param("member") Member member,
+                                                                @Param("start") LocalDateTime start,
+                                                                @Param("end") LocalDateTime end);
 
-    @Query("select m from MedicationCheckList m where m.medication.member =:member and m.goalTime between :start and :end order by m.goalTime asc ")
-    List<MedicationCheckList> findAllByMemberAndGoalTimeOrderByGoalTimeAsc(@Param("member")Member member, @Param("start")LocalDateTime atStartOfDay, @Param("end")LocalDateTime atTime);
+    @Query("select m from MedicationCheckList m " +
+            "where m.medication.member =:member and m.goalTime between :start and :end order by m.goalTime asc ")
+    List<MedicationCheckList> findAllByMemberAndGoalTimeOrderByGoalTimeAsc(@Param("member")Member member,
+                                                                           @Param("start")LocalDateTime atStartOfDay,
+                                                                           @Param("end")LocalDateTime atTime);
 
     List<MedicationCheckList> findAllByMedication(Medication medication);
 }
