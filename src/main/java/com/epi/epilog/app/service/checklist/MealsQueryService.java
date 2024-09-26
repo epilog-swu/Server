@@ -46,7 +46,7 @@ public class MealsQueryService {
                             .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
                             .title((meal.getGoalTime().getMinute() == 0
                                     ? meal.getGoalTime().format(hourFormatter)
-                                    : meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
+                                    : meal.getGoalTime().format(formatter)) + " " + meal.getMeal().toString())
                             .state(meal.getMealStatus().toString())
                             .isComplete(meal.getIsComplete())
                             .build()

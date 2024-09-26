@@ -26,6 +26,10 @@ public class MealCheckList {
     private MealStatus mealStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="meal_id")
+    private Meal meal;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="meal_log_id")
     private MealLog mealLog;
 
