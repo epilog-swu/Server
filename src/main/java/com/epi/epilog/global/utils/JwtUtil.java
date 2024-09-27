@@ -25,9 +25,9 @@ import java.security.Key;
 import java.sql.Date;
 import java.time.ZonedDateTime;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtUtil {
     private final Key key;
     private final Long accessTokenExpirationTime;

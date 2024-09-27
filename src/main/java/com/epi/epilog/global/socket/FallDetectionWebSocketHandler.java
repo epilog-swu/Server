@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     @Value("${sms.server.phone}")
     private String SERVER_PHONE;

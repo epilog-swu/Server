@@ -10,14 +10,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class SMSService {
     @Value("${sms.cool.api}")
     private String apiKey;
-
     @Value("${sms.cool.secret}")
     private String apiSecret;
+    private static final String SMS_URL = "https://api.coolsms.co.kr";
 
     /**
      * 메시지 전송
@@ -28,9 +28,8 @@ public class SMSService {
      * @throws Exception
      */
     public void sendSms(String to, String from, String text) throws Exception {
-        // TODO: 상수로 빼기
         DefaultMessageService messageService = NurigoApp.INSTANCE
-                .initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+                .initialize(apiKey, apiSecret, SMS_URL);
 
         Message message = new Message();
 

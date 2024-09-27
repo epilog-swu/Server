@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Slf4j
 @RequestMapping("/api/medications")
 @RequiredArgsConstructor
+@Slf4j
 public class MedicationController {
     private final MedicationQueryService medicationQueryService;
     private final MedicationCommandService medicationCommandService;

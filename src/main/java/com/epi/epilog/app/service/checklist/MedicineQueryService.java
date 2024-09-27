@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
-@Transactional(readOnly = true)
 public class MedicineQueryService {
     private final MemberRepository memberRepository;
     private final MedicationRepository medicationRepository;

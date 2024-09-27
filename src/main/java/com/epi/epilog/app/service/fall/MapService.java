@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class MapService {
     @Value("${sms.map.api}")
     private String apiKey;
@@ -29,9 +29,9 @@ public class MapService {
     @Value("${bitly.api.token}")
     private String bitlyKey;
     private final RestTemplate restTemplate;
-    private final String MAP_IMAGE_URL = "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=17&size=500x300&sensor=false&markers=color:red%%7Clabel:L%%7C%f,%f&key=%s";
-    private final String ADDRESS_URL = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=";
-    private final String SHORT_URL = "https://api-ssl.bitly.com/v4/shorten";
+    private static final String MAP_IMAGE_URL = "https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=17&size=500x300&sensor=false&markers=color:red%%7Clabel:L%%7C%f,%f&key=%s";
+    private static final String ADDRESS_URL = "https://dapi.kakao.com/v2/local/geo/coord2address.json?x=";
+    private static final String SHORT_URL = "https://api-ssl.bitly.com/v4/shorten";
 
     /**
      * Map Image 생성

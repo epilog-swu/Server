@@ -30,8 +30,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/logs")
+@RequiredArgsConstructor
 public class LogController {
     private final LogQueryService logQueryService;
     private final LogCommandService logCommandService;

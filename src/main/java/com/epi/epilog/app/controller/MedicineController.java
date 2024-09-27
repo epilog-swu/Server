@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/medicines")
+@RequiredArgsConstructor
 public class MedicineController {
     private final MedicineCommandService medicineCommandService;
     private final MedicineQueryService medicineQueryService;

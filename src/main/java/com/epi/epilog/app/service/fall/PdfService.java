@@ -17,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
+@Slf4j
 public class PdfService {
     private final TemplateEngine templateEngine;
 
