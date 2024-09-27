@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class ChecklistSchedulerService {
     private final MedicationCommandService medicationCommandService;
 

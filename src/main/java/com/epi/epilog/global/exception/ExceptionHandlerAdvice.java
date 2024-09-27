@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.epi.epilog.global.exception.ErrorCode.INVALID_HTTP_METHOD;
 
-@Slf4j
+
 @RestControllerAdvice
+@Slf4j
 public class ExceptionHandlerAdvice {
     // TODO: exception handler 공부 후 기능 수정하기
     //모든 에러 -> 하위 에러에서 못받을 때

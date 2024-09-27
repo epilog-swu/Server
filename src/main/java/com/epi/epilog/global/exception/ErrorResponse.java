@@ -10,9 +10,9 @@ import org.springframework.validation.FieldError;
 
 import java.util.List;
 
+@Builder
 @Getter
 @RequiredArgsConstructor
-@Builder
 public class ErrorResponse {
     private final boolean success = false;
     private final HttpStatus httpStatus;

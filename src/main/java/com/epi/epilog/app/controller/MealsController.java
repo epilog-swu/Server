@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/meals")
+@RequiredArgsConstructor
 public class MealsController {
     private final MealsQueryService mealsQueryService;
     private final MealsCommandService mealsCommandService;

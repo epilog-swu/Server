@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
+@Slf4j
 public class DiabetesQueryService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;

@@ -24,14 +24,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class DiabetesCommandService {
     private final LogRepository logRepository;
     private final MemberRepository memberRepository;
-    // TODO: 패턴 상수로 빼기
-    private final Pattern TIME_PATTERN = Pattern.compile("^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$");
+    private static final String DATETIME_PATTERN = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$";
+    private static final Pattern TIME_PATTERN = Pattern.compile(DATETIME_PATTERN);
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**

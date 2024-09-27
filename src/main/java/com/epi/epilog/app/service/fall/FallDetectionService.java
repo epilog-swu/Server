@@ -19,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class FallDetectionService {
     private static final double THRESHOLD_ASVM = 4.5;
     private static final double THRESHOLD_GSVM = 100;

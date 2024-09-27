@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Configuration
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class FirebaseConfig {
     @Value("${firebase.json}")
     private String firebaseJson;
