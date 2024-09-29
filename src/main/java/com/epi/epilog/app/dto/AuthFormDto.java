@@ -1,6 +1,7 @@
 package com.epi.epilog.app.dto;
 
 import com.epi.epilog.app.domain.enums.GenderType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
