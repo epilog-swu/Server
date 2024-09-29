@@ -1,6 +1,7 @@
 package com.epi.epilog.global.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +14,16 @@ import java.util.List;
 @Builder
 @Getter
 @RequiredArgsConstructor
+@Schema(description = "예외 처리 응답")
 public class ErrorResponse {
+    @Schema(description = "요청 성공 여부")
     private final boolean success = false;
+    @Schema(description = "HTTP Status")
     private final HttpStatus httpStatus;
+    @Schema(description = "Dialog Status")
     private final int code;
+    @Schema(description = "설명")
     private final String message;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final List<ValidationError> errors;
 
     public static ErrorResponse of(HttpStatus httpStatus, int code, String message) {
         return ErrorResponse.builder()
@@ -35,7 +38,6 @@ public class ErrorResponse {
                 .httpStatus(httpStatus)
                 .code(code)
                 .message(message)
-                .errors(ValidationError.of(bindingResult))
                 .build();
     }
 

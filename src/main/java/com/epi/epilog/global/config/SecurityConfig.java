@@ -28,7 +28,9 @@ public class SecurityConfig {
             "/detection/fall",
 //            "/api/diabetes/**",
             "/test",
-            "/ws/**"
+            "/ws/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     @Bean

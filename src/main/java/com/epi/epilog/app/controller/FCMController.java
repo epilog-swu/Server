@@ -6,6 +6,8 @@ import com.epi.epilog.app.service.auth.FCMService;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import com.epi.epilog.global.utils.CustomUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,14 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/fcm")
 @RequiredArgsConstructor
+@Tag(name="FCM", description = "FCM API")
 public class FCMController {
     private final FCMService fcmService;
 
-    /**
-     * token 저장
-     * @param form
-     * @return
-     */
+    @Operation(summary = "디바이스 토큰 저장")
     @PostMapping("/token")
     public CommonResponseDto.CommonResponse saveFCMToken(@RequestBody FCMDto.FCMRequestForm form) {
         try {

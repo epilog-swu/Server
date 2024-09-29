@@ -7,11 +7,21 @@ import com.epi.epilog.app.dto.PdfData;
 import com.epi.epilog.app.service.fall.PdfService;
 import com.epi.epilog.app.service.logs.LogCommandService;
 import com.epi.epilog.app.service.logs.LogQueryService;
+import com.epi.epilog.global.exception.ApiException;
+import com.epi.epilog.global.exception.ErrorCode;
+import com.epi.epilog.global.exception.ErrorResponse;
 import com.epi.epilog.global.utils.CustomUserDetails;
 import com.epi.epilog.global.utils.DateTimeConverter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,21 +42,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/logs")
 @RequiredArgsConstructor
+@Tag(name = "Log", description = "일지 관련 API")
 public class LogController {
     private final LogQueryService logQueryService;
     private final LogCommandService logCommandService;
     private final PdfService pdfService;
 
-    /**
-     * 월별 일지 개수 조회
-     */
+    @Operation(summary = "월 별 일지 개수 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "월 별 일지 개수 조회 성공"),
+    })
     @GetMapping("/count")
-    public LogsResponseDto.MonthLogsCount monthLogsCount(@RequestParam(value = "date", required = false) String date){
+    public LogsResponseDto.MonthLogsCount monthLogsCount(@RequestParam(value = "date", required = false) String date) {
         LocalDate queryDate;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (date == null) {
-             date  = DateTimeConverter.convertLocalDateToString(LocalDate.now());
+            date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
 
         queryDate = DateTimeConverter.convertToLocalDate(date);
@@ -56,14 +68,15 @@ public class LogController {
         return logsCount;
     }
 
-    /**
-     * 일별 일지 목록 조회
-     */
+    @Operation(summary = "일 별 일지 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일 별 일지 목록 조회 성공"),
+    })
     @GetMapping("")
-    public LogsResponseDto.DayLogsList dayLogList(@RequestParam(value = "date", required = false) String date){
+    public LogsResponseDto.DayLogsList dayLogList(@RequestParam(value = "date", required = false) String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (date == null){
+        if (date == null) {
             date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
 
@@ -73,14 +86,15 @@ public class LogController {
         return logQueryService.dayLogList(customUserDetails, queryDate);
     }
 
-    /**
-     * 일별 평균, 식전후 평균 혈당 조회
-     */
+    @Operation(summary = "일 별/식 전후 평균 혈당 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일 별/식 전후 평균 혈당 조회 성공"),
+    })
     @GetMapping("/bloodsugar/average")
-    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(@RequestParam(value = "date", required = false)String date){
+    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(@RequestParam(value = "date", required = false) String date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (date == null){
+        if (date == null) {
             date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
         LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
@@ -89,11 +103,12 @@ public class LogController {
         return logQueryService.dayAvgBloodSugar(customUserDetails, queryDate);
     }
 
-    /**
-     * 일별 혈당 목록 조회
-     */
+    @Operation(summary = "일 별 혈당 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일 별 혈당 목록 조회 성공"),
+    })
     @GetMapping("/bloodsugar")
-    public LogsResponseDto.DayBloodSugarList getDayBloodSugarList(@RequestParam(value = "date", required = false)String date){
+    public LogsResponseDto.DayBloodSugarList getDayBloodSugarList(@RequestParam(value = "date", required = false) String date) {
         if (date == null) {
             date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
@@ -101,11 +116,12 @@ public class LogController {
         return logQueryService.dayBloodSugarList(((CustomUserDetails) authentication.getPrincipal()), date);
     }
 
-    /**
-     * 월별 체중, 체지방률 목록 조회
-     */
+    @Operation(summary = "월 별 체중, 체지방률 목록 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "월 별 체중, 체지방률 목록 조회 성공"),
+    })
     @GetMapping("/weight")
-    public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value="date", required = false)String date){
+    public LogsResponseDto.MonthWeightList getMonthWeightList(@RequestParam(value = "date", required = false) String date) {
         if (date == null) {
             date = DateTimeConverter.convertLocalDateToString(LocalDate.now());
         }
@@ -113,40 +129,48 @@ public class LogController {
         return logQueryService.getMonthWeightList(date, ((CustomUserDetails) authentication.getPrincipal()));
     }
 
-    /**
-     * 일지 등록
-     */
+    @Operation(summary = "일지 등록")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "일지 등록 성공"),
+            @ApiResponse(responseCode = "404", description = "일지 등록 실패 - 유저 찾기 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
     @PostMapping("")
-    public CommonResponseDto.CommonResponse createLog(@RequestBody LogsRequestDto.LogCreateForm form) {
+    public ResponseEntity<CommonResponseDto.CommonResponse> createLog(@RequestBody LogsRequestDto.LogCreateForm form) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return logCommandService.createLog( ((CustomUserDetails) authentication.getPrincipal()), form);
+        CommonResponseDto.CommonResponse log = logCommandService.createLog(((CustomUserDetails) authentication.getPrincipal()), form);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(log);
     }
 
-    /**
-     * 일지 상세 조회
-     */
+    @Operation(summary = "일지 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "일지 상세 조회 성공"),
+    })
     @GetMapping("/{logId}")
     public LogsResponseDto.DetailAllLog detailLog(@PathVariable("logId") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return logQueryService.getDetailLog( ((CustomUserDetails) authentication.getPrincipal()), id);
+        return logQueryService.getDetailLog(((CustomUserDetails) authentication.getPrincipal()), id);
     }
 
-    /**
-     * PDF 변환
-     * @param start 시작일
-     * @param end 마지막일
-     * @return
-     * @throws Exception
-     */
+    @Operation(summary = "PDF 변환")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "PDF 변환 성공"),
+            @ApiResponse(responseCode = "400", description = "PDF 변환 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
     @GetMapping("/convert")
-    public ResponseEntity<InputStreamResource> createdPDF(@RequestParam(value = "start", required = true)LocalDate start,
-                                                          @RequestParam(value = "end", required = true)LocalDate end) throws Exception{
+    public ResponseEntity<InputStreamResource> createdPDF(@RequestParam(value = "start", required = true) LocalDate start,
+                                                          @RequestParam(value = "end", required = true) LocalDate end) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         List<PdfData> entries = logQueryService.generatedPdfEntries(((CustomUserDetails) authentication.getPrincipal()), start, end);
-        ByteArrayOutputStream baos = pdfService.createPdf("diabetes_log", entries);
+        ByteArrayOutputStream baos;
+        try {
+            baos = pdfService.createPdf("diabetes_log", entries);
 
+        } catch (Exception e) {
+            throw new ApiException(ErrorCode.FAIL_TO_CONVERSION_PDF);
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=diabetes_log.pdf");
 

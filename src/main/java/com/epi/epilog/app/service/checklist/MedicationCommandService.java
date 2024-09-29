@@ -171,7 +171,7 @@ public class MedicationCommandService {
      * @return
      */
     @Transactional
-    public CommonResponseDto.CommonResponse deleteMedication(CustomUserDetails userInfo, Long medicationId) {
+    public void deleteMedication(CustomUserDetails userInfo, Long medicationId) {
         Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
@@ -189,11 +189,6 @@ public class MedicationCommandService {
         }
 
         medicationRepository.delete(medication);
-
-        return CommonResponseDto.CommonResponse.builder()
-                .success(true)
-                .message("삭제되었습니다.")
-                .build();
     }
 
     /**
