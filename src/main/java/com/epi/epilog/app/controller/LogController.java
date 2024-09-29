@@ -164,8 +164,9 @@ public class LogController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         List<PdfData> entries = logQueryService.generatedPdfEntries(((CustomUserDetails) authentication.getPrincipal()), start, end);
+        ByteArrayOutputStream baos;
         try {
-            ByteArrayOutputStream baos = pdfService.createPdf("diabetes_log", entries);
+            baos = pdfService.createPdf("diabetes_log", entries);
 
         } catch (Exception e) {
             throw new ApiException(ErrorCode.FAIL_TO_CONVERSION_PDF);

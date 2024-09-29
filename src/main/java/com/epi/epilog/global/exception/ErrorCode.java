@@ -24,8 +24,8 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 401, "유효하지 않은 토큰입니다"),
 
     // 2xxx
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, 2000, "유저를 찾을 수 없습니다."),
-    MEDICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, 4000, "약을 찾을 수 없습니다"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 2000, "유저를 찾을 수 없습니다."),
+    MEDICATION_NOT_FOUND(HttpStatus.NOT_FOUND, 4000, "약을 찾을 수 없습니다"),
 
     // 3xxx
     OVER_COUNT_DIABETES(HttpStatus.BAD_REQUEST, 3000, "최대 입력 개수를 넘었습니다."),
