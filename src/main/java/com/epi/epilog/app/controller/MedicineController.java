@@ -53,15 +53,13 @@ public class MedicineController {
      */
     @Operation(summary = "복약 체크리스트 상태 수정")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "복약 체크리스트 상태 수정 성공")
+            @ApiResponse(responseCode = "200", description = "복약 체크리스트 상태 수정 성공")
     })
     @PatchMapping("/{chklstId}")
-    public ResponseEntity<CommonResponseDto.CommonResponse> medicineCheck(@PathVariable("chklstId") Long id, @RequestBody @Valid MedicationResponseDto.MedicineChecklistUpdateDto form) {
+    public CommonResponseDto.CommonResponse medicineCheck(@PathVariable("chklstId") Long id, @RequestBody @Valid MedicationResponseDto.MedicineChecklistUpdateDto form) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userInfo = (CustomUserDetails) authentication.getPrincipal();
 
-        CommonResponseDto.CommonResponse commonResponse = medicineCommandService.medicineCheck(id, form, userInfo);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(commonResponse);
+        return medicineCommandService.medicineCheck(id, form, userInfo);
     }
 }

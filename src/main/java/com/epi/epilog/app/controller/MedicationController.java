@@ -67,20 +67,18 @@ public class MedicationController {
 
     @Operation(summary = "복용약 수정")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "복용약 수정 성공"),
+            @ApiResponse(responseCode = "200", description = "복용약 수정 성공"),
             @ApiResponse(responseCode = "404", description = "복용약 수정 실패 - 약 조회 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "복용약 수정 실패 - 유저 조회 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "403", description = "복용약 수정 실패 - 유저 인증 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "400", description = "복용약 수정 실패 - 유효하지 않은 포맷", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PatchMapping("/{mcId}")
-    public ResponseEntity<CommonResponseDto.CommonResponse> patchMedication(@PathVariable("mcId") Long medicationId, @RequestBody MedicationRequestDto.MedicationAddedForm form) {
+    public CommonResponseDto.CommonResponse patchMedication(@PathVariable("mcId") Long medicationId, @RequestBody MedicationRequestDto.MedicationAddedForm form) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userInfo = (CustomUserDetails) authentication.getPrincipal();
 
-        CommonResponseDto.CommonResponse commonResponse = medicationCommandService.patchMedication(userInfo, medicationId, form);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(commonResponse);
+        return medicationCommandService.patchMedication(userInfo, medicationId, form);
     }
 
     @Operation(summary = "복용약 삭제")
