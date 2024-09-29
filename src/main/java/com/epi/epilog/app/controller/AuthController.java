@@ -29,15 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    /**
-     * 회원가입
-     *
-     * @param form
-     * @return
-     */
     @Operation(summary = "회원가입", description = "모바일 회원가입")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = AuthFormDto.SignUpResponseDto.class)))
+            @ApiResponse(responseCode = "201", description = "회원가입 성공"),
     })
     @PostMapping("/signup")
     public ResponseEntity<AuthFormDto.SignUpResponseDto> signup(@Valid @RequestBody AuthFormDto.SignupFormDto form) {
@@ -47,16 +41,10 @@ public class AuthController {
                 .body(signUpResponseDto);
     }
 
-    /**
-     * 모바일 로그인
-     *
-     * @param form
-     * @return
-     */
     @Operation(summary = "모바일 로그인")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모바일 로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "401", description = "모바일 로그인 실패", content = @Content(schema = @Schema(implementation = com.epi.epilog.global.exception.ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "모바일 로그인 성공"),
+            @ApiResponse(responseCode = "401", description = "모바일 로그인 실패 - 인증 실패", content = @Content(schema = @Schema(implementation = com.epi.epilog.global.exception.ErrorResponse.class))),
     })
     @PostMapping("/login")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.PatientLoginFormDto form) {
@@ -64,16 +52,10 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    /**
-     * 워치 로그인
-     *
-     * @param form
-     * @return
-     */
     @Operation(summary = "워치 로그인")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "워치 로그인 성공", content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "401", description = "워치 로그인 실패", content = @Content(schema = @Schema(implementation = com.epi.epilog.global.exception.ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "워치 로그인 성공"),
+            @ApiResponse(responseCode = "401", description = "워치 로그인 실패 - 인증 실패", content = @Content(schema = @Schema(implementation = com.epi.epilog.global.exception.ErrorResponse.class)))
     })
     @PostMapping("/login/code")
     public ResponseEntity<String> partientLogin(@Valid @RequestBody AuthFormDto.ProtectorLoginFormDto form) {
@@ -81,15 +63,9 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    /**
-     * 닉네임 중복 검사
-     *
-     * @param userId
-     * @return
-     */
     @Operation(summary = "닉네임 중복 검사")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "닉네임 중복 검사 성공", content = @Content(schema = @Schema(implementation = CommonResponseDto.CommonResponse.class)))
+            @ApiResponse(responseCode = "200", description = "닉네임 중복 검사 성공"),
     })
     @GetMapping("/validation")
     public CommonResponseDto.CommonResponse idValidationCheck(@RequestParam("id") String userId) {
