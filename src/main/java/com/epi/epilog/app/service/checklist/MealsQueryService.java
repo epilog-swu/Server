@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MealsQueryService {
-    private final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("mm:ss");
+    private final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
     private final MealRepository mealRepository;
     private final MemberRepository memberRepository;
     private final MealCheckListRepository mealCheckListRepository;
@@ -72,9 +72,10 @@ public class MealsQueryService {
 
         List<Meal> meals = mealRepository.findAllByMember(member);
 
-        return meals.stream().map(meal ->s MealsResponseDto.MealTimesDto.builder()
-                .title(meal.getMealType().toString() + " " + meal.getTime().format(TIME_FORMATTER))
-                .isAlarm(meal.getIsAlarm())
-                .build()).toList();
+        return meals.stream().map(meal -> MealsResponseDto.MealTimesDto.builder()
+                        .title(meal.getMealType().toString() + " " + meal.getTime().format(TIME_FORMATTER))
+                        .isAlarm(meal.getIsAlarm().booleanValue())
+                        .build())
+                .toList();
     }
 }

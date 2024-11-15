@@ -1,6 +1,8 @@
 package com.epi.epilog.app.dto;
 
 import com.epi.epilog.app.domain.enums.MealStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -45,7 +47,14 @@ public class MealsResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class MealTimesDto {
+        @JsonProperty("title")
         public String title;
+        @JsonProperty("isAlarm")
         public boolean isAlarm;
+
+        @JsonIgnore
+        public boolean isAlarm() {
+            return isAlarm;
+        }
     }
 }
