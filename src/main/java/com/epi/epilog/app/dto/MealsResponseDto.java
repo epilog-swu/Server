@@ -39,4 +39,13 @@ public class MealsResponseDto {
         @NotNull
         public MealStatus status;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class MealTimesDto {
+        public String title;
+        public boolean isAlarm;
+    }
 }
