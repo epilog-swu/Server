@@ -31,7 +31,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)){
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
             throw new ApiException(ErrorCode.INVALID_TOKEN);
         }
         filterChain.doFilter(request, response);

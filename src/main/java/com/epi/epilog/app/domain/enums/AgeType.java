@@ -9,7 +9,8 @@ public enum AgeType {
     AGE_30_49("30-49세"),
     AGE_50_64("50-64세"),
     AGE_65_74("65-74세"),
-    AGE_75_PLUS("75세 이상");
+    AGE_75_PLUS("75세 이상"),
+    ;
 
     private final String label;
 

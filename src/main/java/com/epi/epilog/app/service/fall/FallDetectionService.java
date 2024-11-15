@@ -8,15 +8,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class FallDetectionService {
     private static final double THRESHOLD_ASVM = 4.5;
     private static final double THRESHOLD_GSVM = 100;
@@ -34,6 +38,7 @@ public class FallDetectionService {
 
     /**
      * 1차 낙상 감지 (센서 데이터 임계값 기반)
+     *
      * @param data
      * @return
      */
@@ -152,15 +157,15 @@ public class FallDetectionService {
     }
 
     private Double calculateThetaX(Double x, Double y, Double z) {
-        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(z, 2) + Math.pow(y, 2))/x));
+        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(z, 2) + Math.pow(y, 2)) / x));
     }
 
     private Double calculateThetaY(Double x, Double y, Double z) {
-        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2))/y));
+        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2)) / y));
     }
 
     private Double calculateThetaZ(Double x, Double y, Double z) {
-        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))/z));
+        return Math.toDegrees(Math.atan(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / z));
     }
 
     public static double calculatePitch(Double accX, Double accY, Double accZ) {
@@ -171,16 +176,17 @@ public class FallDetectionService {
         return Math.atan2(-accX, accZ);
     }
 
-    public static double calculateDeltaPitch(Double gyroX, Double dt){
+    public static double calculateDeltaPitch(Double gyroX, Double dt) {
         return gyroX * dt;
     }
 
-    public static double calculateDeltaRoll(Double gyroY, Double dt){
+    public static double calculateDeltaRoll(Double gyroY, Double dt) {
         return gyroY * dt;
     }
 
     /**
      * 2차 낙상 감지 (AI 예측 기반)
+     *
      * @param fallData
      * @return
      */
@@ -199,7 +205,7 @@ public class FallDetectionService {
 
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 
-            if (HttpStatus.OK != response.getStatusCode()){
+            if (HttpStatus.OK != response.getStatusCode()) {
                 throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
             }
             String responseBody = response.getBody();

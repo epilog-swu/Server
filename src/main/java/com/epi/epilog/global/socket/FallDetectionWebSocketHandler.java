@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     @Value("${sms.server.phone}")
     private String SERVER_PHONE;
@@ -48,6 +48,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
     /**
      * 웹소켓 연결
+     *
      * @param session
      * @throws Exception
      */
@@ -72,7 +73,9 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
                 UserDetails userDetails = new CustomUserDetails(userInfoDto);
 
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails,
+                                null,
+                                userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 sessions.add(session);
                 session.getAttributes().put("token", token);
@@ -89,6 +92,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
     /**
      * 이벤트 분기 (fall, emer)
+     *
      * @param session
      * @param message
      * @throws Exception
@@ -124,6 +128,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
     /**
      * emer - 후속 조치 이벤트
+     *
      * @param token
      * @param session
      * @param data
@@ -137,7 +142,8 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
             String userId = jwtUtil.getUserById(token);
             Member member = memberRepository.findById(Long.valueOf(userId))
                     .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
-            EmerData emerData = objectMapper.readValue(data.toString(), new TypeReference<EmerData>() {});
+            EmerData emerData = objectMapper.readValue(data.toString(), new TypeReference<EmerData>() {
+            });
             String addressStr = emergencyService.emerEvent(emerData);
 
             String message = member.getName() + "님 낙상 감지됨" + addressStr;
@@ -161,6 +167,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
     /**
      * fall - 낙상 모니터링 이벤트
+     *
      * @param session
      * @param data
      * @throws Exception
@@ -168,7 +175,8 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
     private void handleFallEvent(WebSocketSession session, JsonNode data) throws Exception {
         JsonNode fallNode = data.get("fall");
         if (fallNode != null && fallNode.isArray()) {
-            List<SensorData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<SensorData>>() {});
+            List<SensorData> fallData = objectMapper.readValue(fallNode.toString(), new TypeReference<List<SensorData>>() {
+            });
             boolean fallDetectedResult = fallDetectionService.isFallDetected(fallData);
             log.info("[fall monitoring] sensor algorithm return value: " + fallDetectedResult);
 
@@ -204,6 +212,7 @@ public class FallDetectionWebSocketHandler extends TextWebSocketHandler {
 
     /**
      * 웹소켓 연결 해제
+     *
      * @param session
      * @param status
      * @throws Exception

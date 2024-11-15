@@ -13,10 +13,12 @@ import java.lang.annotation.Target;
  * occurenceType 유효성 검사용
  */
 @Constraint(validatedBy = OccurenceTypeValidator.class)
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidOccurenceType {
     String message() default "Invalid Occurrence Type";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

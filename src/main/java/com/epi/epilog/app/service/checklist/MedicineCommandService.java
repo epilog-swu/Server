@@ -30,7 +30,9 @@ public class MedicineCommandService {
      * @return
      */
     @Transactional
-    public CommonResponseDto.CommonResponse medicineCheck(Long id, MedicationResponseDto.MedicineChecklistUpdateDto form, CustomUserDetails userInfo) {
+    public CommonResponseDto.CommonResponse medicineCheck(Long id,
+                                                          MedicationResponseDto.MedicineChecklistUpdateDto form,
+                                                          CustomUserDetails userInfo) {
         Member member = memberRepository.findById(userInfo.getMember().getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 

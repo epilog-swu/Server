@@ -1,10 +1,13 @@
 package com.epi.epilog.app.service.checklist;
 
+import com.epi.epilog.app.domain.meal.Meal;
 import com.epi.epilog.app.domain.meal.MealCheckList;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
+import com.epi.epilog.app.dto.MealsResponseDto.MealTimesDto;
 import com.epi.epilog.app.repository.MealCheckListRepository;
+import com.epi.epilog.app.repository.MealRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
@@ -12,6 +15,7 @@ import com.epi.epilog.global.utils.DateTimeConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,9 +25,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class MealsQueryService {
+    private final static DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private final MealRepository mealRepository;
     private final MemberRepository memberRepository;
     private final MealCheckListRepository mealCheckListRepository;
 
@@ -39,12 +46,14 @@ public class MealsQueryService {
 
         List<MealsResponseDto.ChecklistStateDto> checklist = new ArrayList<>();
 
-        if (!mealCheckLists.isEmpty()){
+        if (!mealCheckLists.isEmpty()) {
             checklist = mealCheckLists.stream()
                     .map(meal -> MealsResponseDto.ChecklistStateDto.builder()
                             .id(meal.getId())
                             .goalTime(meal.getGoalTime().format(DateTimeConverter.timeFormatter))
-                            .title((meal.getGoalTime().getMinute()==0?meal.getGoalTime().format(hourFormatter):meal.getGoalTime().format(formatter)) + " " + meal.getMeal().getMealType().toString())
+                            .title((meal.getGoalTime().getMinute() == 0
+                                    ? meal.getGoalTime().format(hourFormatter)
+                                    : meal.getGoalTime().format(formatter)) + " " + meal.getMeal().toString())
                             .state(meal.getMealStatus().toString())
                             .isComplete(meal.getIsComplete())
                             .build()
@@ -55,5 +64,18 @@ public class MealsQueryService {
                 .date(date)
                 .checklist(checklist)
                 .build();
+    }
+
+    public List<MealTimesDto> mealTimes(CustomUserInfoDto memberInfo) {
+        Member member = memberRepository.findById(memberInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        List<Meal> meals = mealRepository.findAllByMember(member);
+
+        return meals.stream().map(meal -> MealsResponseDto.MealTimesDto.builder()
+                        .title(meal.getMealType().toString() + " " + meal.getTime().format(TIME_FORMATTER))
+                        .isAlarm(meal.getIsAlarm().booleanValue())
+                        .build())
+                .toList();
     }
 }

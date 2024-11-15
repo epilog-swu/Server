@@ -21,6 +21,7 @@ public class EmergencyService {
 
     /**
      * WebSocket emer 이벤트 처리
+     *
      * @param form
      * @return
      * @throws Exception
@@ -38,6 +39,7 @@ public class EmergencyService {
 
     /**
      * WebSocket 낙상 시 자동 일지 기록
+     *
      * @param member
      * @param emerData
      * @throws Exception
@@ -62,7 +64,9 @@ public class EmergencyService {
             Log logs = Log.builder()
                     .member(member)
                     .date(now.toLocalDate())
-                    .title(now.getMinute()==0?DateTimeConverter.krShortTimeFormatter.format(now):DateTimeConverter.krTimeFormatter.format(now))
+                    .title(now.getMinute() == 0
+                            ? DateTimeConverter.krShortTimeFormatter.format(now)
+                            : DateTimeConverter.krTimeFormatter.format(now))
                     .occurrenceType(DateTimeConverter.convertLocalDateTimeToString(now))
                     .isFall(true)
                     .isMood(false)

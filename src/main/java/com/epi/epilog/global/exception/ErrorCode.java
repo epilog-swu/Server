@@ -11,8 +11,9 @@ public enum ErrorCode {
     INVALID_ARGUMENT_ERROR(HttpStatus.BAD_REQUEST, 400, "올바르지 않은 파라미터입니다."),
     INVALID_DATETIME_ERROR(HttpStatus.BAD_REQUEST, 400, "올바르지 않은 시간 포맷입니다."),
     INVALID_DATE_ERROR(HttpStatus.BAD_REQUEST, 400, "올바르지 않은 날짜 포맷입니다."),
+    FAIL_TO_CONVERSION_PDF(HttpStatus.BAD_REQUEST, 400, "PDF 변환에 실패했습니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, 404, "데이터베이스에 존재하지 않습니다."),
-    INVALID_FORMAT_ERROR(HttpStatus.BAD_REQUEST,400, "올바르지 않은 포맷입니다."),
+    INVALID_FORMAT_ERROR(HttpStatus.BAD_REQUEST, 400, "올바르지 않은 포맷입니다."),
     INVALID_TYPE_ERROR(HttpStatus.BAD_REQUEST, 400, "올바르지 않은 타입입니다."),
     ILLEGAL_ARGUMENT_ERROR(HttpStatus.BAD_REQUEST, 400, "필수 파라미터가 없습니다"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
@@ -23,8 +24,8 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 401, "유효하지 않은 토큰입니다"),
 
     // 2xxx
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, 2000, "유저를 찾을 수 없습니다."),
-    MEDICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, 4000, "약을 찾을 수 없습니다"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 2000, "유저를 찾을 수 없습니다."),
+    MEDICATION_NOT_FOUND(HttpStatus.NOT_FOUND, 4000, "약을 찾을 수 없습니다"),
 
     // 3xxx
     OVER_COUNT_DIABETES(HttpStatus.BAD_REQUEST, 3000, "최대 입력 개수를 넘었습니다."),
@@ -32,7 +33,8 @@ public enum ErrorCode {
 
     // 5xxx
     TIME_PARSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "시간 파싱에 실패했습니다."),
-    OCCURENCE_PARSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5002, "발생시간 파싱에 실패했습니다.");
+    OCCURENCE_PARSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5002, "발생시간 파싱에 실패했습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final int code;

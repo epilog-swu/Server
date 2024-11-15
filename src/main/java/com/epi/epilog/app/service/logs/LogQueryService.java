@@ -8,7 +8,6 @@ import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.LogsResponseDto;
 import com.epi.epilog.app.dto.PdfData;
 import com.epi.epilog.app.repository.LogExerciseRepository;
-import com.epi.epilog.app.repository.LogMoodRepository;
 import com.epi.epilog.app.repository.LogRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
@@ -23,21 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 @Slf4j
 public class LogQueryService {
     private final MemberRepository memberRepository;
     private final LogRepository logRepository;
-    private final LogMoodRepository logMoodRepository;
     private final LogExerciseRepository logExerciseRepository;
 
     /**
      * 월별 일지 개수 조회
+     *
      * @param date
      * @param member
      * @return
@@ -66,11 +70,11 @@ public class LogQueryService {
 
         Map<Integer, Integer> counts = new HashMap<>();
 
-        for (Integer day = 1; day <= daysInMonth; day++){
+        for (Integer day = 1; day <= daysInMonth; day++) {
             counts.put(day, 0);
         }
 
-        for(Log log : logs){
+        for (Log log : logs) {
             Integer day = log.getDate().getDayOfMonth();
             counts.put(day, counts.get(day) + 1);
         }
@@ -85,6 +89,7 @@ public class LogQueryService {
 
     /**
      * 일별 일지 목록 조회
+     *
      * @param member
      * @param queryDate
      * @return
@@ -109,7 +114,7 @@ public class LogQueryService {
                 LogsResponseDto.DayLogsItem
                         .builder()
                         .id(log.getId())
-                        .title(log.getDate().format(DateTimeConverter.krDateFormatter)+" "+log.getTitle())
+                        .title(log.getDate().format(DateTimeConverter.krDateFormatter) + " " + log.getTitle())
                         .keyword(getKeywords(log))
                         .build()
         ).collect(Collectors.toList());
@@ -136,18 +141,26 @@ public class LogQueryService {
 
     /**
      * 일별 평균, 식전후 평균 혈당 조회
+     *
      * @param customUserDetails
      * @param queryDate
      * @return
      */
-    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(CustomUserDetails customUserDetails, LocalDate queryDate) {
+    public LogsResponseDto.DayAvgBloodSugar dayAvgBloodSugar(CustomUserDetails customUserDetails,
+                                                             LocalDate queryDate) {
         Member member = getMember(customUserDetails);
 
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
 
         Double average = getAverage(logs);
-        Double preAverage = getPrePostAverage(logs, OccurrenceType.BEFORE_BREAKFAST, OccurrenceType.BEFORE_LUNCH, OccurrenceType.BEFORE_DINNER);
-        Double postAverage = getPrePostAverage(logs, OccurrenceType.AFTER_BREAKFAST, OccurrenceType.AFTER_LUNCH, OccurrenceType.AFTER_DINNER);
+        Double preAverage = getPrePostAverage(logs,
+                OccurrenceType.BEFORE_BREAKFAST,
+                OccurrenceType.BEFORE_LUNCH,
+                OccurrenceType.BEFORE_DINNER);
+        Double postAverage = getPrePostAverage(logs,
+                OccurrenceType.AFTER_BREAKFAST,
+                OccurrenceType.AFTER_LUNCH,
+                OccurrenceType.AFTER_DINNER);
 
 
         return LogsResponseDto.DayAvgBloodSugar
@@ -160,7 +173,10 @@ public class LogQueryService {
     }
 
     @NotNull
-    private static Double getPrePostAverage(List<Log> logs, OccurrenceType beforeBreakfast, OccurrenceType beforeLunch, OccurrenceType beforeDinner) {
+    private static Double getPrePostAverage(List<Log> logs,
+                                            OccurrenceType beforeBreakfast,
+                                            OccurrenceType beforeLunch,
+                                            OccurrenceType beforeDinner) {
         Double preAverage = logs.stream()
                 .filter(log -> log.getBloodSugar() != null)
                 .filter(log -> OccurrenceType.isValid(log.getOccurrenceType()) &&
@@ -185,6 +201,7 @@ public class LogQueryService {
 
     /**
      * 일별 혈당 목록 조회
+     *
      * @param userInfo
      * @param date
      * @return
@@ -196,13 +213,14 @@ public class LogQueryService {
         List<Log> logs = logRepository.findAllByDateAndMember(queryDate, member);
         logs.sort(new CustomLogsComparator());
 
-        List<LogsResponseDto.DayBloodSugarItem> bloodSugarItemList = logs.stream().filter(log -> log.getBloodSugar() != null).map(log ->
-                LogsResponseDto.DayBloodSugarItem
-                        .builder()
-                        .title(log.getTitle())
-                        .bloodSugar(log.getBloodSugar())
-                        .build()
-        ).collect(Collectors.toList());
+        List<LogsResponseDto.DayBloodSugarItem> bloodSugarItemList = logs.stream()
+                .filter(log -> log.getBloodSugar() != null).map(log ->
+                        LogsResponseDto.DayBloodSugarItem
+                                .builder()
+                                .title(log.getTitle())
+                                .bloodSugar(log.getBloodSugar())
+                                .build()
+                ).collect(Collectors.toList());
 
         return LogsResponseDto.DayBloodSugarList
                 .builder()
@@ -214,6 +232,7 @@ public class LogQueryService {
 
     /**
      * 월별 몸무게 및 체지방률 변화 추이 조회
+     *
      * @param date
      * @param userInfo
      * @return
@@ -222,7 +241,8 @@ public class LogQueryService {
         Member member = getMember(userInfo);
 
         LocalDate queryDate = DateTimeConverter.convertToLocalDate(date);
-        List<Log> logs = logRepository.findAllByMonthAndMember(queryDate.getYear(), queryDate.getMonthValue(), member);
+        List<Log> logs = logRepository
+                .findAllByMonthAndMember(queryDate.getYear(), queryDate.getMonthValue(), member);
         logs.sort(new CustomLogsComparator().reversed());
 
         Map<LocalDate, List<Log>> logsWeightGroupedByDate = logs.stream()
@@ -247,9 +267,9 @@ public class LogQueryService {
         logsBodyFatPercentGroupedByDate.forEach((logsDate, logList) -> {
             Log lastLog = logList.get(0);
             bodyFatPercentage.add(LogsResponseDto.MonthWeightItem.builder()
-                            .date(DateTimeConverter.convertLocalDateToString(logsDate))
-                            .value(lastLog.getBodyFatPercentage())
-                            .build());
+                    .date(DateTimeConverter.convertLocalDateToString(logsDate))
+                    .value(lastLog.getBodyFatPercentage())
+                    .build());
         });
 
         return LogsResponseDto.MonthWeightList.builder()
@@ -262,9 +282,10 @@ public class LogQueryService {
 
     /**
      * PDF 변환
+     *
      * @param userInfo 유저 정보
-     * @param start pdf 변환 시작날짜
-     * @param end pdf 변환 마지막날짜
+     * @param start    pdf 변환 시작날짜
+     * @param end      pdf 변환 마지막날짜
      * @return
      */
     public List<PdfData> generatedPdfEntries(CustomUserDetails userInfo, LocalDate start, LocalDate end) {
@@ -328,8 +349,9 @@ public class LogQueryService {
 
     /**
      * 일지 상세 조회
+     *
      * @param principal 유저 정보
-     * @param id Log 아이디
+     * @param id        Log 아이디
      * @return
      */
     public LogsResponseDto.DetailAllLog getDetailLog(CustomUserDetails principal, Long id) {
@@ -343,25 +365,26 @@ public class LogQueryService {
         }
 
         LogsResponseDto.FallDetail fall = LogsResponseDto.FallDetail.builder()
-                .address(log.getFallAddress()!=null?log.getFallAddress():null)
-                .mapImage(log.getFallAddressImage()!=null?log.getFallAddressImage():null)
+                .address(log.getFallAddress() != null ? log.getFallAddress() : null)
+                .mapImage(log.getFallAddressImage() != null ? log.getFallAddressImage() : null)
                 .build();
 
         List<String> keywords = getKeywords(log);
 
+        // TODO: Optioanl 객체 사용해서 리팩토링 하기. 가독성
         return LogsResponseDto.DetailAllLog.builder()
                 .title(log.getDate() + " " + log.getTitle())
                 .keyword(keywords)
-                .bloodSugar(log.getBloodSugar()!=null? log.getBloodSugar() : null)
-                .systolicBloodPressure(log.getSystolicBloodPressure()!=null?log.getSystolicBloodPressure():null)
-                .diastolicBloodPressure(log.getDiastolicBloodPressure()!=null?log.getDiastolicBloodPressure():null)
-                .heartRate(log.getHeartRate()!=null?log.getHeartRate():null)
-                .weight(log.getWeight()!=null?log.getWeight():null)
-                .bodyFatPercentage(log.getBodyFatPercentage()!=null?log.getBodyFatPercentage():null)
-                .bodyPhoto(log.getBodyPhoto()!=null?log.getBodyPhoto():null)
-                .fall(fall.getAddress()!=null||fall.getMapImage()!=null?fall:null)
-                .exercise(!keywords.stream().filter(keyword -> keyword.equals("운동")).collect(Collectors.toList()).isEmpty()?createExerciseList(log):null)
-                .mood((!keywords.stream().filter(keyword -> keyword.equals("기분")).collect(Collectors.toList()).isEmpty())?createMoodList(log):null)
+                .bloodSugar(log.getBloodSugar() != null ? log.getBloodSugar() : null)
+                .systolicBloodPressure(log.getSystolicBloodPressure() != null ? log.getSystolicBloodPressure() : null)
+                .diastolicBloodPressure(log.getDiastolicBloodPressure() != null ? log.getDiastolicBloodPressure() : null)
+                .heartRate(log.getHeartRate() != null ? log.getHeartRate() : null)
+                .weight(log.getWeight() != null ? log.getWeight() : null)
+                .bodyFatPercentage(log.getBodyFatPercentage() != null ? log.getBodyFatPercentage() : null)
+                .bodyPhoto(log.getBodyPhoto() != null ? log.getBodyPhoto() : null)
+                .fall(fall.getAddress() != null || fall.getMapImage() != null ? fall : null)
+                .exercise(!keywords.stream().filter(keyword -> keyword.equals("운동")).collect(Collectors.toList()).isEmpty() ? createExerciseList(log) : null)
+                .mood((!keywords.stream().filter(keyword -> keyword.equals("기분")).collect(Collectors.toList()).isEmpty()) ? createMoodList(log) : null)
                 .build();
     }
 
@@ -369,7 +392,7 @@ public class LogQueryService {
         List<String> moodKeyword = new ArrayList<>();
         StringBuilder details = new StringBuilder();
 
-        if (log_one.getLogMood().isEmpty() || log_one.getLogMood() == null){
+        if (log_one.getLogMood().isEmpty() || log_one.getLogMood() == null) {
             return null;
         }
 
@@ -421,11 +444,11 @@ public class LogQueryService {
                 .build();
     }
 
-    private String createComment(List<String> keyword, String type){
+    private String createComment(List<String> keyword, String type) {
         StringBuilder comment = new StringBuilder();
         if (type.equals("mood")) {
             comment.append("오늘은 ");
-            for (int i = 0; i< keyword.size(); i++) {
+            for (int i = 0; i < keyword.size(); i++) {
                 comment.append(keyword.get(i));
                 if (i == keyword.size() - 1)
                     comment.append(" 감정을 느꼈습니다.");
@@ -438,14 +461,14 @@ public class LogQueryService {
         }
         if (type.equals("exercise")) {
             comment.append("오늘은 ");
-            for (int i = 0; i< keyword.size(); i++) {
+            for (int i = 0; i < keyword.size(); i++) {
                 comment.append(keyword.get(i));
                 if (i == keyword.size() - 1)
                     comment.append(" 신체활동을 했습니다.");
                 else
                     comment.append(", ");
             }
-            if (keyword.isEmpty()){
+            if (keyword.isEmpty()) {
                 comment.append("선택된 활동이 없습니다.");
             }
         }
