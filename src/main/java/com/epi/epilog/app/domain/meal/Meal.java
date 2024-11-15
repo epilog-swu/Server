@@ -41,11 +41,7 @@ public class Meal {
     private MealType mealType;
     @ColumnDefault("true")
     private Boolean isAlarm;
-    @ElementCollection
-    @Builder.Default
-    @CollectionTable(name = "MealTimes", joinColumns = @JoinColumn(name = "meal_id"))
-    private List<LocalTime> times = new ArrayList<>();
-
+    private LocalTime time;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
