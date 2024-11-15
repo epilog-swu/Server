@@ -1,6 +1,7 @@
 package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.CommonResponseDto;
+import com.epi.epilog.app.dto.MealsRequestDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
 import com.epi.epilog.app.dto.MealsResponseDto.MealTimesDto;
 import com.epi.epilog.app.service.checklist.MealsCommandService;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,5 +66,16 @@ public class MealsController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return mealsQueryService.mealTimes(userDetails.getMember());
+    }
+
+    @Operation(summary = "식사 시간 추가")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "식사 시간 추가 성공")
+    })
+    @PostMapping("/time")
+    public CommonResponseDto.CommonResponse createMealTime(@RequestBody List<MealsRequestDto.CreateMeal> form) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return mealsCommandService.createMealTime(userDetails.getMember(), form);
     }
 }
