@@ -47,7 +47,7 @@ springdoc:
     operations-sorter: alpha
 
 jwt:
-  expiration_time: 86400000 #1일
+  expiration_time: 180000 #3분
   secret: ${JWT_SECRET_KEY}
 
 sms:
