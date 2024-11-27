@@ -30,6 +30,8 @@ public class MealsResponseDto {
         private Long id;
         private String goalTime;
         private String title;
+        private String time;
+        private String mealType;
         private boolean isComplete;
         private String state;
     }
