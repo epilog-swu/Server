@@ -16,8 +16,9 @@ public class MealsResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ChecklistDto {
-        public LocalDate date;
-        public List<ChecklistStateDto> checklist;
+        private Long id;
+        private LocalDate date;
+        private List<ChecklistStateDto> checklist;
     }
 
     @Data
@@ -26,20 +27,20 @@ public class MealsResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ChecklistStateDto {
-        public Long id;
-        public String goalTime;
-        public String title;
-        public boolean isComplete;
-        public String state;
+        private Long id;
+        private String goalTime;
+        private String title;
+        private boolean isComplete;
+        private String state;
     }
 
     @Data
     @Getter
     public static class MealChecklistUpdateDto {
         @NotNull
-        public String time;
+        private String time;
         @NotNull
-        public MealStatus status;
+        private MealStatus status;
     }
 
     @Getter
@@ -47,13 +48,14 @@ public class MealsResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class MealTimesDto {
+        private Long id;
         @JsonProperty("title")
-        public String title;
+        private String title;
         @JsonProperty("isAlarm")
-        public boolean isAlarm;
+        private boolean isAlarm;
 
         @JsonIgnore
-        public boolean isAlarm() {
+        private boolean isAlarm() {
             return isAlarm;
         }
     }
