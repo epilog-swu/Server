@@ -73,6 +73,7 @@ public class MealsQueryService {
         List<Meal> meals = mealRepository.findAllByMember(member);
 
         return meals.stream().map(meal -> MealsResponseDto.MealTimesDto.builder()
+                        .id(meal.getId())
                         .title(meal.getMealType().toString() + " " + meal.getTime().format(TIME_FORMATTER))
                         .isAlarm(meal.getIsAlarm().booleanValue())
                         .build())
