@@ -30,6 +30,8 @@ public class MealsResponseDto {
         private Long id;
         private String goalTime;
         private String title;
+        private String time;
+        private String mealType;
         private boolean isComplete;
         private String state;
     }
@@ -53,7 +55,6 @@ public class MealsResponseDto {
         private String title;
         @JsonProperty("isAlarm")
         private boolean isAlarm;
-
         @JsonIgnore
         private boolean isAlarm() {
             return isAlarm;
