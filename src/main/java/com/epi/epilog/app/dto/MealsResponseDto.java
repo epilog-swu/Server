@@ -55,7 +55,6 @@ public class MealsResponseDto {
         private String title;
         @JsonProperty("isAlarm")
         private boolean isAlarm;
-
         @JsonIgnore
         private boolean isAlarm() {
             return isAlarm;
