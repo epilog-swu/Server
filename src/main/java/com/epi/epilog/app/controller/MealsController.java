@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -81,6 +82,12 @@ public class MealsController {
         return mealsCommandService.createMealTime(userDetails.getMember(), form);
     }
 
+    @Operation(summary = "식사 시간 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "식사 시간 삭제 성공"),
+            @ApiResponse(responseCode = "403", description = "권한 없음"),
+            @ApiResponse(responseCode = "400", description = "식사 시간 존재하지 않음"),
+    })
     @DeleteMapping("/time/{timeId}")
     public CommonResponseDto.CommonResponse deleteMealTime(@RequestParam Long timeId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

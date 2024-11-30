@@ -77,7 +77,7 @@ public class MealsCommandService {
 
         List<Meal> savedMealTimes = mealRepository.saveAll(mealTimes);
 
-        createAutoMealChecklist(savedMealTimes, member);
+        createAutoMealChecklist(savedMealTimes);
 
         return CommonResponseDto.CommonResponse.builder()
                 .message("추가되었습니다.")
@@ -85,11 +85,8 @@ public class MealsCommandService {
                 .build();
     }
 
-    public void createAutoMealChecklist(List<Meal> savedMealTimes, Member member) {
-        List<Meal> filteredMealTimes = savedMealTimes.stream()
-                .filter(Meal::getIsAlarm)
-                .toList();
-        for (Meal meal : filteredMealTimes) {
+    public void createAutoMealChecklist(List<Meal> savedMealTimes) {
+        for (Meal meal : savedMealTimes) {
             for (int i = 0; i < 7; i++) {
                 LocalDate goalDate = LocalDate.now().plusDays(i);
                 createMealChecklist(meal, goalDate);
@@ -99,11 +96,11 @@ public class MealsCommandService {
 
     public void createAutoScheduledMealChecklist() {
         LocalDate targetDate = LocalDate.now().plusDays(8);
-        List<Meal> filteredMealTime = getFilteredMealTime();
-        if (filteredMealTime.isEmpty()) {
+        List<Meal> allMealTimes = mealRepository.findAll();
+        if (allMealTimes.isEmpty()) {
             return;
         }
-        for (Meal meal : filteredMealTime) {
+        for (Meal meal : allMealTimes) {
             createMealChecklist(meal, targetDate);
         }
     }
@@ -124,12 +121,5 @@ public class MealsCommandService {
                 .build();
 
         mealCheckListRepository.save(mealChecklist);
-    }
-
-    private List<Meal> getFilteredMealTime() {
-        List<Meal> allMealTimes = mealRepository.findAll();
-        return allMealTimes.stream()
-                .filter(Meal::getIsAlarm)
-                .toList();
     }
 }
