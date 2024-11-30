@@ -1,6 +1,7 @@
 package com.epi.epilog.app.controller;
 
 import com.epi.epilog.app.dto.CommonResponseDto;
+import com.epi.epilog.app.dto.CommonResponseDto.CommonResponse;
 import com.epi.epilog.app.dto.MealsRequestDto;
 import com.epi.epilog.app.dto.MealsResponseDto;
 import com.epi.epilog.app.dto.MealsResponseDto.MealTimesDto;
@@ -16,6 +17,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,5 +79,12 @@ public class MealsController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         return mealsCommandService.createMealTime(userDetails.getMember(), form);
+    }
+
+    @DeleteMapping("/time/{timeId}")
+    public CommonResponseDto.CommonResponse deleteMealTime(@RequestParam Long timeId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        return mealsCommandService.deleteMealTime(userDetails.getMember(), timeId);
     }
 }
