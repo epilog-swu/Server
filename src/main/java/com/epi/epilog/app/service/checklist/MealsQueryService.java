@@ -11,6 +11,7 @@ import com.epi.epilog.app.repository.MealRepository;
 import com.epi.epilog.app.repository.MemberRepository;
 import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
+import com.epi.epilog.global.utils.DateTimeConverter;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +72,7 @@ public class MealsQueryService {
 
         return MealsResponseDto.ChecklistStateDto.builder()
                 .id(meal.getId())
-                .goalTime(formattedGoalTime)
+                .goalTime(DateTimeConverter.convertLocalDateTimeToString(meal.getGoalTime()))
                 .title(title)
                 .time(formattedGoalTime)
                 .mealType(meal.getMeal().getMealType().toString())
