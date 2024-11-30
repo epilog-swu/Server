@@ -19,7 +19,7 @@ public class ChecklistSchedulerService {
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     @Transactional
     public void mealChecklistScheduler() {
-        mealsCommandService.createAutoMealChecklist();
+        mealsCommandService.createAutoScheduledMealChecklist();
     }
 
     /**
