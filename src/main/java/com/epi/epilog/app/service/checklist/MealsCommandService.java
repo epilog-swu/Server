@@ -5,6 +5,7 @@ import com.epi.epilog.app.domain.meal.Meal;
 import com.epi.epilog.app.domain.meal.MealCheckList;
 import com.epi.epilog.app.domain.member.Member;
 import com.epi.epilog.app.dto.CommonResponseDto;
+import com.epi.epilog.app.dto.CommonResponseDto.CommonResponse;
 import com.epi.epilog.app.dto.CustomUserInfoDto;
 import com.epi.epilog.app.dto.MealsRequestDto.CreateMeal;
 import com.epi.epilog.app.dto.MealsResponseDto;
@@ -19,19 +20,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class MealsCommandService {
     private final MealRepository mealRepository;
     private final MemberRepository memberRepository;
     private final MealCheckListRepository mealCheckListRepository;
 
-    @Transactional
     public CommonResponseDto.CommonResponse mealsCheck(Long id, MealsResponseDto.MealChecklistUpdateDto form) {
         MealCheckList mealCheckList = mealCheckListRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
@@ -43,7 +43,25 @@ public class MealsCommandService {
         return CommonResponseDto.CommonResponse.builder().success(true).message("수정되었습니다.").build();
     }
 
-    @Transactional
+    public CommonResponse deleteMealTime(CustomUserInfoDto memberInfo, Long timeId) {
+        Member member = memberRepository.findById(memberInfo.getId())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
+        Meal meal = mealRepository.findById(timeId)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEAL_NOT_FOUND));
+
+        if (meal.getMember().getId() != member.getId()) {
+            throw new ApiException(ErrorCode.FORBIDDEN);
+        }
+
+        mealRepository.delete(meal);
+
+        return CommonResponse.builder()
+                .success(true)
+                .message("삭제되었습니다.")
+                .build();
+    }
+
     public CommonResponseDto.CommonResponse createMealTime(CustomUserInfoDto memberInfo, List<CreateMeal> forms) {
         Member member = memberRepository.findById(memberInfo.getId())
                 .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
@@ -59,7 +77,7 @@ public class MealsCommandService {
 
         List<Meal> savedMealTimes = mealRepository.saveAll(mealTimes);
 
-        createAutoMealChecklist(savedMealTimes, member);
+        createAutoMealChecklist(savedMealTimes);
 
         return CommonResponseDto.CommonResponse.builder()
                 .message("추가되었습니다.")
@@ -67,12 +85,8 @@ public class MealsCommandService {
                 .build();
     }
 
-    @Transactional
-    public void createAutoMealChecklist(List<Meal> savedMealTimes, Member member) {
-        List<Meal> filteredMealTimes = savedMealTimes.stream()
-                .filter(Meal::getIsAlarm)
-                .toList();
-        for (Meal meal : filteredMealTimes) {
+    public void createAutoMealChecklist(List<Meal> savedMealTimes) {
+        for (Meal meal : savedMealTimes) {
             for (int i = 0; i < 7; i++) {
                 LocalDate goalDate = LocalDate.now().plusDays(i);
                 createMealChecklist(meal, goalDate);
@@ -80,14 +94,13 @@ public class MealsCommandService {
         }
     }
 
-    @Transactional
     public void createAutoScheduledMealChecklist() {
         LocalDate targetDate = LocalDate.now().plusDays(8);
-        List<Meal> filteredMealTime = getFilteredMealTime();
-        if (filteredMealTime.isEmpty()) {
+        List<Meal> allMealTimes = mealRepository.findAll();
+        if (allMealTimes.isEmpty()) {
             return;
         }
-        for (Meal meal : filteredMealTime) {
+        for (Meal meal : allMealTimes) {
             createMealChecklist(meal, targetDate);
         }
     }
@@ -108,13 +121,5 @@ public class MealsCommandService {
                 .build();
 
         mealCheckListRepository.save(mealChecklist);
-    }
-
-    @Nullable
-    private List<Meal> getFilteredMealTime() {
-        List<Meal> allMealTimes = mealRepository.findAll();
-        return allMealTimes.stream()
-                .filter(Meal::getIsAlarm)
-                .toList();
     }
 }
