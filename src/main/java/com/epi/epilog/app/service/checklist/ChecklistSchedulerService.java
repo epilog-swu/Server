@@ -11,25 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ChecklistSchedulerService {
     private final MedicationCommandService medicationCommandService;
+    private final MealsCommandService mealsCommandService;
 
     /**
      * TODO: 식사 체크리스트 스케줄러
      */
-//    @Scheduled(cron = "0 0 15 * * ?")
-//    @Transactional
-//    public void mealChecklistScheduler() {
-//        List<Meal> all = mealRepository.findAll();
-//        if (!all.isEmpty()){
-//            List<MealCheckList> mealChecklist = all.stream().map(meal -> MealCheckList.builder()
-//                    .meal(meal)
-//                    .goalTime(LocalDate.now().plusDays(1).atTime(meal.getGoalTime()))
-//                    .isComplete(false)
-//                    .mealStatus(MealStatus.상태없음)
-//                    .build()).collect(Collectors.toList());
-//            mealLogRepository.saveAll(mealChecklist);
-//            log.info("scheduler) 식사 체크리스트 목록이 성공적으로 등록되었습니다.");
-//        }
-//    }
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
+    @Transactional
+    public void mealChecklistScheduler() {
+        mealsCommandService.createAutoMealChecklist();
+    }
 
     /**
      * 복약 체크리스트 스케줄러

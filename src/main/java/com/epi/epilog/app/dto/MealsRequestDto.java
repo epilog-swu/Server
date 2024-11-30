@@ -2,7 +2,6 @@ package com.epi.epilog.app.dto;
 
 import com.epi.epilog.app.domain.enums.MealType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalTime;
 import lombok.AccessLevel;
