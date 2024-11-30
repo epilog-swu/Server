@@ -16,7 +16,6 @@ public class MealsResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ChecklistDto {
-        private Long id;
         private LocalDate date;
         private List<ChecklistStateDto> checklist;
     }

@@ -17,6 +17,7 @@ import com.epi.epilog.global.exception.ApiException;
 import com.epi.epilog.global.exception.ErrorCode;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
@@ -96,7 +97,8 @@ class MealsQueryServiceTest {
 
         MealsResponseDto.ChecklistStateDto checklistItem = result.getChecklist().get(0);
         Assertions.assertThat(checklistItem.getId()).isEqualTo(100L);
-        Assertions.assertThat(checklistItem.getGoalTime()).isEqualTo("8시");
+        String expectedGoalTime = date.atTime(8, 0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Assertions.assertThat(checklistItem.getGoalTime()).isEqualTo(expectedGoalTime);
         Assertions.assertThat(checklistItem.getTitle()).isEqualTo("8시 아침식사");
         Assertions.assertThat(checklistItem.getMealType()).isEqualTo("아침식사");
         Assertions.assertThat(checklistItem.getState()).isEqualTo("상태없음");
