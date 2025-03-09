@@ -19,7 +19,12 @@
 <img src="https://github.com/user-attachments/assets/e8df7518-24b0-4ab8-bc4e-f4e3ef90fdd3" width="700px" alert="ERD" />
 
 ### 시스템 아키텍처
+#### 메인 서버 아키텍처
 <img src="https://github.com/user-attachments/assets/e73892fa-cc88-41b8-886d-de692a326904" width="680px" alert="architecture"/>
+
+#### AI 서버리스 플로우 (AWS Lambda)
+<img src="https://github.com/user-attachments/assets/bee2bc66-838d-4779-9ee9-b2f8e567ae9d" width="680px" alert="AI_architecture"/>
+
 
 ## 디렉토리 구조
 ```
